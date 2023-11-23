@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 Not Found</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <style>
+    .page-404-container {
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-family: "Poppins", sans-serif;
+    }
+    .page-404 {
+      width: 100%;
+      max-width: 1024px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding-top: 144px;
+      font-size: 1.6rem;
+    }
+    .page-404__404 {
+      color: #4f46e5;
+      font-weight: 600;
+      line-height: 24px;
+    }
+    .page-404__title {
+      color: #111827;
+      font-size: 4.8rem;
+      font-weight: 700;
+      line-height: 48px;
+    }
+    .page-404__desc {
+      color: #4b5563;
+      line-height: 28px;
+    }
+    .page-404_btn {
+      background-color: #6366f1;
+      color: #fff;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 20px;
+      padding: 10px 14px;
+      margin-top: 40px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+  </style>
+  <body>
+    <div class="page-404-container">
+      <section class="page-404">
+        <h2 class="page-404__404">404</h2>
+        <h1 class="page-404__title">Page not found</h1>
+        <p class="page-404__desc">
+          Sorry, we couldn’t find the page you’re looking for. Go back home
+        </p>
+        <a class="page-404_btn" href="/">Go back home</a>
+      </section>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
