@@ -4,7 +4,6 @@ import { cn } from '@/lib/utils';
 
 const Header = () => {
   const { pathname } = useLocation();
-  console.log(pathname);
   return (
     <header className='sticky top-0 w-full border-b-[1px] bg-white py-5 shadow-sm'>
       <div className='container flex items-center gap-10'>

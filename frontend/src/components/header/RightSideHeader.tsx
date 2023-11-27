@@ -1,17 +1,16 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger
 } from '@/components/ui/navigation-menu';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/useAuth';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '../ui/button';
 import { LogOut, User } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import Loading from '../loading/Loading';
+import { Button } from '../ui/button';
 
 const RightSideHeader = () => {
   const { user, logout, loading } = useAuth();
@@ -61,27 +60,23 @@ const RightSideHeader = () => {
           <NavigationMenuContent className='min-w-[240px] px-4 py-5'>
             <ul className='flex flex-col justify-evenly gap-5'>
               <li className=''>
-                <NavigationMenuLink>
-                  <Link to='/profile' className='w-full'>
-                    <Button variant='link' size={'lg'} className='grid w-full grid-cols-2 gap-4'>
-                      <User size={20} className='ml-8' />
-                      <span className='mr-auto'>Profile</span>
-                    </Button>
-                  </Link>
-                </NavigationMenuLink>
+                <Link to='/profile' className='w-full'>
+                  <Button variant='link' size={'lg'} className='grid w-full grid-cols-2 gap-4'>
+                    <User size={20} className='ml-8' />
+                    <span className='mr-auto'>Profile</span>
+                  </Button>
+                </Link>
               </li>
               <li>
-                <NavigationMenuLink>
-                  <Button
-                    variant='link'
-                    size={'lg'}
-                    className='grid w-full grid-cols-2 gap-4 '
-                    onClick={handleLogOutClick}
-                  >
-                    <LogOut size={20} className='ml-8' />
-                    <span className='mr-auto'>Log out</span>
-                  </Button>
-                </NavigationMenuLink>
+                <Button
+                  variant='link'
+                  size={'lg'}
+                  className='grid w-full grid-cols-2 gap-4 '
+                  onClick={handleLogOutClick}
+                >
+                  <LogOut size={20} className='ml-8' />
+                  <span className='mr-auto'>Log out</span>
+                </Button>
               </li>
             </ul>
           </NavigationMenuContent>
