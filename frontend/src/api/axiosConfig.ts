@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const SERVER_URL = 'https://advanced-web-server-production.up.railway.app/api/v1';
+const SERVER_URL = 'http://localhost:5000/api/v1';
 
 const instance = axios.create({
   baseURL: SERVER_URL,

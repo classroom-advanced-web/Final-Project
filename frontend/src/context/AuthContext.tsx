@@ -21,6 +21,7 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
 
   const loadUser = async () => {
     try {
+      setLoading(true);
       const res = await authApi.loadUser();
 
       if (res) {
@@ -40,6 +41,8 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
       localStorage.removeItem('access-token');
       setUser(null);
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,7 +55,6 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
       if (res?.access_token) {
         localStorage.setItem('access-token', res.access_token);
         localStorage.setItem('refresh-token', res.refresh_token);
-        loadUser();
       }
     } catch (error: any) {
       if (error?.response) {
@@ -77,10 +79,11 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
       if (res?.access_token) {
         localStorage.setItem('access-token', res.access_token);
         localStorage.setItem('refresh-token', res.refresh_token);
-        loadUser();
       }
     } catch (error: any) {
-      setError(error.message);
+      if (error?.response) {
+        setError(error.response.data.error);
+      }
       console.error(error);
     } finally {
       setLoading(false);

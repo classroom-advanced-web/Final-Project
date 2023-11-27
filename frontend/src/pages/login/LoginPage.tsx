@@ -14,8 +14,6 @@ import * as z from 'zod';
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
-  const navigate = useNavigate();
-
   const form = useForm<z.infer<typeof signInSchema>>({
     resolver: zodResolver(signInSchema),
     defaultValues: {
@@ -24,15 +22,15 @@ const LoginPage = () => {
     }
   });
 
-  const { user, error, login, loading } = useAuth();
+  const { user, error, login, loading, loadUser } = useAuth();
   if (user) {
     return <Navigate to='/' />;
   }
 
-  const onSubmit = (data: z.infer<typeof signInSchema>) => {
+  const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     try {
-      login({ email: data.email, password: data.password });
-      navigate('/');
+      await login({ email: data.email, password: data.password });
+      await loadUser();
     } catch (error) {
       console.error(error);
     }
