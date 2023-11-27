@@ -1,3 +1,4 @@
+import SocialLogins from '@/components/social-login/SocialLogins';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -8,7 +9,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import * as z from 'zod';
 
 const LoginPage = () => {
@@ -21,6 +22,7 @@ const LoginPage = () => {
       password: ''
     }
   });
+
 
   const { user, error, login, loading, loadUser } = useAuth();
   if (user) {
@@ -104,19 +106,7 @@ const LoginPage = () => {
           </div>
         </form>
       </Form>
-      <section className='flex flex-col items-center justify-center '>
-        <h2 className='mb-4 text-2xl font-bold'>Or continue with</h2>
-        <div className='flex items-center space-x-4'>
-          <Button className='flex items-center space-x-2' onClick={() => {}}>
-            <img src='https://img.icons8.com/color/48/000000/google-logo.png' alt='google' className='h-6 w-6' />
-            <span>Google</span>
-          </Button>
-          <Button className='flex items-center space-x-2' onClick={() => {}}>
-            <img src='https://img.icons8.com/color/50/000000/facebook.png' alt='facebook' className='h-6 w-6' />
-            <span>Facebook</span>
-          </Button>
-        </div>
-      </section>
+      <SocialLogins />
     </main>
   );
 };
