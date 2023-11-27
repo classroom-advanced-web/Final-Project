@@ -23,7 +23,6 @@ const LoginPage = () => {
     }
   });
 
-
   const { user, error, login, loading, loadUser } = useAuth();
   if (user) {
     return <Navigate to='/' />;
@@ -94,12 +93,19 @@ const LoginPage = () => {
           />
           {error && <div className='text-red-500'>{error}</div>}
           <div className='flex items-center justify-between'>
-            <Link
-              className='rounded-md border-[1px] border-gray-300 px-3 py-2 text-sm transition-all duration-150 hover:bg-blue-100/20'
-              to='/sign-up'
-            >
-              Create account
-            </Link>
+            <div>
+              <Link
+                className='rounded-md border-[1px] border-gray-300 px-3 py-2 text-sm transition-all duration-150 hover:bg-blue-100/20'
+                to='/sign-up'
+              >
+                Create account
+              </Link>
+
+              <Button type='button' className='text-blue-500' variant={'link'}>
+                <Link to={'/forgot-password'}>Forgot password?</Link>
+              </Button>
+            </div>
+
             <Button type='submit' disabled={loading}>
               Sign in
             </Button>
