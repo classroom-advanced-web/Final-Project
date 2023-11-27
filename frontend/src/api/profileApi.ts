@@ -1,4 +1,3 @@
-import { formatDate } from "@/lib/utils";
 import instance from "./axiosConfig";
 
 class ProfileApi {
