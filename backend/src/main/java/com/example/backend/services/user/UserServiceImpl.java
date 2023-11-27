@@ -10,6 +10,7 @@ import com.example.backend.dtos.UserDTO;
 import com.example.backend.entities.Role;
 import com.example.backend.entities.User;
 import com.example.backend.exceptions.AuthenticationErrorException;
+import com.example.backend.exceptions.ConflictException;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.repositories.RoleRepository;
 import com.example.backend.repositories.UserRepository;
@@ -83,6 +84,11 @@ public class UserServiceImpl implements IUserService {
                 () -> new NotFoundException("Role not found")
         );
 
+        User existedUser = userRepository.findByEmail(newUserDTO.getEmail()).orElse(null);
+
+        if(existedUser != null) {
+            throw new ConflictException("Email have already existed");
+        }
 
 
         try {

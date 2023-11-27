@@ -39,6 +39,16 @@ public class MyExceptionHandler {
                 HttpStatus.UNAUTHORIZED);
     }
 
+    @ExceptionHandler(ConflictException.class)
+    @ResponseStatus(code = HttpStatus.CONFLICT)
+    public ResponseEntity<ErrorResponseDTO> resolveException(ConflictException exception) {
+        return new ResponseEntity<>(
+                ErrorResponseDTO.builder()
+                        .error(exception.getMessage())
+                        .build(),
+                HttpStatus.CONFLICT);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
     public ResponseEntity<ErrorResponseDTO> resolveException(AccessDeniedException exception) {
