@@ -17,7 +17,7 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 
 @Service
 @RequiredArgsConstructor
-public class EmailServiceImpl {
+public class EmailServiceImpl implements IEmailService {
 
     private final JavaMailSender emailSender;
     private final ApplicationContext applicationContext;
@@ -34,7 +34,7 @@ public class EmailServiceImpl {
 
     }
 
-    public void sendHtmlEmail(String to, String subject, String OTP) throws MessagingException, MessagingException {
+    public void sendHtmlMessage(String to, String subject, String OTP) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
 

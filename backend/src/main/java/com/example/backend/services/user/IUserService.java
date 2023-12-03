@@ -1,11 +1,12 @@
 package com.example.backend.services.user;
 
 import com.example.backend.dtos.*;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
-import org.springframework.stereotype.Service;
 
+import java.util.Map;
 
 public interface IUserService {
 
@@ -23,4 +24,8 @@ public interface IUserService {
                                            @NonNull HttpServletResponse response);
 
     AuthenticationResponseDTO authenticateWithGoogle(@NonNull AccessTokenDTO token);
+
+    Map<String, Long> sendOTP(String email) throws MessagingException;
+
+    Map<String, String> verifyOTP(Long otpID, String otpStr);
 }

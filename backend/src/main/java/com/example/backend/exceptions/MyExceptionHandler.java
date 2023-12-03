@@ -1,6 +1,7 @@
 package com.example.backend.exceptions;
 
 import com.example.backend.dtos.ErrorResponseDTO;
+import jakarta.mail.MessagingException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -73,5 +74,16 @@ public class MyExceptionHandler {
                         .error(errorMessage)
                         .build(),
                  HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({MessagingException.class})
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseEntity<ErrorResponseDTO> resolveException(MessagingException exception) {
+        String errorMessage = "Malformed JSON request. Please check the request body.";
+        return new ResponseEntity<>(
+                ErrorResponseDTO.builder()
+                        .error(errorMessage)
+                        .build(),
+                HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

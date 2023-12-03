@@ -5,15 +5,20 @@ import com.example.backend.constants.AppConstant;
 import com.example.backend.constants.GenderEnum;
 import com.example.backend.constants.RoleEnum;
 import com.example.backend.dtos.*;
+import com.example.backend.entities.OTP;
 import com.example.backend.entities.Role;
 import com.example.backend.entities.User;
 import com.example.backend.exceptions.AuthenticationErrorException;
 import com.example.backend.exceptions.ConflictException;
 import com.example.backend.exceptions.NotFoundException;
+import com.example.backend.repositories.OTPRepository;
 import com.example.backend.repositories.RoleRepository;
 import com.example.backend.repositories.UserRepository;
+import com.example.backend.services.email.IEmailService;
 import com.example.backend.services.google.IGoogleService;
+import com.example.backend.services.otp.IOTPService;
 import com.example.backend.services.token.ITokenService;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -21,19 +26,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -42,9 +43,12 @@ public class UserServiceImpl implements IUserService {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final OTPRepository otpRepository;
     private final ITokenService tokenService;
     private final PasswordEncoder passwordEncoder;
     private final IGoogleService googleService;
+    private final IOTPService otpService;
+    private final IEmailService emailService;
 
     private final Mapper<User, UserDTO> userMapper;
 
@@ -232,6 +236,55 @@ public class UserServiceImpl implements IUserService {
                 .accessToken(tokenService.generateToken(existedUser))
                 .refreshToken(tokenService.generateRefreshToken(existedUser))
                 .build();
+
+    }
+
+    @Override
+    public Map<String, Long> sendOTP(String email) throws MessagingException {
+
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("Email does not exists")
+        );
+
+        String otpString = otpService.generateOTP();
+
+        emailService.sendHtmlMessage(email, "OTP", otpString);
+
+        OTP savedOTP = otpRepository.save(
+                OTP.builder()
+                        .value(otpString)
+                        .expiredDate(OTP.calculateExpiration())
+                        .build()
+        );
+
+        Map<String, Long> response = new HashMap<>();
+        response.put("otp_id", savedOTP.getId());
+
+
+        return response;
+    }
+
+    @Override
+    public Map<String, String> verifyOTP(Long otpID, String otpStr) {
+
+
+        OTP foundOTP = otpRepository.findById(otpID).orElseThrow(
+                () -> new NotFoundException("OTP wrong")
+        );
+
+
+
+        LocalDateTime now = LocalDateTime.now();
+        if(otpStr.equals(foundOTP.getValue()) &&
+                Timestamp.valueOf(now).before(foundOTP.getExpiredDate()) &&
+                !foundOTP.isRevoked()) {
+            Map<String, String> response = new HashMap<>();
+            foundOTP.setRevoked(true);
+            otpRepository.save(foundOTP);
+            response.put("message", "Success");
+            return response;
+        }
+        return null;
 
     }
 

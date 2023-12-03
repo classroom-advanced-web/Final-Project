@@ -1,23 +1,18 @@
 package com.example.backend;
 
-import com.example.backend.constants.AppConstant;
 import com.example.backend.constants.GenderEnum;
 import com.example.backend.constants.RoleEnum;
 import com.example.backend.entities.Role;
 import com.example.backend.entities.User;
-import com.example.backend.exceptions.NotFoundException;
+import com.example.backend.services.otp.OTPServiceImpl;
 import com.example.backend.repositories.RoleRepository;
 import com.example.backend.repositories.UserRepository;
 import com.example.backend.services.email.EmailServiceImpl;
-import com.example.backend.services.google.GoogleServiceImpl;
-import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Optional;
 
 @SpringBootApplication
 public class BackendApplication {
@@ -30,15 +25,13 @@ public class BackendApplication {
     CommandLineRunner run(RoleRepository roleRepository,
                           UserRepository userRepository,
                           PasswordEncoder passwordEncoder,
-                          EmailServiceImpl emailService
+                          EmailServiceImpl emailService,
+                          OTPServiceImpl otpServiceImpl
                           ) {
         return args -> {
 
             try {
-                String otp = "123456";
-                emailService.sendHtmlEmail("zduytruongz@gmail.com", "OTP",
-                        "123456"
-                );
+                System.out.println(otpServiceImpl.generateOTP());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -72,7 +65,7 @@ public class BackendApplication {
                     User.builder()
                             .firstName("Truong")
                             .lastName("Vo")
-                            .email("truong@example.com")
+                            .email("zduytruongz@gmail.com")
                             .password(passwordEncoder.encode("12345"))
                             .role(student)
                             .gender(GenderEnum.MALE.name())
