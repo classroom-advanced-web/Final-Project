@@ -21,7 +21,6 @@ const SignUpPage = () => {
       last_name: '',
       dob: '',
       gender: '',
-      role: '',
       email: '',
       password: ''
     }
@@ -58,29 +57,6 @@ const SignUpPage = () => {
       <h1 className='mb-4 text-center text-4xl font-bold'>Create new account</h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
-          <FormField
-            control={form.control}
-            name='role'
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Role:</FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <FormControl
-                    className={cn(form.formState.errors.dob && 'border-red-400 focus-visible:ring-red-400', 'pr-8')}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder='Role' />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value='member'>Member</SelectItem>
-                    <SelectItem value='teacher'>Teacher</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
           <div className='grid grid-cols-2 gap-2'>
             <FormField
               control={form.control}

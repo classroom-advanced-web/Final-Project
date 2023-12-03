@@ -14,7 +14,6 @@ export const signUpSchema = z.object({
       return date < now && date.getFullYear() > 1900 && date.getFullYear() <= MAX_YEAR;
     }, 'Please enter a valid birthday'),
   gender: z.string().min(1, 'Please enter your gender').trim().toUpperCase(),
-  role: z.string().min(1, 'Please enter your role').trim().toUpperCase(),
   email: z.string().min(1, 'Please enter your email').email('Please enter a valid email').trim(),
   password: z
     .string()
