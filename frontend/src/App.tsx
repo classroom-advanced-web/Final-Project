@@ -15,6 +15,7 @@ const LandingPage = lazy(() => import('./pages/landing/LandingPage'));
 const ProfilePage = lazy(() => import('./pages/profile/ProfilePage'));
 const ForgotPasswordPage = lazy(() => import('./pages/forgot-password/ForgotPassword'));
 const RedeemOTPPage = lazy(() => import('./pages/forgot-password/RedeemOTP'));
+const ResetPasswordPage = lazy(() => import('./pages/forgot-password/ResetPassword'));
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
           <Route path='/profile' element={<ProfilePage />} />
           <Route path='/forgot-password' element={<ForgotPasswordPage />} />
           <Route path='/forgot-password/redeem' element={<RedeemOTPPage />} />
+          <Route path='/forgot-password/reset' element={<ResetPasswordPage />} />
 
           <Route path='*' element={<NotFoundPage />} />
         </Routes>
