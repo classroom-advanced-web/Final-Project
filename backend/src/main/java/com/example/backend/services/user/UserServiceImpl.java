@@ -212,6 +212,15 @@ public class UserServiceImpl implements IUserService {
         User existedUser = userRepository.findByEmail(user.getEmail()).orElse(null);
         if(existedUser == null) {
             user.setGender(GenderEnum.UNKNOWN.name());
+            String roleName = RoleEnum.STUDENT.name();
+
+            Role role = roleRepository.findByName(roleName).orElseThrow(
+                    () -> new NotFoundException("Role not found")
+            );
+
+            user.setRole(role);
+
+
             User savedUser = userRepository.save(user);
             return AuthenticationResponseDTO.builder()
                     .accessToken(tokenService.generateToken(savedUser))
