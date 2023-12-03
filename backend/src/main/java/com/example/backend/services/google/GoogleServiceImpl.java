@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 
 @Service
 
-public class GoogleServiceImpl {
+public class GoogleServiceImpl implements IGoogleService {
 
     private static final String GOOGLE_TOKEN_INFO_URL = "https://www.googleapis.com/oauth2/v3/userinfo?access_token=";
 
@@ -40,7 +40,8 @@ public class GoogleServiceImpl {
 
 
 
-    public User isValidGoogleAccessToken(String accessToken) {
+    @Override
+    public User getUserInfo(String accessToken) {
         try {
             RestTemplate restTemplate = new RestTemplate();
 
@@ -60,19 +61,6 @@ public class GoogleServiceImpl {
                 // Token is valid
                 Map<String, Object> userInfo = response.getBody();
 
-                // Extract user information from the tokenInfo map
-//                String userId = (String) tokenInfo.get("sub");
-//                String userEmail = (String) tokenInfo.get("email");
-//                String userName = (String) tokenInfo.get("name");
-
-                // Print or use the extracted user information
-//                System.out.println("User ID: " + userId);
-//                System.out.println("User Email: " + userEmail);
-//                System.out.println("User Name: " + userName);
-
-//                for (Map.Entry<String, Object> entry : tokenInfo.entrySet()) {
-//                    System.out.println(entry.getKey() + ": " + entry.getValue());
-//                }
 
                 return User.builder()
                         .firstName((String) userInfo.get("given_name"))
