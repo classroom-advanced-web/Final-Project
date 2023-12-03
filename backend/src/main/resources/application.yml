@@ -6,10 +6,10 @@ server:
 
 spring:
   profiles:
-    active: railway
+    active: local
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create-drop
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     show-sql: true
@@ -30,4 +30,7 @@ application:
       expiration: 86400000 # a day
       refresh-token:
         expiration: 604800000 # 7 days
+    oauth2:
+      google:
+        client-id: "228097325596-si80lhvch9q4g7gmqj5e7cvrilca63p5.apps.googleusercontent.com"
 
