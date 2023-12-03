@@ -10,6 +10,7 @@ type AuthContext = {
   register: (registerInstance: RegisterDTO) => Promise<void>;
   logout: () => void;
   loadUser: () => Promise<void>;
+  loginWithGoogle: (accessToken: String) => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthContext | null>(null);
@@ -66,6 +67,28 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
+  const loginWithGoogle = async (accessToken: String) => {
+    setLoading(true);
+
+    try {
+      const res = await authApi.loginWithGoogle(accessToken);
+
+      console.log(res);
+
+      if (res?.access_token) {
+        localStorage.setItem('access-token', res.access_token);
+        localStorage.setItem('refresh-token', res.refresh_token);
+      }
+    } catch (error: any) {
+      if (error?.response) {
+        setError(error.response.data.error);
+      }
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('access-token');
     localStorage.removeItem('refresh-token');
@@ -97,7 +120,8 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
     login,
     loadUser,
     logout,
-    register
+    register,
+    loginWithGoogle
   };
 
   return <AuthContext.Provider value={data}>{children}</AuthContext.Provider>;
