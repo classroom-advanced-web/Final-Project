@@ -211,6 +211,7 @@ public class UserServiceImpl implements IUserService {
 
         User existedUser = userRepository.findByEmail(user.getEmail()).orElse(null);
         if(existedUser == null) {
+            user.setGender(GenderEnum.UNKNOWN.name());
             User savedUser = userRepository.save(user);
             return AuthenticationResponseDTO.builder()
                     .accessToken(tokenService.generateToken(savedUser))
