@@ -1,5 +1,6 @@
 package com.example.backend;
 
+import com.example.backend.constants.GenderEnum;
 import com.example.backend.constants.RoleEnum;
 import com.example.backend.entities.Role;
 import com.example.backend.entities.User;
@@ -24,18 +25,56 @@ public class BackendApplication {
     }
 
     @Bean
-    CommandLineRunner run(RoleRepository roleRepository) {
+    CommandLineRunner run(RoleRepository roleRepository,
+                          UserRepository userRepository,
+                          PasswordEncoder passwordEncoder
+                          ) {
         return args -> {
 
+            Role student = Role.builder()
+                    .name(RoleEnum.STUDENT.name())
+                    .build();
+
             roleRepository.save(
-                    Role.builder()
-                            .name(RoleEnum.STUDENT.name())
-                            .build()
+                    student
             );
 
             roleRepository.save(
                     Role.builder()
                             .name(RoleEnum.TEACHER.name())
+                            .build()
+            );
+
+            userRepository.save(
+                    User.builder()
+                            .firstName("Toan")
+                            .lastName("Tran")
+                            .email("toan@example.com")
+                            .password(passwordEncoder.encode("12345"))
+                            .role(student)
+                            .gender(GenderEnum.MALE.name())
+                            .build()
+            );
+
+            userRepository.save(
+                    User.builder()
+                            .firstName("Truong")
+                            .lastName("Vo")
+                            .email("truong@example.com")
+                            .password(passwordEncoder.encode("12345"))
+                            .role(student)
+                            .gender(GenderEnum.MALE.name())
+                            .build()
+            );
+
+            userRepository.save(
+                    User.builder()
+                            .firstName("Thang")
+                            .lastName("Le")
+                            .email("thang@example.com")
+                            .password(passwordEncoder.encode("12345"))
+                            .role(student)
+                            .gender(GenderEnum.MALE.name())
                             .build()
             );
 
