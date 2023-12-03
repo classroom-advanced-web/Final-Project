@@ -30,5 +30,4 @@ public class RegisterDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date DOB;
 
-    private RoleEnum role;
 }

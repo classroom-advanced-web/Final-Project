@@ -49,6 +49,10 @@ public class MyExceptionHandler {
                 HttpStatus.CONFLICT);
     }
 
+
+
+    /*---------------------- System exception ---------------------------*/
+
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(code = HttpStatus.FORBIDDEN)
     public ResponseEntity<ErrorResponseDTO> resolveException(AccessDeniedException exception) {

@@ -3,6 +3,7 @@ package com.example.backend.services.user;
 import com.example.backend.configurations.converter.Mapper;
 import com.example.backend.constants.AppConstant;
 import com.example.backend.constants.GenderEnum;
+import com.example.backend.constants.RoleEnum;
 import com.example.backend.dtos.AuthenticationResponseDTO;
 import com.example.backend.dtos.LoginDTO;
 import com.example.backend.dtos.RegisterDTO;
@@ -79,8 +80,10 @@ public class UserServiceImpl implements IUserService {
     @Override
     public AuthenticationResponseDTO register(@NonNull RegisterDTO newUserDTO) {
 
+        String roleName = RoleEnum.STUDENT.name();
 
-        Role role = roleRepository.findByName(newUserDTO.getRole().name()).orElseThrow(
+
+        Role role = roleRepository.findByName(roleName).orElseThrow(
                 () -> new NotFoundException("Role not found")
         );
 
