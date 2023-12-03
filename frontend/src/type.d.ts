@@ -14,7 +14,6 @@ type RegisterDTO = {
   gender: string | "MALE" | "FEMALE";
   email: string;
   password: string;
-  role: string | "MEMBER" | "TEACHER";
 };
 
 
