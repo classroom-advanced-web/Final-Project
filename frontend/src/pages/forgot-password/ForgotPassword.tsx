@@ -1,20 +1,37 @@
+import authApi from '@/api/authApi';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useState } from 'react';
+import { Console } from 'console';
+import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 const ForgotPassword = () => {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
-  const handleForgotPasswordClick = () => {
-    navigate(`/forgot-password/redeem?email=${email}`);
+  const handleForgotPasswordClick = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const res = await authApi.requestOtp({ email });
+      console.log(res);
+      navigate(`/forgot-password/redeem?email=${email}`, { state: { id: res.otp_id } });
+    } catch (error: any) {
+      if (error.response?.data?.error) {
+        setError(error.response.data.error);
+      }
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <div className='flex h-screen flex-col items-center justify-center bg-gray-100'>
       <div className='w-full max-w-md rounded-md bg-white px-6 py-8 shadow-md'>
         <h2 className='mb-4 text-2xl font-bold'>Forgot Password</h2>
-        <form className='space-y-4'>
+        <form onSubmit={handleForgotPasswordClick} className='space-y-4'>
           <div>
             <label htmlFor='email' className='block font-medium'>
               Email
@@ -28,12 +45,14 @@ const ForgotPassword = () => {
               placeholder='Enter your email'
             />
           </div>
+          {error && <span className='mt-1 text-sm text-red-500'>{error}</span>}
           <Button
-            onClick={handleForgotPasswordClick}
+            disabled={loading}
+            //onClick={handleForgotPasswordClick}
             type='submit'
             className='w-full rounded-md border border-transparent  px-4 py-2 text-white shadow-sm  focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
           >
-            Reset Password
+            {loading ? 'Sending OTP' : 'Reset password'}
           </Button>
         </form>
       </div>
