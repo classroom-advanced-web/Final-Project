@@ -1,14 +1,17 @@
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useEffect } from 'react';
+import ResendOTP from './ResendButton';
 
-const RedeemOTP: React.FC = () => {
+const RedeemOTP = () => {
   const [otp, setOtp] = useState('');
+
   const [searchParams, setSearchParams] = useSearchParams();
   const [countdown, setCountdown] = useState(60);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
+  const navigate = useNavigate();
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
@@ -23,20 +26,18 @@ const RedeemOTP: React.FC = () => {
     return () => clearTimeout(timer);
   }, [countdown, isResendDisabled]);
 
-  console.log(searchParams.get('email'));
-
   const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOtp(e.target.value);
   };
 
-  const handleRedeem = () => {
-    // TODO: Implement redeem logic here
-  };
+  if (!searchParams.get('email')) {
+    console.log('No email found in search params');
+    return <Navigate to={'/forgot-password'} />;
+  }
 
-  const handleResend = () => {
-    setIsResendDisabled(true);
-    setCountdown(60);
-    // TODO: Implement resend logic here
+  const handleRedeem = () => {
+    navigate(`/forgot-password/reset?email=${searchParams.get('email')}`);
+    // TODO: Implement redeem logic here
   };
 
   return (
@@ -52,9 +53,7 @@ const RedeemOTP: React.FC = () => {
       <Button onClick={handleRedeem} className='w-1/7 rounded'>
         Redeem
       </Button>
-      <Button onClick={handleResend} disabled={isResendDisabled} className='w-1/7 mt-4 rounded'>
-        {isResendDisabled ? `Resend (${countdown})` : 'Resend'}
-      </Button>
+      <ResendOTP />
     </div>
   );
 };

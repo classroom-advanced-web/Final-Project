@@ -45,3 +45,25 @@ export const ProfileSchema = z.object({
     }, 'Please enter a valid birthday'),
   gender: z.string().min(1, 'Please enter your gender').trim()
 });
+
+export const resetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(6, 'Password should be 6 - 20 character long')
+      .max(20, 'Password should be 6 - 20 character long')
+      .trim()
+      .regex(
+        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/,
+        'Only contain ASCII without special character. At least 6 characters, 1 number, 1 upper,  1 lowercase'
+      ),
+    confirmPassword: z.string()
+  })
+  .superRefine(({ password, confirmPassword }, ctx) => {
+    if (confirmPassword !== password) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'The passwords did not match'
+      });
+    }
+  });
