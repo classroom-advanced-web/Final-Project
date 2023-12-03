@@ -4,10 +4,7 @@ import com.example.backend.configurations.converter.Mapper;
 import com.example.backend.constants.AppConstant;
 import com.example.backend.constants.GenderEnum;
 import com.example.backend.constants.RoleEnum;
-import com.example.backend.dtos.AuthenticationResponseDTO;
-import com.example.backend.dtos.LoginDTO;
-import com.example.backend.dtos.RegisterDTO;
-import com.example.backend.dtos.UserDTO;
+import com.example.backend.dtos.*;
 import com.example.backend.entities.Role;
 import com.example.backend.entities.User;
 import com.example.backend.exceptions.AuthenticationErrorException;
@@ -15,6 +12,7 @@ import com.example.backend.exceptions.ConflictException;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.repositories.RoleRepository;
 import com.example.backend.repositories.UserRepository;
+import com.example.backend.services.google.IGoogleService;
 import com.example.backend.services.token.ITokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -46,6 +44,7 @@ public class UserServiceImpl implements IUserService {
     private final RoleRepository roleRepository;
     private final ITokenService tokenService;
     private final PasswordEncoder passwordEncoder;
+    private final IGoogleService googleService;
 
     private final Mapper<User, UserDTO> userMapper;
 
@@ -92,6 +91,7 @@ public class UserServiceImpl implements IUserService {
         if(existedUser != null) {
             throw new ConflictException("Email have already existed");
         }
+
 
 
         try {
@@ -199,6 +199,30 @@ public class UserServiceImpl implements IUserService {
             }
         }
         throw new AuthenticationErrorException("Invalid token");
+    }
+
+    @Override
+    public AuthenticationResponseDTO authenticateWithGoogle(@NonNull AccessTokenDTO token) {
+        User user = googleService.getUserInfo(token.getAccessToken());
+
+        if(user == null) {
+            throw new AuthenticationErrorException("Invalid Token");
+        }
+
+        User existedUser = userRepository.findByEmail(user.getEmail()).orElse(null);
+        if(existedUser == null) {
+            User savedUser = userRepository.save(user);
+            return AuthenticationResponseDTO.builder()
+                    .accessToken(tokenService.generateToken(savedUser))
+                    .refreshToken(tokenService.generateRefreshToken(savedUser))
+                    .build();
+        }
+
+        return AuthenticationResponseDTO.builder()
+                .accessToken(tokenService.generateToken(existedUser))
+                .refreshToken(tokenService.generateRefreshToken(existedUser))
+                .build();
+
     }
 
     // Helper method to get null property names from an object

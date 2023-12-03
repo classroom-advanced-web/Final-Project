@@ -1,9 +1,6 @@
 package com.example.backend.services.user;
 
-import com.example.backend.dtos.AuthenticationResponseDTO;
-import com.example.backend.dtos.LoginDTO;
-import com.example.backend.dtos.RegisterDTO;
-import com.example.backend.dtos.UserDTO;
+import com.example.backend.dtos.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
@@ -24,4 +21,6 @@ public interface IUserService {
 
     UserDTO getAuthenticatedUser(@NonNull HttpServletRequest request,
                                            @NonNull HttpServletResponse response);
+
+    AuthenticationResponseDTO authenticateWithGoogle(@NonNull AccessTokenDTO token);
 }
