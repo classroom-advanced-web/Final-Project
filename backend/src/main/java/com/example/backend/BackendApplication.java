@@ -1,5 +1,6 @@
 package com.example.backend;
 
+import com.example.backend.constants.AppConstant;
 import com.example.backend.constants.GenderEnum;
 import com.example.backend.constants.RoleEnum;
 import com.example.backend.entities.Role;
@@ -7,6 +8,7 @@ import com.example.backend.entities.User;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.repositories.RoleRepository;
 import com.example.backend.repositories.UserRepository;
+import com.example.backend.services.email.EmailServiceImpl;
 import com.example.backend.services.google.GoogleServiceImpl;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import org.springframework.boot.CommandLineRunner;
@@ -27,9 +29,19 @@ public class BackendApplication {
     @Bean
     CommandLineRunner run(RoleRepository roleRepository,
                           UserRepository userRepository,
-                          PasswordEncoder passwordEncoder
+                          PasswordEncoder passwordEncoder,
+                          EmailServiceImpl emailService
                           ) {
         return args -> {
+
+            try {
+                String otp = "123456";
+                emailService.sendHtmlEmail("zduytruongz@gmail.com", "OTP",
+                        "123456"
+                );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             Role student = Role.builder()
                     .name(RoleEnum.STUDENT.name())
