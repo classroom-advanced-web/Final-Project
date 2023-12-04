@@ -57,13 +57,9 @@ export const resetPasswordSchema = z
         /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{6,}$/,
         'Only contain ASCII without special character. At least 6 characters, 1 number, 1 upper,  1 lowercase'
       ),
-    confirmPassword: z.string()
+    confirmPassword: z.string().min(1, 'Please enter your password confirmation').trim()
   })
-  .superRefine(({ password, confirmPassword }, ctx) => {
-    if (confirmPassword !== password) {
-      ctx.addIssue({
-        code: 'custom',
-        message: 'The passwords did not match'
-      });
-    }
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword']
   });
