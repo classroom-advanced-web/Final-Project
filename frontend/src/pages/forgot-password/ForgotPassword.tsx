@@ -1,6 +1,7 @@
 import authApi from '@/api/authApi';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useToast } from '@/components/ui/use-toast';
 import { Console } from 'console';
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -10,13 +11,14 @@ const ForgotPassword = () => {
   const [error, setError] = useState('');
   const [email, setEmail] = useState('');
   const navigate = useNavigate();
+
   const handleForgotPasswordClick = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       setLoading(true);
       const res = await authApi.requestOtp({ email });
       console.log(res);
-      navigate(`/forgot-password/redeem?email=${email}`, { state: { id: res.otp_id } });
+      navigate(`/forgot-password/redeem?email=${email}`, { state: { id: res.otp_id, accessToken: res.access_token } });
     } catch (error: any) {
       if (error.response?.data?.error) {
         setError(error.response.data.error);

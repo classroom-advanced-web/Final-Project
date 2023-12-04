@@ -7,6 +7,7 @@ import PrivateRoute from './components/private-route/PrivateRoute';
 import LoadingPage from './components/loading/LoadingPage';
 import NotFoundPage from './pages/not-found/NotFoundPage';
 import LoadingOverlay from './components/loading/LoadingOverlay';
+import { Toaster } from './components/ui/toaster';
 
 const HomePage = lazy(() => import('./pages/home/HomePage'));
 const SignUpPage = lazy(() => import('./pages/sign-up/SignUpPage'));

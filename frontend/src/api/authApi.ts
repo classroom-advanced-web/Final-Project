@@ -3,13 +3,18 @@ import instance from './axiosConfig';
 class AuthApi {
   //tạo
 
+  async resetPassword({ email, password, token }: { email: string; password: string; token: string }) {
+    const res = await instance.post(`/auth/password/renew?access_token=${token}`, { email, password, token });
+    return res.data;
+  }
+
   async requestOtp({ email }: { email: string }) {
     const res = await instance.post('/auth/otp/send', { email });
     return res.data;
   }
 
-  async verifyOtp({ id, otp }: { id: string; otp: string }) {
-    const res = await instance.post('/auth/otp/verify', { otp_id: id, otp_value: otp });
+  async verifyOtp({ id, otp, token, email }: { id: string; otp: string; token: string; email: string }) {
+    const res = await instance.post(`/auth/otp/verify?access_token=${token}`, { otp_id: id, otp_value: otp, email });
     return res.data;
   }
 

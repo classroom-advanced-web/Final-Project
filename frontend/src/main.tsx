@@ -6,6 +6,7 @@ import { BrowserRouter } from 'react-router-dom';
 import App from './App.tsx';
 import AuthContextProvider from './context/AuthContext.tsx';
 import './index.css';
+import { Toaster } from './components/ui/toaster.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
@@ -14,6 +15,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         <BrowserRouter>
           <App />
         </BrowserRouter>
+        <Toaster />
       </GoogleOAuthProvider>
     </AuthContextProvider>
   </React.StrictMode>

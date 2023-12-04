@@ -17,12 +17,6 @@ const RedeemOTP = () => {
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate();
-
-  const { state } = useLocation();
-
-  const { id } = state;
-
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
@@ -36,6 +30,11 @@ const RedeemOTP = () => {
 
     return () => clearTimeout(timer);
   }, [countdown, isResendDisabled]);
+  const navigate = useNavigate();
+
+  const { state } = useLocation();
+
+  const { id, accessToken } = state;
 
   const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOtp(e.target.value);
@@ -49,9 +48,11 @@ const RedeemOTP = () => {
   const handleRedeem = async () => {
     try {
       setIsverifying(true);
-      const res = await authApi.verifyOtp({ id, otp });
+      const res = await authApi.verifyOtp({ id, otp, token: accessToken, email: searchParams.get('email') ?? '' });
       console.log(res);
-      setError('Success');
+      navigate(`/forgot-password/reset?email=${searchParams.get('email')}`, {
+        state: { accessToken }
+      });
     } catch (error: any) {
       console.error(error);
       if (error.response?.data?.message) setError(error.response?.data?.message);
