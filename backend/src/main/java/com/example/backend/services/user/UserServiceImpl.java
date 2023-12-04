@@ -303,8 +303,20 @@ public class UserServiceImpl implements IUserService {
         return response;
     }
 
+    @Override
+    public Map<String, String> verifyEmail(String email) {
 
+        User foundUser = userRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("User not found")
+        );
 
+        foundUser.setActivated(true);
+        userRepository.save(foundUser);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Success");
+
+        return response;
+    }
 
     // Helper method to get null property names from an object
     private String[] getNullPropertyNames(Object source) {

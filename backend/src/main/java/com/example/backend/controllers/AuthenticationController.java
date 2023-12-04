@@ -110,4 +110,25 @@ public class AuthenticationController {
         );
     }
 
+    @PostMapping("/email/verify")
+    public ResponseEntity<Map<String, String>> verifyEmail(@RequestBody Map<String, String> data,
+                                                             @RequestParam("access_token") String accessToken) {
+        String email = data.get("email");
+        String extractedEmail = tokenService.extractClaim(accessToken, Claims::getSubject);
+
+        Map<String, String> response = null;
+        if(!email.equals(extractedEmail) || tokenService.isExpiredToken(accessToken)) {
+            response = new HashMap<>();
+            response.put("error", "Invalid Token");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    response
+            );
+        }
+
+        return ResponseEntity.ok(
+                userService.verifyEmail(email)
+        );
+
+    }
+
 }

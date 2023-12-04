@@ -30,4 +30,5 @@ public interface IUserService {
     Map<String, String> verifyOTP(Long otpID, String otpStr);
 
     Map<String, String> renewPassword(String email, String password);
+    Map<String, String> verifyEmail(String email);
 }

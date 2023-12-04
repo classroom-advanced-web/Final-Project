@@ -48,6 +48,9 @@ public class User implements UserDetails {
 
      private boolean revoked;
 
+     @Column(name = "is_activated")
+     private boolean isActivated;
+
      @ManyToOne()
      @JoinColumn(name = "role_id")
      private Role role;

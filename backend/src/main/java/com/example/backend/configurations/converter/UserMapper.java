@@ -29,6 +29,7 @@ public class UserMapper implements Mapper<User, UserDTO>{
                 .lastName(obj.getLastName())
                 .gender(GenderEnum.valueOf(obj.getGender()))
                 .DOB(obj.getDOB())
+                .isActivated(obj.isActivated())
                 .build();
     }
 }
