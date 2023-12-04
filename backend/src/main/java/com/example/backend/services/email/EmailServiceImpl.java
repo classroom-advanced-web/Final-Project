@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.thymeleaf.TemplateEngine;
@@ -22,6 +23,7 @@ public class EmailServiceImpl implements IEmailService {
     private final JavaMailSender emailSender;
     private final ApplicationContext applicationContext;
 
+    @Async
     public void sendSimpleMessage(
             String to, String subject, String text) {
 
@@ -34,6 +36,7 @@ public class EmailServiceImpl implements IEmailService {
 
     }
 
+    @Async
     public void sendHtmlMessage(String to, String subject, String OTP) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
