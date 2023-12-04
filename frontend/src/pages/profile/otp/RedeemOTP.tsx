@@ -60,7 +60,7 @@ const RedeemOTP = () => {
             title: 'Account activated',
             description: 'Your account has been activated.'
           });
-          navigate('/profile');
+          window.location.href = '/profile';
         }
       } else if (action === 'forgot-password') {
         const res = await authApi.verifyOtp({ id, otp, token: accessToken, email: searchParams.get('email') ?? '' });

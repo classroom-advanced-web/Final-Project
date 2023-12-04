@@ -1,10 +1,10 @@
-import ProfileForm from '@/components/profile/ProfileForm';
-import { useAuth } from '@/hooks/useAuth';
-import { useState } from 'react';
-import { cn, formatDate } from '@/lib/utils.ts';
-import { Link, useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import authApi from '@/api/authApi';
+import ProfileForm from '@/components/profile/ProfileForm';
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/useAuth';
+import { cn, formatDate } from '@/lib/utils.ts';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -19,6 +19,7 @@ const ProfilePage = () => {
   };
 
   const handleActivateClick = async () => {
+    setLoading(true);
     try {
       const res = await authApi.requestOtp({ email: user.email });
       navigate(`/redeem?action=activate&email=${user.email}`, {
@@ -26,6 +27,8 @@ const ProfilePage = () => {
       });
     } catch (error: any) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -56,11 +59,12 @@ const ProfilePage = () => {
                         <span>
                           Not activated 🔴
                           <Button
+                            disabled={loading}
                             variant='outline'
                             className='ml-2 text-sm text-blue-500 underline transition hover:text-blue-400'
                             onClick={handleActivateClick}
                           >
-                            Activate
+                            {loading ? 'Please wait...' : 'Activate'}
                           </Button>
                         </span>
                       )}
