@@ -9,9 +9,24 @@ import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 
 import { EyeOff, Eye } from 'lucide-react';
+import { Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import authApi from '@/api/authApi';
+import { useToast } from '@/components/ui/use-toast';
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const { toast } = useToast();
+
+  const { state } = useLocation();
+
+  if (!state) {
+    return <Navigate to={'/forgot-password'} />;
+  }
+
+  const { accessToken } = state;
 
   const form = useForm<z.infer<typeof resetPasswordSchema>>({
     resolver: zodResolver(resetPasswordSchema),
@@ -26,7 +41,19 @@ const ResetPassword = () => {
   };
 
   const onSubmit = async (data: z.infer<typeof resetPasswordSchema>) => {
-    console.log(data);
+    try {
+      const res = await authApi.resetPassword({
+        email: searchParams.get('email') ?? '',
+        password: data.password,
+        token: accessToken
+      });
+      navigate('/login');
+      toast({
+        title: `Password reset successfully`
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
