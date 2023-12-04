@@ -2,7 +2,10 @@ import instance from './axiosConfig';
 
 class AuthApi {
   //tạo
-
+  async verifyEmail({ token, email }: { token: string; email: string }) {
+    const res = await instance.post(`/auth/email/verify?access_token=${token}`, { email });
+    return res.data;
+  }
   async resetPassword({ email, password, token }: { email: string; password: string; token: string }) {
     const res = await instance.post(`/auth/password/renew?access_token=${token}`, { email, password, token });
     return res.data;

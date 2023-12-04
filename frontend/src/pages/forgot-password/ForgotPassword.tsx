@@ -18,7 +18,9 @@ const ForgotPassword = () => {
       setLoading(true);
       const res = await authApi.requestOtp({ email });
       console.log(res);
-      navigate(`/forgot-password/redeem?email=${email}`, { state: { id: res.otp_id, accessToken: res.access_token } });
+      navigate(`/redeem?action=forgot-password&email=${email}`, {
+        state: { id: res.otp_id, accessToken: res.access_token }
+      });
     } catch (error: any) {
       if (error.response?.data?.error) {
         setError(error.response.data.error);

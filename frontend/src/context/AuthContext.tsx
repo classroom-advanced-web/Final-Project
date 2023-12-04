@@ -26,13 +26,14 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
       const res = await authApi.loadUser();
 
       if (res) {
-        const { id, email, dob, first_name, last_name, gender } = res;
+        const { id, email, dob, first_name, last_name, gender, activated } = res;
         const user = {
           id,
           email,
           dob: dob ? new Date(dob) : new Date('1/1/2000'),
           firstName: first_name ?? '',
           lastName: last_name ?? '',
+          activated: activated ?? false,
           gender: gender
         };
 

@@ -4,6 +4,7 @@ type User = {
   dob: Date;
   firstName: string;
   lastName: string;
+  activated: boolean
   gender: "MALE" | "FEMALE";
 };
 

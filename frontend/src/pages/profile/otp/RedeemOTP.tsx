@@ -5,12 +5,11 @@ import { Navigate, useLocation, useNavigate, useSearchParams } from 'react-route
 import { useEffect } from 'react';
 
 import authApi from '@/api/authApi';
-import { Console } from 'console';
-import { spawn } from 'child_process';
+import { useToast } from '@/components/ui/use-toast';
 
 const RedeemOTP = () => {
   const [error, setError] = useState('');
-  const [isVerifying, setIsverifying] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
   const [otp, setOtp] = useState('');
   const [searchParams, setSearchParams] = useSearchParams();
   const [countdown, setCountdown] = useState(60);
@@ -31,7 +30,7 @@ const RedeemOTP = () => {
     return () => clearTimeout(timer);
   }, [countdown, isResendDisabled]);
   const navigate = useNavigate();
-
+  const { toast } = useToast();
   const { state } = useLocation();
 
   const { id, accessToken } = state;
@@ -45,24 +44,38 @@ const RedeemOTP = () => {
     return <Navigate to={'/forgot-password'} />;
   }
 
+  if (!searchParams.get('action')) {
+    return <Navigate to={'/login'} />;
+  }
+
+  const action = searchParams.get('action');
+
   const handleRedeem = async () => {
+    setIsVerifying(true);
     try {
-      setIsverifying(true);
-      const res = await authApi.verifyOtp({ id, otp, token: accessToken, email: searchParams.get('email') ?? '' });
-      console.log(res);
-      navigate(`/forgot-password/reset?email=${searchParams.get('email')}`, {
-        state: { accessToken }
-      });
+      if (action === 'activate') {
+        const res = await authApi.verifyEmail({ token: accessToken, email: searchParams.get('email') ?? '' });
+        if (res) {
+          toast({
+            title: 'Account activated',
+            description: 'Your account has been activated.'
+          });
+          navigate('/profile');
+        }
+      } else if (action === 'forgot-password') {
+        const res = await authApi.verifyOtp({ id, otp, token: accessToken, email: searchParams.get('email') ?? '' });
+        console.log(res);
+        navigate(`/forgot-password/reset?email=${searchParams.get('email')}`, {
+          state: { accessToken }
+        });
+      }
     } catch (error: any) {
       console.error(error);
       if (error.response?.data?.message) setError(error.response?.data?.message);
       else setError(error.response?.data?.error);
     } finally {
-      setIsverifying(false);
+      setIsVerifying(false);
     }
-
-    //navigate(`/forgot-password/reset?email=${searchParams.get('email')}`);
-    // TODO: Implement redeem logic here
   };
 
   const handleResend = async () => {
