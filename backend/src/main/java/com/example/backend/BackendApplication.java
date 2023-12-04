@@ -65,7 +65,7 @@ public class BackendApplication {
                     User.builder()
                             .firstName("Truong")
                             .lastName("Vo")
-                            .email("zduytruongz@gmail.com")
+                            .email("truong@example.com")
                             .password(passwordEncoder.encode("12345"))
                             .role(student)
                             .gender(GenderEnum.MALE.name())
