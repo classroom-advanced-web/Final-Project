@@ -25,7 +25,9 @@ public interface IUserService {
 
     AuthenticationResponseDTO authenticateWithGoogle(@NonNull AccessTokenDTO token);
 
-    Map<String, Long> sendOTP(String email) throws MessagingException;
+    Map<String, Object> sendOTP(String email) throws MessagingException;
 
     Map<String, String> verifyOTP(Long otpID, String otpStr);
+
+    Map<String, String> renewPassword(String email, String password);
 }

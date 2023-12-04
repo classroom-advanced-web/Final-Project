@@ -33,4 +33,6 @@ public interface ITokenService {
     String generateRefreshToken(
             @NonNull UserDetails userDetails
     );
+
+    String generateEmailToken(String email);
 }

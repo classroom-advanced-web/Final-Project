@@ -33,6 +33,8 @@ public class TokenServiceImpl implements ITokenService{
     @Value("${application.security.jwt.refresh-token.expiration}")
     private long refreshExpiration;
 
+    private long shortExpiration = 15 * 60 * 1000;
+
     @Override
     public Long extractUserId(String jwt) {
         return Long.valueOf(extractClaim(jwt, Claims::getSubject));
@@ -70,6 +72,18 @@ public class TokenServiceImpl implements ITokenService{
     @Override
     public String generateRefreshToken(@NonNull UserDetails userDetails) {
         return buildToken(new HashMap<>(), userDetails, refreshExpiration);
+    }
+
+    @Override
+    public String generateEmailToken(String email) {
+        return Jwts
+                .builder()
+                .setClaims(new HashMap<>())
+                .setSubject(email)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + shortExpiration))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256) //private key
+                .compact();
     }
 
     private String buildToken(

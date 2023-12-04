@@ -240,7 +240,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public Map<String, Long> sendOTP(String email) throws MessagingException {
+    public Map<String, Object> sendOTP(String email) throws MessagingException {
 
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException("Email does not exists")
@@ -257,8 +257,9 @@ public class UserServiceImpl implements IUserService {
                         .build()
         );
 
-        Map<String, Long> response = new HashMap<>();
+        Map<String, Object> response = new HashMap<>();
         response.put("otp_id", savedOTP.getId());
+        response.put("access_token", tokenService.generateEmailToken(email));
 
 
         return response;
@@ -287,6 +288,23 @@ public class UserServiceImpl implements IUserService {
         return null;
 
     }
+
+    @Override
+    public Map<String, String> renewPassword(String email, String password) {
+
+        User foundUser = userRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("User not found")
+        );
+
+        foundUser.setPassword(passwordEncoder.encode(password));
+        User updatedUser = userRepository.save(foundUser);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Success");
+        return response;
+    }
+
+
+
 
     // Helper method to get null property names from an object
     private String[] getNullPropertyNames(Object source) {

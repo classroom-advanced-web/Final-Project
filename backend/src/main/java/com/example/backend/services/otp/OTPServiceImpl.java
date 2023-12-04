@@ -27,7 +27,7 @@ public class OTPServiceImpl implements IOTPService{
         long currentTime = System.currentTimeMillis() / 1000; // Convert to seconds
 
         // Calculate the number of time steps that have passed
-        long timeStep = currentTime / AppConstant.OTP_PERIOD;
+        long timeStep = currentTime / (AppConstant.OTP_PERIOD / 10);
 
         // Create a buffer to hold the time step value
         ByteBuffer buffer = ByteBuffer.allocate(8);
