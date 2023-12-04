@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { resetPasswordSchema } from '@/schema/formSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -7,13 +7,10 @@ import { z } from 'zod';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-import { error } from 'console';
+
 import { EyeOff, Eye } from 'lucide-react';
-import { Link } from 'react-router-dom';
 
 const ResetPassword = () => {
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
   const form = useForm<z.infer<typeof resetPasswordSchema>>({
@@ -28,20 +25,12 @@ const ResetPassword = () => {
     setShowPassword((prev: boolean) => !prev);
   };
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setConfirmPassword(e.target.value);
-  };
-
   const onSubmit = async (data: z.infer<typeof resetPasswordSchema>) => {
     console.log(data);
   };
 
   return (
-    <div className='container'>
+    <div className='container flex max-w-[1024px] flex-col justify-center py-20'>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
           <FormField
@@ -69,7 +58,10 @@ const ResetPassword = () => {
                     </div>
                   </div>
                 </FormControl>
-                <FormMessage />
+
+                <div className='w-full'>
+                  <FormMessage />
+                </div>
               </FormItem>
             )}
           />
@@ -78,7 +70,7 @@ const ResetPassword = () => {
             name='confirmPassword'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password:</FormLabel>
+                <FormLabel>Confirm Password:</FormLabel>
                 <FormControl>
                   <div className='relative'>
                     <Input
@@ -86,7 +78,7 @@ const ResetPassword = () => {
                       placeholder='Confirm Password'
                       {...field}
                       className={cn(
-                        form.formState.errors.password && 'border-red-400 focus-visible:ring-red-400',
+                        form.formState.errors.root?.message && 'border-red-400 focus-visible:ring-red-400',
                         'pr-8'
                       )}
                     />
@@ -98,12 +90,13 @@ const ResetPassword = () => {
                     </div>
                   </div>
                 </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
           />
+          <Button type='submit'>Reset Password</Button>
         </form>
-        <Button>Reset Password</Button>
       </Form>
     </div>
   );

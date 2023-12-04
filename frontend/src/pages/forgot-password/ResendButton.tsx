@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useEffect } from 'react';
 
-const ResendOTP: React.FC = () => {
+const ResendOTP = () => {
   const [countdown, setCountdown] = useState(60);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   useEffect(() => {

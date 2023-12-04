@@ -1,17 +1,28 @@
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
-import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 import { useEffect } from 'react';
-import ResendOTP from './ResendButton';
+
+import authApi from '@/api/authApi';
+import { Console } from 'console';
+import { spawn } from 'child_process';
 
 const RedeemOTP = () => {
+  const [error, setError] = useState('');
+  const [isVerifying, setIsverifying] = useState(false);
   const [otp, setOtp] = useState('');
-
   const [searchParams, setSearchParams] = useSearchParams();
   const [countdown, setCountdown] = useState(60);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+
+  const { state } = useLocation();
+
+  const { id } = state;
+
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
@@ -35,9 +46,42 @@ const RedeemOTP = () => {
     return <Navigate to={'/forgot-password'} />;
   }
 
-  const handleRedeem = () => {
-    navigate(`/forgot-password/reset?email=${searchParams.get('email')}`);
+  const handleRedeem = async () => {
+    try {
+      setIsverifying(true);
+      const res = await authApi.verifyOtp({ id, otp });
+      console.log(res);
+      setError('Success');
+    } catch (error: any) {
+      console.error(error);
+      if (error.response?.data?.message) setError(error.response?.data?.message);
+      else setError(error.response?.data?.error);
+    } finally {
+      setIsverifying(false);
+    }
+
+    //navigate(`/forgot-password/reset?email=${searchParams.get('email')}`);
     // TODO: Implement redeem logic here
+  };
+
+  const handleResend = async () => {
+    setIsResendDisabled(true);
+    setCountdown(60);
+    // TODO: Implement resend logic here
+
+    try {
+      setLoading(true);
+      const email: string = searchParams.get('email') ?? '';
+      const res = await authApi.requestOtp({ email });
+      console.log(res);
+    } catch (error: any) {
+      if (error.response?.data?.error) {
+        setError(error.response.data.error);
+      }
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -47,13 +91,17 @@ const RedeemOTP = () => {
         type='text'
         value={otp}
         onChange={handleOtpChange}
-        className='mb-4 rounded-md border border-gray-300 px-4 py-2'
+        className='rounded-md border border-gray-300 px-4 py-2'
         placeholder='Enter OTP'
       />
-      <Button onClick={handleRedeem} className='w-1/7 rounded'>
-        Redeem
+      {error && <span className='mb-2 text-sm text-red-500'>{error}</span>}
+
+      <Button disabled={isVerifying} onClick={handleRedeem} className='w-1/7 mt-2 rounded'>
+        {isVerifying ? 'Verifying' : 'Redeem'}
       </Button>
-      <ResendOTP />
+      <Button onClick={handleResend} disabled={isResendDisabled || loading} className='w-1/7 mt-4 rounded'>
+        {isResendDisabled ? `Resend (${countdown})` : 'Resend'}
+      </Button>
     </div>
   );
 };
