@@ -11,7 +11,7 @@ const RedeemOTP = () => {
   const [error, setError] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
   const [otp, setOtp] = useState('');
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [countdown, setCountdown] = useState(60);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
   const [loading, setLoading] = useState(false);

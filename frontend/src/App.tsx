@@ -3,11 +3,10 @@ import { Route, Routes } from 'react-router-dom';
 
 import './App.css';
 import Header from './components/header/Header';
-import PrivateRoute from './components/private-route/PrivateRoute';
-import LoadingPage from './components/loading/LoadingPage';
-import NotFoundPage from './pages/not-found/NotFoundPage';
 import LoadingOverlay from './components/loading/LoadingOverlay';
-import { Toaster } from './components/ui/toaster';
+import LoadingPage from './components/loading/LoadingPage';
+import PrivateRoute from './components/private-route/PrivateRoute';
+import NotFoundPage from './pages/not-found/NotFoundPage';
 
 const HomePage = lazy(() => import('./pages/home/HomePage'));
 const SignUpPage = lazy(() => import('./pages/sign-up/SignUpPage'));

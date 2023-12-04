@@ -15,7 +15,7 @@ import { useToast } from '@/components/ui/use-toast';
 
 const ResetPassword = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   const { toast } = useToast();
@@ -42,7 +42,7 @@ const ResetPassword = () => {
 
   const onSubmit = async (data: z.infer<typeof resetPasswordSchema>) => {
     try {
-      const res = await authApi.resetPassword({
+      await authApi.resetPassword({
         email: searchParams.get('email') ?? '',
         password: data.password,
         token: accessToken

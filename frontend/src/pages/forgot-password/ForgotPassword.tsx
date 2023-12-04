@@ -1,8 +1,6 @@
 import authApi from '@/api/authApi';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
-import { Console } from 'console';
 import { FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router';
 
