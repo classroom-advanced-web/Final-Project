@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const SERVER_URL = 'https://web-ga1-be-production.up.railway.app/api/v1';
+const SERVER_URL = import.meta.env.VITE_SERVER_HOST as string;
 
 const instance = axios.create({
   baseURL: SERVER_URL,

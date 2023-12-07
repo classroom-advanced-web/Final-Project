@@ -7,6 +7,22 @@ server:
 spring:
   profiles:
     active: local
+  datasource:
+    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+      host: ${MAIL_HOST}
+      username: ${MAIL_USERNAME}
+      password: ${MAIL_PASSWORD}
+      port: ${MAIL_PORT}
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
   thymeleaf:
     enabled: true
     prefix: classpath:/templates/
