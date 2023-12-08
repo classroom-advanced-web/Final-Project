@@ -63,3 +63,14 @@ export const resetPasswordSchema = z
     message: "Passwords don't match",
     path: ['confirmPassword']
   });
+
+export const createClassSchema = z.object({
+  className: z.string().min(1, 'Please enter your class name').trim(),
+  section: z.string().trim(),
+  subject: z.string().trim(),
+  room: z.string().trim()
+});
+
+export const joinClassSchema = z.object({
+  code: z.string().min(1, 'Please enter your code').trim()
+});
