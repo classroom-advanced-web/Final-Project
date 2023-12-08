@@ -1,3 +1,4 @@
+import classApi from '@/api/classApi';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -15,6 +16,7 @@ import { createClassSchema } from '@/schema/formSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
+import { useToast } from '../ui/use-toast';
 
 type Props = {
   children?: React.ReactNode;
@@ -31,9 +33,17 @@ const CreateClassForm = ({ children }: Props) => {
     }
   });
 
+  const { toast } = useToast();
+
   const onSubmit = async (data: z.infer<typeof createClassSchema>) => {
     try {
-      console.log(data);
+      const res = await classApi.createClass(data);
+      if (res) {
+        toast({
+          title: 'Create class successfully'
+        });
+        form.reset();
+      }
     } catch (error) {
       console.error(error);
     }
@@ -139,11 +149,13 @@ const CreateClassForm = ({ children }: Props) => {
             {/* {error && <div className='text-red-500'>{error}</div>} */}
             <DialogFooter>
               <DialogClose asChild>
-                <Button type='button' variant='ghost'>
+                <Button type='button' variant='ghost' disabled={form.formState.isLoading}>
                   Close
                 </Button>
               </DialogClose>
-              <Button type='submit'>Create</Button>
+              <Button type='submit' disabled={form.formState.isLoading}>
+                Create
+              </Button>
             </DialogFooter>
           </form>
         </Form>

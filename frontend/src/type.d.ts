@@ -4,20 +4,18 @@ type User = {
   dob: Date;
   firstName: string;
   lastName: string;
-  activated: boolean
-  gender: "MALE" | "FEMALE";
+  activated: boolean;
+  gender: 'MALE' | 'FEMALE';
 };
 
 type RegisterDTO = {
   firstName: string;
   lastName: string;
   dob: Date;
-  gender: string | "MALE" | "FEMALE";
+  gender: string | 'MALE' | 'FEMALE';
   email: string;
   password: string;
 };
-
-
 
 type ProfileFields = {
   id: number;
@@ -25,4 +23,14 @@ type ProfileFields = {
   lastName: string;
   birthday: Date;
   gender: string;
+};
+
+type Classroom = {
+  id: number;
+  name: string;
+  description: string;
+  subject: string;
+  code: string;
+  room: string;
+  imageUrl: string;
 };

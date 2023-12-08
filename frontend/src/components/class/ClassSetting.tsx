@@ -1,5 +1,3 @@
-import { IoSettingsOutline } from 'react-icons/io5';
-import { Button } from '../ui/button';
 import {
   Dialog,
   DialogContent,
@@ -8,13 +6,11 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
+import { IoSettingsOutline } from 'react-icons/io5';
 
 const ClassSetting = () => {
   return (
     <div>
-      {/* <Button variant='ghost' className='text-xl'>
-        <IoSettingsOutline />
-      </Button> */}
       <Dialog>
         <DialogTrigger>
           <IoSettingsOutline />

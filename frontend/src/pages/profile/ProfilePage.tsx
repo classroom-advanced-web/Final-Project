@@ -43,11 +43,13 @@ const ProfilePage = () => {
             <div className='mx-auto max-w-2xl rounded-md bg-white p-8 shadow-md'>
               <div className='mb-6 flex items-center space-x-4'>
                 <div className=' grid w-full grid-cols-2 gap-4'>
-                  <div>
+                  <div className='flex flex-col justify-between'>
                     <h3 className='text-xl font-semibold'>
                       {user.firstName && user.lastName ? user.firstName + ' ' + user.lastName : 'Chưa đặt tên'}
                     </h3>
-                    <p className='mb-2 text-lg font-semibold'>{user.email}</p>
+                    <p className='mb-2 truncate text-lg font-semibold' title={user.email}>
+                      {user.email}
+                    </p>
                   </div>
 
                   <div className='flex flex-col'>
