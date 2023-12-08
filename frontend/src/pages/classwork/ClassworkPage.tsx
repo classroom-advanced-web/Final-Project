@@ -6,6 +6,7 @@ const ClassworkPage = () => {
   return (
     <div>
       <ClassNav page='classwork' />
+      {id}
     </div>
   );
 };

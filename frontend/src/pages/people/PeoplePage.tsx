@@ -6,6 +6,7 @@ const PeoplePage = () => {
   return (
     <div>
       <ClassNav page='people' />
+      {id}
     </div>
   );
 };

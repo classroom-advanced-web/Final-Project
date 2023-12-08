@@ -6,6 +6,7 @@ const GradesPage = () => {
   return (
     <div>
       <ClassNav page='grades' />
+      {id}
     </div>
   );
 };

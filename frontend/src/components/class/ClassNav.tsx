@@ -16,24 +16,26 @@ const ClassNav = ({ page }: Props) => {
     <nav className='container border-b-[1px]'>
       <ul className='flex items-center'>
         <li className={cn('px-4 py-1', page === 'stream' && 'border-b-[2px] border-b-blue-700 text-blue-700')}>
-          <Button variant='ghost'>
-            <Link to={`/class/${id}`}> Stream</Link>
-          </Button>
+          <Link to={`/class/${id}`}>
+            <Button variant='ghost'>Stream</Button>
+          </Link>
         </li>
         <li className={cn('px-4 py-1', page === 'classwork' && 'border-b-[2px] border-b-blue-700 text-blue-700')}>
-          <Button variant='ghost'>
-            <Link to={`/classwork/${id}`}> Classwork</Link>
-          </Button>
+          <Link to={`/classwork/${id}`}>
+            {' '}
+            <Button variant='ghost'>Classwork</Button>
+          </Link>
         </li>
         <li className={cn('px-4 py-1', page === 'people' && 'border-b-[2px] border-b-blue-700 text-blue-700')}>
-          <Button variant='ghost'>
-            <Link to={`/people/${id}`}> People</Link>
-          </Button>
+          <Link to={`/people/${id}`}>
+            <Button variant='ghost'>People</Button>
+          </Link>
         </li>
         <li className={cn('px-4 py-1', page === 'grades' && 'border-b-[2px] border-b-blue-700 text-blue-700')}>
-          <Button variant='ghost'>
-            <Link to={`/grades/${id}`}> Grades</Link>
-          </Button>
+          <Link to={`/grades/${id}`}>
+            {' '}
+            <Button variant='ghost'>Grades</Button>
+          </Link>
         </li>
         <li className='ml-auto py-1 '>
           <Button variant='ghost' className='text-xl'>

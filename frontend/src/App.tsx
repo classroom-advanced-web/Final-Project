@@ -7,10 +7,6 @@ import LoadingOverlay from './components/loading/LoadingOverlay';
 import LoadingPage from './components/loading/LoadingPage';
 import PrivateRoute from './components/private-route/PrivateRoute';
 import NotFoundPage from './pages/not-found/NotFoundPage';
-import ClassPage from './pages/class/ClassPage';
-import ClassworkPage from './pages/classwork/ClassworkPage';
-import PeoplePage from './pages/people/PeoplePage';
-import GradesPage from './pages/grades/GradesPage';
 
 const HomePage = lazy(() => import('./pages/home/HomePage'));
 const SignUpPage = lazy(() => import('./pages/sign-up/SignUpPage'));
@@ -20,6 +16,10 @@ const ProfilePage = lazy(() => import('./pages/profile/ProfilePage'));
 const ForgotPasswordPage = lazy(() => import('./pages/forgot-password/ForgotPassword'));
 const RedeemOTPPage = lazy(() => import('./pages/profile/otp/RedeemOTP'));
 const ResetPasswordPage = lazy(() => import('./pages/forgot-password/ResetPassword'));
+const ClassPage = lazy(() => import('./pages/class/ClassPage'));
+const ClassworkPage = lazy(() => import('./pages/classwork/ClassworkPage'));
+const PeoplePage = lazy(() => import('./pages/people/PeoplePage'));
+const GradesPage = lazy(() => import('./pages/grades/GradesPage'));
 
 function App() {
   return (
