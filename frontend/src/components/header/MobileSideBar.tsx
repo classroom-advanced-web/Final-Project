@@ -8,9 +8,7 @@ const MobileSideBar = () => {
     <div className='md:hidden '>
       <Sheet>
         <SheetTrigger>
-          <Button variant='outline'>
-            <HamburgerMenuIcon className='h-4 w-4' />
-          </Button>
+          <HamburgerMenuIcon className='h-4 w-4' />
         </SheetTrigger>
         <SheetContent className='w-[400px] sm:w-[540px]' side='left'>
           <SheetHeader>

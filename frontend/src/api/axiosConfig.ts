@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const SERVER_URL = 'https://web-ga1-be-production.up.railway.app/api/v1';
+// const SERVER_URL = 'https://web-ga1-be-production.up.railway.app/api/v1';
+const SERVER_URL = 'http://localhost:5000/api/v1';
 
 const instance = axios.create({
   baseURL: SERVER_URL,
