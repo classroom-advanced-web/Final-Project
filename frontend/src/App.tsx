@@ -8,6 +8,9 @@ import LoadingPage from './components/loading/LoadingPage';
 import PrivateRoute from './components/private-route/PrivateRoute';
 import NotFoundPage from './pages/not-found/NotFoundPage';
 import ClassPage from './pages/class/ClassPage';
+import ClassworkPage from './pages/classwork/ClassworkPage';
+import PeoplePage from './pages/people/PeoplePage';
+import GradesPage from './pages/grades/GradesPage';
 
 const HomePage = lazy(() => import('./pages/home/HomePage'));
 const SignUpPage = lazy(() => import('./pages/sign-up/SignUpPage'));
@@ -37,6 +40,30 @@ function App() {
             element={
               <PrivateRoute>
                 <ClassPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/classwork/:id'
+            element={
+              <PrivateRoute>
+                <ClassworkPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/people/:id'
+            element={
+              <PrivateRoute>
+                <PeoplePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/grades/:id'
+            element={
+              <PrivateRoute>
+                <GradesPage />
               </PrivateRoute>
             }
           />

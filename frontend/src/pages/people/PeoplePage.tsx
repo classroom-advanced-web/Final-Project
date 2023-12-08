@@ -1,12 +1,12 @@
 import ClassNav from '@/components/class/ClassNav';
 import { useParams } from 'react-router-dom';
 
-const ClassPage = () => {
+const PeoplePage = () => {
   const { id } = useParams();
   return (
     <div>
-      <ClassNav page='stream' />
+      <ClassNav page='people' />
     </div>
   );
 };
-export default ClassPage;
+export default PeoplePage;
