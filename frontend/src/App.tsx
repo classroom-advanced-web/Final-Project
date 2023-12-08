@@ -7,6 +7,7 @@ import LoadingOverlay from './components/loading/LoadingOverlay';
 import LoadingPage from './components/loading/LoadingPage';
 import PrivateRoute from './components/private-route/PrivateRoute';
 import NotFoundPage from './pages/not-found/NotFoundPage';
+import ClassPage from './pages/class/ClassPage';
 
 const HomePage = lazy(() => import('./pages/home/HomePage'));
 const SignUpPage = lazy(() => import('./pages/sign-up/SignUpPage'));
@@ -28,6 +29,14 @@ function App() {
             element={
               <PrivateRoute>
                 <HomePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/class/:id'
+            element={
+              <PrivateRoute>
+                <ClassPage />
               </PrivateRoute>
             }
           />

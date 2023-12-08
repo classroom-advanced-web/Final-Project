@@ -5,12 +5,14 @@ import { HiDotsVertical } from 'react-icons/hi';
 import { FaArrowTrendUp } from 'react-icons/fa6';
 import { LuUserSquare2 } from 'react-icons/lu';
 import './home.css';
+import { useNavigate } from 'react-router-dom';
 
 const classes = Array(10).fill(0);
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const navigateToClass = () => {
-    console.log('navigate to class');
+    navigate('/class/1');
   };
   return (
     <main className='container h-[1200px]'>
