@@ -22,6 +22,11 @@ class ClassApi {
     });
     return res.data;
   };
+
+  getClassDetail = async (classId: string) => {
+    const res = await instance.get(`/classrooms/${classId}`);
+    return res.data;
+  };
 }
 
 const classApi = new ClassApi();
