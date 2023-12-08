@@ -7,7 +7,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.util.Date;
 import java.util.List;
 
 @Data
@@ -15,6 +19,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "roles")
 @Where(clause = "revoked = false")
 public class Role {
@@ -27,12 +32,20 @@ public class Role {
     @Column(name = "role_name", nullable = false, unique = true)
     private String name;
 
+   @OneToOne(mappedBy = "role")
+   @JsonIgnore
+    private ClassUser classUser;
+
     @Column(name = "revoked")
     private boolean revoked;
 
-    @OneToMany(mappedBy = "role")
-    @JsonIgnore
-    List<User> users;
+    @Column(name = "created_date")
+    @CreatedDate
+    private Date createdDate;
+
+    @Column(name = "updated_date")
+    @LastModifiedDate
+    private Date updatedDate;
 
 
 }
