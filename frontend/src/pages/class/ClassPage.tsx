@@ -2,6 +2,7 @@ import ClassNav from '@/components/class/ClassNav';
 import { DEFAULT_THUMB } from '@/constance/constance';
 import { useParams } from 'react-router-dom';
 import ClassCode from './ClassCode';
+import streamSvg from '@/assets/stream.svg';
 
 const ClassPage = () => {
   const { id } = useParams();
@@ -20,17 +21,13 @@ const ClassPage = () => {
           </div>
         </section>
         <section className='mt-5 flex items-start gap-3'>
-          <div className='hidden w-[174px]  md:inline-block'>
+          <div className='hidden w-[174px] md:inline-block'>
             <ClassCode classCode='ulzkea2' />
           </div>
           <div>
-            <div className='flex h-[120px] w-full items-center gap-2 rounded-sm border-[1px] px-3 py-2'>
+            <div className='flex h-[200px] w-full items-center gap-5 rounded-sm border-[1px] px-3 py-5'>
               <div className='h-full overflow-hidden rounded-md'>
-                <img
-                  className='h-full w-[144px] object-cover'
-                  src='https://gstatic.com/classroom/themes/img_read_thumb.jpg'
-                  alt=''
-                />
+                <img className='h-full ' src={streamSvg} alt='' />
               </div>
               <div>
                 <h2 className='text-lg font-medium'>This is where you can talk to your class</h2>

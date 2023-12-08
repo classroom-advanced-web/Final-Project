@@ -4,16 +4,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
+import { useToast } from '@/components/ui/use-toast';
 import { HiDotsVertical } from 'react-icons/hi';
 import { IoLink, IoCopyOutline } from 'react-icons/io5';
 
 type Props = {
-  classCode: String;
+  classCode: string;
 };
 
 const ClassCode = ({ classCode }: Props) => {
+  const { toast } = useToast();
   const copyClassCode = () => {
     navigator.clipboard.writeText(classCode);
+    toast({
+      title: 'Copied class code',
+      description: 'You can send it anywhere'
+    });
   };
   return (
     <div className=' w-full rounded-sm border-[1px] p-3'>
