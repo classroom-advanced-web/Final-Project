@@ -70,3 +70,7 @@ export const createClassSchema = z.object({
   subject: z.string().trim(),
   room: z.string().trim()
 });
+
+export const joinClassSchema = z.object({
+  code: z.string().min(1, 'Please enter your code').trim()
+});

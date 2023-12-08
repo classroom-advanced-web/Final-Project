@@ -143,7 +143,7 @@ const CreateClassForm = ({ children }: Props) => {
                   Close
                 </Button>
               </DialogClose>
-              <Button type='submit'>Save changes</Button>
+              <Button type='submit'>Create</Button>
             </DialogFooter>
           </form>
         </Form>
