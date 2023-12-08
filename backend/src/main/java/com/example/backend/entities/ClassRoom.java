@@ -1,7 +1,6 @@
 package com.example.backend.entities;
 
-import com.example.backend.constants.AppConstant;
-import com.example.backend.services.otp.OTPServiceImpl;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,9 +11,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,21 +20,40 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "otps")
+@Table(name = "classes")
 @Where(clause = "revoked = false")
-public class OTP {
+public class ClassRoom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "otp_id")
+    @Column(name = "class_id")
     private Long id;
 
-    private String value;
+    @Column(name = "class_name", nullable = false)
+    private String name;
+
+    @Column(name = "class_code", nullable = false, unique = true)
+    private String code;
+
+    @Column(name = "class_description")
+    private String description;
+
+    @Column(name = "class_subject")
+    private String subject;
+
+    @Column(name = "class_room")
+    private String room;
+
+    @Column(name = "class_image_url", nullable = false)
+    private String imageUrl;
+
+    @OneToMany(mappedBy = "classRoom")
+    @JsonIgnore
+    private List<ClassUser> classUsers;
+
+
 
     private boolean revoked;
-
-    @Column(name = "expired_date")
-    private Date expiredDate;
 
     @Column(name = "created_date")
     @CreatedDate
@@ -46,13 +63,4 @@ public class OTP {
     @LastModifiedDate
     private Date updatedDate;
 
-
-    public static Timestamp calculateExpiration() {
-        // Calculate the expiration time (5 minutes from now)
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime expirationTime = now.plusSeconds(AppConstant.OTP_PERIOD);
-
-        // Convert LocalDateTime to Timestamp
-        return Timestamp.valueOf(expirationTime);
-    }
 }

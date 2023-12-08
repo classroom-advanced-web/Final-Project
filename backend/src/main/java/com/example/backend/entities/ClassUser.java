@@ -1,7 +1,5 @@
 package com.example.backend.entities;
 
-import com.example.backend.constants.AppConstant;
-import com.example.backend.services.otp.OTPServiceImpl;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,8 +10,6 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -22,21 +18,30 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "otps")
+@Table(name = "classes_user")
 @Where(clause = "revoked = false")
-public class OTP {
+public class ClassUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "otp_id")
+    @Column(name = "class_user_id")
     private Long id;
 
-    private String value;
+    @ManyToOne
+    @JoinColumn(name = "class_id", nullable = false)
+    private ClassRoom classRoom;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @OneToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
+
+
 
     private boolean revoked;
-
-    @Column(name = "expired_date")
-    private Date expiredDate;
 
     @Column(name = "created_date")
     @CreatedDate
@@ -45,14 +50,4 @@ public class OTP {
     @Column(name = "updated_date")
     @LastModifiedDate
     private Date updatedDate;
-
-
-    public static Timestamp calculateExpiration() {
-        // Calculate the expiration time (5 minutes from now)
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime expirationTime = now.plusSeconds(AppConstant.OTP_PERIOD);
-
-        // Convert LocalDateTime to Timestamp
-        return Timestamp.valueOf(expirationTime);
-    }
 }

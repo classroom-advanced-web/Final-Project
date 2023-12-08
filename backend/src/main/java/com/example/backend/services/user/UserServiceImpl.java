@@ -83,12 +83,6 @@ public class UserServiceImpl implements IUserService {
     @Override
     public AuthenticationResponseDTO register(@NonNull RegisterDTO newUserDTO) {
 
-        String roleName = RoleEnum.STUDENT.name();
-
-
-        Role role = roleRepository.findByName(roleName).orElseThrow(
-                () -> new NotFoundException("Role not found")
-        );
 
         User existedUser = userRepository.findByEmail(newUserDTO.getEmail()).orElse(null);
 
@@ -104,7 +98,6 @@ public class UserServiceImpl implements IUserService {
             User user = User.builder()
                     .email(newUserDTO.getEmail())
                     .password(passwordEncoder.encode(newUserDTO.getPassword()))
-                    .role(role)
                     .firstName(newUserDTO.getFirstName())
                     .lastName(newUserDTO.getLastName())
                     .gender(newUserDTO.getGender() == null ? GenderEnum.UNKNOWN.name() : newUserDTO.getGender().name())
@@ -216,13 +209,6 @@ public class UserServiceImpl implements IUserService {
         User existedUser = userRepository.findByEmail(user.getEmail()).orElse(null);
         if(existedUser == null) {
             user.setGender(GenderEnum.UNKNOWN.name());
-            String roleName = RoleEnum.STUDENT.name();
-
-            Role role = roleRepository.findByName(roleName).orElseThrow(
-                    () -> new NotFoundException("Role not found")
-            );
-
-            user.setRole(role);
 
 
             User savedUser = userRepository.save(user);

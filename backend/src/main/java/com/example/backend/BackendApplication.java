@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class BackendApplication {
 
     public static void main(String[] args) {
+
         SpringApplication.run(BackendApplication.class, args);
     }
 
@@ -56,7 +57,6 @@ public class BackendApplication {
                             .lastName("Tran")
                             .email("toan@example.com")
                             .password(passwordEncoder.encode("12345"))
-                            .role(student)
                             .gender(GenderEnum.MALE.name())
                             .build()
             );
@@ -67,7 +67,6 @@ public class BackendApplication {
                             .lastName("Vo")
                             .email("truong@example.com")
                             .password(passwordEncoder.encode("12345"))
-                            .role(student)
                             .gender(GenderEnum.MALE.name())
                             .build()
             );
@@ -78,7 +77,6 @@ public class BackendApplication {
                             .lastName("Le")
                             .email("thang@example.com")
                             .password(passwordEncoder.encode("12345"))
-                            .role(student)
                             .gender(GenderEnum.MALE.name())
                             .build()
             );
