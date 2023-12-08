@@ -1,6 +1,6 @@
 package com.example.backend.configurations.converter;
 
-public interface Mapper<E, D> {
+public interface IMapper<E, D> {
 
     public E toEntity(D obj);
 

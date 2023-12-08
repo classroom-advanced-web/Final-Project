@@ -29,7 +29,7 @@ public class ClassUser {
 
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
-    private ClassRoom classRoom;
+    private Classroom classroom;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

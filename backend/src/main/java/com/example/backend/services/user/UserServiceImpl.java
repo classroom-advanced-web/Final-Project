@@ -1,16 +1,18 @@
 package com.example.backend.services.user;
 
-import com.example.backend.configurations.converter.Mapper;
+import com.example.backend.configurations.converter.ClassRoomMapper;
+import com.example.backend.configurations.converter.IMapper;
+import com.example.backend.configurations.converter.RoleMapper;
 import com.example.backend.constants.AppConstant;
 import com.example.backend.constants.GenderEnum;
-import com.example.backend.constants.RoleEnum;
 import com.example.backend.dtos.*;
+import com.example.backend.entities.ClassUser;
 import com.example.backend.entities.OTP;
-import com.example.backend.entities.Role;
 import com.example.backend.entities.User;
 import com.example.backend.exceptions.AuthenticationErrorException;
 import com.example.backend.exceptions.ConflictException;
 import com.example.backend.exceptions.NotFoundException;
+import com.example.backend.repositories.ClassroomRepository;
 import com.example.backend.repositories.OTPRepository;
 import com.example.backend.repositories.RoleRepository;
 import com.example.backend.repositories.UserRepository;
@@ -35,6 +37,7 @@ import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -44,13 +47,16 @@ public class UserServiceImpl implements IUserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final OTPRepository otpRepository;
+    private final ClassroomRepository classroomRepository;
+    private final ClassRoomMapper classRoomMapper;
+    private final RoleMapper roleMapper;
     private final ITokenService tokenService;
     private final PasswordEncoder passwordEncoder;
     private final IGoogleService googleService;
     private final IOTPService otpService;
     private final IEmailService emailService;
 
-    private final Mapper<User, UserDTO> userMapper;
+    private final IMapper<User, UserDTO> userIMapper;
 
     @Override
     public AuthenticationResponseDTO login(@NonNull LoginDTO loginDTO) {
@@ -148,7 +154,7 @@ public class UserServiceImpl implements IUserService {
                 () -> new NotFoundException("User not found")
         );
 
-        return userMapper.toDTO(user);
+        return userIMapper.toDTO(user);
 
 
     }
@@ -165,7 +171,7 @@ public class UserServiceImpl implements IUserService {
             existingUser.setGender(userDTO.getGender() == null ? "UNKNOWN" : userDTO.getGender().name());
 
             // Save the updated user
-            return userMapper.toDTO(userRepository.save(existingUser));
+            return userIMapper.toDTO(userRepository.save(existingUser));
         }).orElseThrow(() -> new RuntimeException("User not found"));
 
 
@@ -191,7 +197,7 @@ public class UserServiceImpl implements IUserService {
         if (userID != null ) {
             User user = userRepository.findById(userID).orElse(null);
             if (user != null && tokenService.isValidToken(token, user)) {
-                return userMapper.toDTO(user);
+                return userIMapper.toDTO(user);
 
             }
         }
@@ -302,6 +308,30 @@ public class UserServiceImpl implements IUserService {
         response.put("message", "Success");
 
         return response;
+    }
+
+    @Override
+    public List<ClassroomsOfUserDTO> getClassrooms(Long id) {
+
+        User user = userRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("User not found")
+        );
+
+        List<ClassUser> classUsers = user.getClassUsers();
+        return classUsers.stream()
+                .map(classUser -> {
+
+                    RoleDTO role = roleMapper.toDTO(classUser.getRole());
+
+                    ClassroomDTO classRoom = classRoomMapper.toDTO(classUser.getClassroom());
+
+                    return ClassroomsOfUserDTO.builder()
+                            .role(role)
+                            .classroom(classRoom)
+                            .build();
+                })
+                .collect(Collectors.toList());
+
     }
 
     // Helper method to get null property names from an object

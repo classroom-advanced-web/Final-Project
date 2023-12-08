@@ -1,12 +1,14 @@
 package com.example.backend.controllers;
 
+import com.example.backend.dtos.ClassroomsOfUserDTO;
 import com.example.backend.dtos.UserDTO;
 import com.example.backend.services.user.IUserService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/users")
@@ -27,5 +29,9 @@ public class UserController {
     }
 
 
+    @GetMapping("/classrooms/{id}")
+    public ResponseEntity<List<ClassroomsOfUserDTO>> getClassrooms(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getClassrooms(id));
+    }
 
 }

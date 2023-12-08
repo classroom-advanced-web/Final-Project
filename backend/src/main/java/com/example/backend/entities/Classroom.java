@@ -22,7 +22,7 @@ import java.util.List;
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "classes")
 @Where(clause = "revoked = false")
-public class ClassRoom {
+public class Classroom {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +47,7 @@ public class ClassRoom {
     @Column(name = "class_image_url", nullable = false)
     private String imageUrl;
 
-    @OneToMany(mappedBy = "classRoom")
+    @OneToMany(mappedBy = "classroom")
     @JsonIgnore
     private List<ClassUser> classUsers;
 

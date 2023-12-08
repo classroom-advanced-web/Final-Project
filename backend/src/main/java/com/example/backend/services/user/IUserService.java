@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 
+import java.util.List;
 import java.util.Map;
 
 public interface IUserService {
@@ -31,4 +32,6 @@ public interface IUserService {
 
     Map<String, String> renewPassword(String email, String password);
     Map<String, String> verifyEmail(String email);
+
+    List<ClassroomsOfUserDTO> getClassrooms(Long id);
 }
