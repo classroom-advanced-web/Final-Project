@@ -72,6 +72,6 @@
   }
   body {
     font-family: 'Poppins', sans-serif;
-    @apply bg-background text-foreground;
+    @apply h-screen bg-background text-foreground;
   }
 }

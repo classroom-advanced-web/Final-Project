@@ -21,7 +21,7 @@ const ClassPage = () => {
           </div>
         </section>
         <section className='mt-5 flex items-start gap-3'>
-          <div className='hidden w-[174px] md:inline-block'>
+          <div className='hidden w-[240px] md:inline-block'>
             <ClassCode classCode='ulzkea2' />
           </div>
           <div>
