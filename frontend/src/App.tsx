@@ -16,6 +16,10 @@ const ProfilePage = lazy(() => import('./pages/profile/ProfilePage'));
 const ForgotPasswordPage = lazy(() => import('./pages/forgot-password/ForgotPassword'));
 const RedeemOTPPage = lazy(() => import('./pages/profile/otp/RedeemOTP'));
 const ResetPasswordPage = lazy(() => import('./pages/forgot-password/ResetPassword'));
+const ClassPage = lazy(() => import('./pages/class/ClassPage'));
+const ClassworkPage = lazy(() => import('./pages/classwork/ClassworkPage'));
+const PeoplePage = lazy(() => import('./pages/people/PeoplePage'));
+const GradesPage = lazy(() => import('./pages/grades/GradesPage'));
 
 function App() {
   return (
@@ -28,6 +32,38 @@ function App() {
             element={
               <PrivateRoute>
                 <HomePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/class/:id'
+            element={
+              <PrivateRoute>
+                <ClassPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/classwork/:id'
+            element={
+              <PrivateRoute>
+                <ClassworkPage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/people/:id'
+            element={
+              <PrivateRoute>
+                <PeoplePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/grades/:id'
+            element={
+              <PrivateRoute>
+                <GradesPage />
               </PrivateRoute>
             }
           />
