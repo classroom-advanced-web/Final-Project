@@ -1,11 +1,11 @@
 import ClassNav from '@/components/class/ClassNav';
-import { Button } from '@/components/ui/button';
 import { DEFAULT_THUMB } from '@/constance/constance';
-import { HiDotsVertical } from 'react-icons/hi';
 import { useParams } from 'react-router-dom';
+import ClassCode from './ClassCode';
 
 const ClassPage = () => {
   const { id } = useParams();
+  console.log(id);
   return (
     <div>
       <ClassNav page='stream' />
@@ -21,17 +21,7 @@ const ClassPage = () => {
         </section>
         <section className='mt-5 flex items-start gap-3'>
           <div className='hidden w-[174px]  md:inline-block'>
-            <div className=' w-full rounded-sm border-[1px] p-3'>
-              <div className='flex items-center justify-between'>
-                <span className='text-sm'>Class code</span>
-                <Button variant='ghost' className='text-sm'>
-                  <HiDotsVertical />
-                </Button>
-              </div>
-              <div>
-                <h3 className='text-xl font-medium'>zjcm5k6</h3>
-              </div>
-            </div>
+            <ClassCode classCode='ulzkea2' />
           </div>
           <div>
             <div className='flex h-[120px] w-full items-center gap-2 rounded-sm border-[1px] px-3 py-2'>
