@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
-import { IoSettingsOutline } from 'react-icons/io5';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '../ui/button';
+import ClassSetting from './ClassSetting';
 
 type Props = {
   page: 'stream' | 'classwork' | 'people' | 'grades';
@@ -38,9 +38,7 @@ const ClassNav = ({ page }: Props) => {
           </Link>
         </li>
         <li className='ml-auto py-1 '>
-          <Button variant='ghost' className='text-xl'>
-            <IoSettingsOutline />
-          </Button>
+          <ClassSetting />
         </li>
       </ul>
     </nav>
