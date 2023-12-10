@@ -84,7 +84,7 @@ public class ClassroomServiceImpl implements IClassroomService {
         ClassUser savedData = classUserRepository.save(classUser);
 
 
-        return Map.of("class_id", savedData.getId());
+        return Map.of("class_id", savedData.getClassroom().getId());
     }
 
     @Override
