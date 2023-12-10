@@ -32,9 +32,9 @@ public class Role {
     @Column(name = "role_name", nullable = false, unique = true)
     private String name;
 
-   @OneToOne(mappedBy = "role")
+   @OneToMany(mappedBy = "role")
    @JsonIgnore
-    private ClassUser classUser;
+    private List<ClassUser> classUsers;
 
     @Column(name = "revoked")
     private boolean revoked;

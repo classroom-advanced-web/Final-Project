@@ -45,15 +45,24 @@ public class ClassroomServiceImpl implements IClassroomService {
         Classroom savedClassroom = classRoomRepository.save(classRoom);
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        classUserRepository.save(
-                ClassUser.builder()
-                .classroom(savedClassroom)
-                .role(roleRepository.findByName(RoleEnum.Owner.name()).orElseThrow(
-                        () -> new NotFoundException("Role not found")
-                ))
-                .user(user)
-                .build()
+        Role role = roleRepository.findByName(RoleEnum.Owner.name()).orElseThrow(
+                () -> new NotFoundException("Role not found")
         );
+        ClassUser classUser =  ClassUser.builder()
+                .classroom(savedClassroom)
+                .role(role)
+                .user(user)
+                .build();
+
+        try {
+            classUserRepository.save(
+                    classUser
+            );
+        } catch (Exception e) {
+            throw  new ConflictException(e.getMessage());
+        }
+
+
 
         return classRoomMapper.toDTO(savedClassroom);
 
