@@ -30,6 +30,7 @@ public class UserDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date DOB;
 
+    @JsonProperty("is_activated")
     private Boolean isActivated;
 
 }
