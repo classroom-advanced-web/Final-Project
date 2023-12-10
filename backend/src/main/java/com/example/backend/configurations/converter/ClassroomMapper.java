@@ -5,7 +5,7 @@ import com.example.backend.entities.Classroom;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class ClassRoomMapper implements IMapper<Classroom, ClassroomDTO> {
+public class ClassroomMapper implements IMapper<Classroom, ClassroomDTO> {
 
     @Override
     public Classroom toEntity(ClassroomDTO obj) {
@@ -15,6 +15,7 @@ public class ClassRoomMapper implements IMapper<Classroom, ClassroomDTO> {
                 .subject(obj.getSubject())
                 .code(obj.getCode())
                 .room(obj.getRoom())
+                .section(obj.getSection())
                 .imageUrl(obj.getImageUrl())
                 .build();
     }
@@ -28,6 +29,7 @@ public class ClassRoomMapper implements IMapper<Classroom, ClassroomDTO> {
                 .subject(obj.getSubject())
                 .code(obj.getCode())
                 .room(obj.getRoom())
+                .section(obj.getSection())
                 .imageUrl(obj.getImageUrl())
                 .build();
     }

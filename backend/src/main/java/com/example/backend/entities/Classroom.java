@@ -47,6 +47,9 @@ public class Classroom {
     @Column(name = "class_image_url", nullable = false)
     private String imageUrl;
 
+    @Column(name = "class_section")
+    private String section;
+
     @OneToMany(mappedBy = "classroom")
     @JsonIgnore
     private List<ClassUser> classUsers;

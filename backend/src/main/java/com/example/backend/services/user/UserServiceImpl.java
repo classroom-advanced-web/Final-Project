@@ -1,6 +1,6 @@
 package com.example.backend.services.user;
 
-import com.example.backend.configurations.converter.ClassRoomMapper;
+import com.example.backend.configurations.converter.ClassroomMapper;
 import com.example.backend.configurations.converter.IMapper;
 import com.example.backend.configurations.converter.RoleMapper;
 import com.example.backend.constants.AppConstant;
@@ -48,7 +48,7 @@ public class UserServiceImpl implements IUserService {
     private final RoleRepository roleRepository;
     private final OTPRepository otpRepository;
     private final ClassroomRepository classroomRepository;
-    private final ClassRoomMapper classRoomMapper;
+    private final ClassroomMapper classRoomMapper;
     private final RoleMapper roleMapper;
     private final ITokenService tokenService;
     private final PasswordEncoder passwordEncoder;

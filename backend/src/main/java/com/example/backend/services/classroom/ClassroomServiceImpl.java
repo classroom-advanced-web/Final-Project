@@ -1,6 +1,6 @@
 package com.example.backend.services.classroom;
 
-import com.example.backend.configurations.converter.ClassRoomMapper;
+import com.example.backend.configurations.converter.ClassroomMapper;
 import com.example.backend.dtos.ClassroomDTO;
 import com.example.backend.dtos.JoinClassRequestDTO;
 import com.example.backend.entities.Classroom;
@@ -13,6 +13,7 @@ import com.example.backend.repositories.ClassUserRepository;
 import com.example.backend.repositories.RoleRepository;
 import com.example.backend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -27,7 +28,7 @@ public class ClassroomServiceImpl implements IClassroomService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final ClassUserRepository classUserRepository;
-    private final ClassRoomMapper classRoomMapper;
+    private final ClassroomMapper classRoomMapper;
 
     private final int SHORT_IDENTIFIER_LENGTH = 6;
 
@@ -75,6 +76,8 @@ public class ClassroomServiceImpl implements IClassroomService {
         Classroom classRoom = classRoomRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Classroom not found")
         );
+
+        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         return classRoomMapper.toDTO(classRoom);
     }

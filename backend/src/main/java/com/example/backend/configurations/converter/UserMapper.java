@@ -6,7 +6,7 @@ import com.example.backend.entities.User;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class UserIMapper implements IMapper<User, UserDTO> {
+public class UserMapper implements IMapper<User, UserDTO> {
     @Override
     public User toEntity(UserDTO obj) {
         return User.builder()

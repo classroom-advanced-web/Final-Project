@@ -18,6 +18,8 @@ public class ClassroomDTO {
     String description;
     String subject;
 
+    String section;
+
     String code;
     String room;
 

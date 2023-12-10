@@ -31,24 +31,19 @@ public class BackendApplication {
                           ) {
         return args -> {
 
-            try {
-                System.out.println(otpServiceImpl.generateOTP());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            Role student = Role.builder()
-                    .name(RoleEnum.STUDENT.name())
-                    .build();
-
-            roleRepository.save(
-                    student
+            roleRepository.save(Role.builder()
+                    .name(RoleEnum.Owner.name())
+                    .build()
             );
 
-            roleRepository.save(
-                    Role.builder()
-                            .name(RoleEnum.TEACHER.name())
-                            .build()
+            roleRepository.save(Role.builder()
+                    .name(RoleEnum.Teacher.name())
+                    .build()
+            );
+
+            roleRepository.save(Role.builder()
+                    .name(RoleEnum.Student.name())
+                    .build()
             );
 
             userRepository.save(
