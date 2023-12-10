@@ -9,13 +9,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { useToast } from '../ui/use-toast';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
   open: boolean;
-  onOpenChange?: (open: boolean) => void;
+  onOpenChange: (open: boolean) => void;
 };
 
 const CreateClassForm = ({ open, onOpenChange }: Props) => {
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof createClassSchema>>({
     resolver: zodResolver(createClassSchema),
     defaultValues: {
@@ -36,6 +38,8 @@ const CreateClassForm = ({ open, onOpenChange }: Props) => {
           title: 'Create class successfully'
         });
         form.reset();
+        onOpenChange(false);
+        navigate(`/class/${res.id}`);
       }
     } catch (error) {
       console.error(error);
