@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.nio.channels.AcceptPendingException;
+import java.nio.file.AccessDeniedException;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Map;
@@ -74,13 +76,16 @@ public class ClassroomServiceImpl implements IClassroomService {
     }
 
     @Override
-    public ClassroomDTO getClassRoom(Long id) {
+    public ClassroomDTO getClassRoom(Long id) throws AccessDeniedException {
 
         Classroom classRoom = classRoomRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Classroom not found")
         );
 
-        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!classUserRepository.existsByUserAndClassroom(user, classRoom)) {
+            throw new AccessDeniedException("User is not in this class");
+        }
 
         return classRoomMapper.toDTO(classRoom);
     }

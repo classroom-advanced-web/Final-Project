@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.nio.file.AccessDeniedException;
 import java.util.Map;
 
 @RestController
@@ -24,7 +25,10 @@ public class ClassroomController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClassroomDTO> getClassRoom(@PathVariable Long id) {
+    public ResponseEntity<ClassroomDTO> getClassRoom(@PathVariable Long id) throws AccessDeniedException {
+
+
+
         return ResponseEntity.ok(classroomService.getClassRoom(id));
     }
 
