@@ -2,6 +2,11 @@ import { DEFAULT_THUMB } from '@/constance/constance';
 import instance from './axiosConfig';
 
 class ClassApi {
+  getClasses = async () => {
+    const res = await instance.get('/users/classrooms');
+    return res.data;
+  };
+
   createClass = async ({
     className,
     section,

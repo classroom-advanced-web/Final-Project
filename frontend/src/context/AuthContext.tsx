@@ -26,7 +26,6 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
       const res = await authApi.loadUser();
 
       if (res) {
-        console.log(res);
         const { id, email, dob, first_name, last_name, gender, is_activated } = res;
         const user = {
           id,
@@ -74,8 +73,6 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
 
     try {
       const res = await authApi.loginWithGoogle(accessToken);
-
-      console.log(res);
 
       if (res?.access_token) {
         localStorage.setItem('access-token', res.access_token);

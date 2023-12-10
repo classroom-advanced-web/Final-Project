@@ -33,7 +33,6 @@ const ProfileForm = ({ setIsEditMode, user }: Props) => {
 
   const onSubmit = async (data: z.infer<typeof ProfileSchema>) => {
     setLoading(true);
-    console.log(data);
     try {
       const { birthday, firstName, gender, lastName } = data;
       const res = await profileApi.updateProfile({

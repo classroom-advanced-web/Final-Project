@@ -12,3 +12,9 @@ export const thumbs = [
 ];
 
 export const DEFAULT_THUMB = 'https://gstatic.com/classroom/themes/img_backtoschool_thumb.jpg';
+
+export const ROLE = {
+  OWNER: 1,
+  TEACHER: 2,
+  STUDENT: 3
+};
