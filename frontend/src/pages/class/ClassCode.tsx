@@ -7,7 +7,6 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import { HiDotsVertical } from 'react-icons/hi';
 import { IoLink, IoCopyOutline } from 'react-icons/io5';
-import { useLocation } from 'react-router-dom';
 
 type Props = {
   classCode: string;
