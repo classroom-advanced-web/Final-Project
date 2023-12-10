@@ -74,3 +74,11 @@ export const createClassSchema = z.object({
 export const joinClassSchema = z.object({
   code: z.string().min(1, 'Please enter your code').trim()
 });
+
+export const updateClassSchema = z.object({
+  className: z.string().min(1, 'Please enter your class name').trim(),
+  description: z.string().trim(),
+  section: z.string().trim(),
+  room: z.string().trim(),
+  subject: z.string().trim()
+});
