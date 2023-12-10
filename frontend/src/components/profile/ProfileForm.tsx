@@ -19,7 +19,6 @@ type Props = {
 
 const ProfileForm = ({ setIsEditMode, user }: Props) => {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof ProfileSchema>>({
     resolver: zodResolver(ProfileSchema),

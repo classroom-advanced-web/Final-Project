@@ -1,14 +1,13 @@
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { DEFAULT_THUMB } from '@/constance/constance';
-import { HiDotsVertical } from 'react-icons/hi';
-import { FaArrowTrendUp } from 'react-icons/fa6';
-import { LuUserSquare2 } from 'react-icons/lu';
-import './home.css';
-import { useNavigate } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import classApi from '@/api/classApi';
 import Loading from '@/components/loading/Loading';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { FaArrowTrendUp } from 'react-icons/fa6';
+import { HiDotsVertical } from 'react-icons/hi';
+import { LuUserSquare2 } from 'react-icons/lu';
+import { useQuery } from 'react-query';
+import { useNavigate } from 'react-router-dom';
+import './home.css';
 
 type getClassApi = {
   classroom: Classroom;
