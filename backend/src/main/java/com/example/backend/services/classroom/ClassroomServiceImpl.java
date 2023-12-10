@@ -55,11 +55,11 @@ public class ClassroomServiceImpl implements IClassroomService {
                 .build();
 
         try {
-            ClassUser savedClassUser = classUserRepository.save(
+            classUserRepository.save(
                     classUser
             );
         } catch (Exception e) {
-            e.printStackTrace();
+            throw  new ConflictException(e.getMessage());
         }
 
 
