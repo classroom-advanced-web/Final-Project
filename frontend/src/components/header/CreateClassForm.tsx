@@ -19,10 +19,11 @@ import * as z from 'zod';
 import { useToast } from '../ui/use-toast';
 
 type Props = {
-  children?: React.ReactNode;
+  open: boolean;
+  onOpenChange?: (open: boolean) => void;
 };
 
-const CreateClassForm = ({ children }: Props) => {
+const CreateClassForm = ({ open, onOpenChange }: Props) => {
   const form = useForm<z.infer<typeof createClassSchema>>({
     resolver: zodResolver(createClassSchema),
     defaultValues: {
@@ -50,10 +51,7 @@ const CreateClassForm = ({ children }: Props) => {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant='ghost'>{children}</Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='sm:max-w-[425px]'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>

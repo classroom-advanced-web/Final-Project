@@ -1,13 +1,5 @@
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger
-} from '@/components/ui/dialog';
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -18,10 +10,11 @@ import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 
 type Props = {
-  children?: React.ReactNode;
+  open: boolean;
+  onOpenChange?: (open: boolean) => void;
 };
 
-const JoinClassForm = ({ children }: Props) => {
+const JoinClassForm = ({ open, onOpenChange }: Props) => {
   const form = useForm<z.infer<typeof joinClassSchema>>({
     resolver: zodResolver(joinClassSchema),
     defaultValues: {
@@ -38,10 +31,7 @@ const JoinClassForm = ({ children }: Props) => {
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button variant='ghost'>{children}</Button>
-      </DialogTrigger>
+    <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='sm:max-w-[425px]'>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
