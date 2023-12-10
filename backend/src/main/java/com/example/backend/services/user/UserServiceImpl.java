@@ -167,7 +167,11 @@ public class UserServiceImpl implements IUserService {
 
         return optionalUser.map(existingUser -> {
             // Use BeanUtils to copy non-null properties from DTO to entity
-            BeanUtils.copyProperties(userDTO, existingUser, getNullPropertyNames(userDTO));
+            Set<String> ignoreProperties = getNullPropertyNames(userDTO) ;
+            ignoreProperties.add("id");
+            ignoreProperties.add("email");
+            ignoreProperties.add("isActivated");
+            BeanUtils.copyProperties(userDTO, existingUser, ignoreProperties.toArray(new String[0]));
             existingUser.setGender(userDTO.getGender() == null ? "UNKNOWN" : userDTO.getGender().name());
 
             // Save the updated user
@@ -335,7 +339,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     // Helper method to get null property names from an object
-    private String[] getNullPropertyNames(Object source) {
+    private Set<String> getNullPropertyNames(Object source) {
         final BeanWrapper src = new BeanWrapperImpl(source);
         java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
 
@@ -345,7 +349,7 @@ public class UserServiceImpl implements IUserService {
             if (srcValue == null) emptyNames.add(pd.getName());
         }
 
-        String[] result = new String[emptyNames.size()];
-        return emptyNames.toArray(result);
+
+        return emptyNames;
     }
 }
