@@ -5,32 +5,33 @@ import {
   NavigationMenuTrigger,
   NavigationMenuContent
 } from '@/components/ui/navigation-menu';
-import { Button } from '../ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 import { Plus } from 'lucide-react';
 import CreateClassForm from './CreateClassForm';
 import JoinClassForm from './JoinClassForm';
 
 const AddClassButton = () => {
   return (
-    <NavigationMenu className='w-max'>
-      <NavigationMenuList>
-        <NavigationMenuItem>
-          <NavigationMenuTrigger>
-            <Plus />
-          </NavigationMenuTrigger>
-          <NavigationMenuContent className='px-4 py-5'>
-            <ul className='flex flex-col justify-evenly gap-5'>
-              <li>
-                <JoinClassForm>Join class</JoinClassForm>
-              </li>
-              <li>
-                <CreateClassForm>Create class </CreateClassForm>
-              </li>
-            </ul>
-          </NavigationMenuContent>
-        </NavigationMenuItem>
-      </NavigationMenuList>
-    </NavigationMenu>
+    <DropdownMenu>
+      <DropdownMenuTrigger>
+        <Plus />
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuItem>
+          <JoinClassForm>Join class</JoinClassForm>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <CreateClassForm>Create class </CreateClassForm>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 export default AddClassButton;
