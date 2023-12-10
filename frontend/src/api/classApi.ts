@@ -43,8 +43,7 @@ class ClassApi {
     subject: string;
     room: string;
   }) => {
-    const res = await instance.put('/classrooms/update', {
-      id: classId,
+    const res = await instance.put(`/classrooms/update/${classId}`, {
       name: className,
       description,
       section,
