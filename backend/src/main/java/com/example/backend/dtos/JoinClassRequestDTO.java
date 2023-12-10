@@ -17,7 +17,5 @@ public class JoinClassRequestDTO {
     @JsonProperty("role_id")
     Long roleId;
 
-    @JsonProperty("user_id")
-    Long userId;
 
 }

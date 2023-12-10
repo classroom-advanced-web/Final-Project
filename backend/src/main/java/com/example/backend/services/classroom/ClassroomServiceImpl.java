@@ -7,6 +7,7 @@ import com.example.backend.entities.Classroom;
 import com.example.backend.entities.ClassUser;
 import com.example.backend.entities.Role;
 import com.example.backend.entities.User;
+import com.example.backend.exceptions.ConflictException;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.repositories.ClassroomRepository;
 import com.example.backend.repositories.ClassUserRepository;
@@ -55,9 +56,11 @@ public class ClassroomServiceImpl implements IClassroomService {
                 () -> new NotFoundException("Role not found")
         );
 
-        User user = userRepository.findById(body.getUserId()).orElseThrow(
-                () -> new NotFoundException("User not found")
-        );
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(classUserRepository.existsByUserAndClassroom(user, classRoom)) {
+            throw new ConflictException("User already joined this class");
+        }
 
         ClassUser classUser = ClassUser.builder()
                 .classroom(classRoom)
