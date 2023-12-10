@@ -28,6 +28,32 @@ class ClassApi {
     return res.data;
   };
 
+  updateClass = async ({
+    classId,
+    className,
+    description,
+    section,
+    subject,
+    room
+  }: {
+    classId: number;
+    className: string;
+    description: string;
+    section: string;
+    subject: string;
+    room: string;
+  }) => {
+    const res = await instance.put('/classrooms/update', {
+      id: classId,
+      name: className,
+      description,
+      section,
+      subject,
+      room
+    });
+    return res.data;
+  };
+
   getClassDetail = async (classId: number) => {
     const res = await instance.get(`/classrooms/${classId}`);
     return res.data;
