@@ -28,6 +28,7 @@ type ProfileFields = {
 type Classroom = {
   id: number;
   name: string;
+  section?: string;
   description?: string;
   subject?: string;
   code: string;
