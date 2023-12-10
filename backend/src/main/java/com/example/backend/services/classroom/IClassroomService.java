@@ -14,4 +14,6 @@ public interface IClassroomService {
 
     ClassroomDTO getClassRoom(Long id) throws AccessDeniedException;
 
+    ClassroomDTO updateClassRoom(ClassroomDTO classRoomDTO) throws AccessDeniedException;
+
 }

@@ -14,7 +14,9 @@ import com.example.backend.repositories.ClassroomRepository;
 import com.example.backend.repositories.ClassUserRepository;
 import com.example.backend.repositories.RoleRepository;
 import com.example.backend.repositories.UserRepository;
+import com.example.backend.services.helper.Helper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,7 @@ import java.nio.file.AccessDeniedException;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +36,7 @@ public class ClassroomServiceImpl implements IClassroomService {
     private final UserRepository userRepository;
     private final ClassUserRepository classUserRepository;
     private final ClassroomMapper classRoomMapper;
+    private final Helper helper;
 
     private final int SHORT_IDENTIFIER_LENGTH = 6;
 
@@ -111,6 +115,30 @@ public class ClassroomServiceImpl implements IClassroomService {
         return classRoomMapper.toDTO(classRoom);
     }
 
+    @Override
+    public ClassroomDTO updateClassRoom(ClassroomDTO classRoomDTO) throws AccessDeniedException {
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        Classroom classRoom = classRoomRepository.findById(classRoomDTO.getId()).orElseThrow(
+                () -> new NotFoundException("Classroom not found")
+        );
+
+        ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classRoom.getId()).orElse(null);
+        if(classUser == null ||
+                !classUser.getRole().getName().equals(RoleEnum.Owner.name())) {
+            throw new AccessDeniedException("User is not owner of this class");
+        }
+
+
+        Set<String> ignoreProperties = helper.getNullPropertyNames(classRoomDTO);
+        ignoreProperties.add("id");
+        ignoreProperties.add("code");
+        BeanUtils.copyProperties(classRoomDTO, classRoom, ignoreProperties.toArray(new String[0]));
+        Classroom savedClassroom = classRoomRepository.save(classRoom);
+
+        return classRoomMapper.toDTO(savedClassroom);
+    }
 
     private static String generateShortIdentifier(int length) {
         SecureRandom random = new SecureRandom();

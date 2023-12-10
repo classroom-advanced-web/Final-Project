@@ -15,6 +15,7 @@ import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.repositories.*;
 import com.example.backend.services.email.IEmailService;
 import com.example.backend.services.google.IGoogleService;
+import com.example.backend.services.helper.Helper;
 import com.example.backend.services.otp.IOTPService;
 import com.example.backend.services.token.ITokenService;
 import jakarta.mail.MessagingException;
@@ -54,6 +55,7 @@ public class UserServiceImpl implements IUserService {
     private final IGoogleService googleService;
     private final IOTPService otpService;
     private final IEmailService emailService;
+    private final Helper helper;
 
     private final IMapper<User, UserDTO> userIMapper;
 
@@ -166,7 +168,7 @@ public class UserServiceImpl implements IUserService {
 
         return optionalUser.map(existingUser -> {
             // Use BeanUtils to copy non-null properties from DTO to entity
-            Set<String> ignoreProperties = getNullPropertyNames(userDTO) ;
+            Set<String> ignoreProperties = helper.getNullPropertyNames(userDTO) ;
             ignoreProperties.add("id");
             ignoreProperties.add("email");
             ignoreProperties.add("isActivated");
@@ -340,17 +342,5 @@ public class UserServiceImpl implements IUserService {
     }
 
     // Helper method to get null property names from an object
-    private Set<String> getNullPropertyNames(Object source) {
-        final BeanWrapper src = new BeanWrapperImpl(source);
-        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
 
-        Set<String> emptyNames = new HashSet<>();
-        for (java.beans.PropertyDescriptor pd : pds) {
-            Object srcValue = src.getPropertyValue(pd.getName());
-            if (srcValue == null) emptyNames.add(pd.getName());
-        }
-
-
-        return emptyNames;
-    }
 }

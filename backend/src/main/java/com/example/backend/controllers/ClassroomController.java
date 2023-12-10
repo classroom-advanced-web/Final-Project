@@ -38,4 +38,11 @@ public class ClassroomController {
                 classroomService.joinClassRoom(body)
         );
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<ClassroomDTO> updateClassRoom(@RequestBody ClassroomDTO classRoomDTO) throws AccessDeniedException {
+        return ResponseEntity.ok(
+                classroomService.updateClassRoom(classRoomDTO)
+        );
+    }
 }
