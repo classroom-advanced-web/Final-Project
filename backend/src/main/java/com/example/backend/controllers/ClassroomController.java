@@ -2,13 +2,16 @@ package com.example.backend.controllers;
 
 import com.example.backend.dtos.ClassroomDTO;
 import com.example.backend.dtos.JoinClassRequestDTO;
+import com.example.backend.dtos.UsersOfClassroomDTO;
 import com.example.backend.services.classroom.IClassroomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.AccessDeniedException;
+
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -39,10 +42,17 @@ public class ClassroomController {
         );
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<ClassroomDTO> updateClassRoom(@RequestBody ClassroomDTO classRoomDTO) throws AccessDeniedException {
+    @PutMapping("/update/{id}")
+    public ResponseEntity<ClassroomDTO> updateClassRoom(@PathVariable Long id, @RequestBody ClassroomDTO classRoomDTO) throws AccessDeniedException {
         return ResponseEntity.ok(
-                classroomService.updateClassRoom(classRoomDTO)
+                classroomService.updateClassRoom(id, classRoomDTO)
+        );
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<List<UsersOfClassroomDTO>> getUsersOfClassroom(@PathVariable Long id) throws AccessDeniedException {
+        return ResponseEntity.ok(
+                classroomService.getUsersOfClassroom(id)
         );
     }
 }

@@ -13,6 +13,8 @@ public interface ClassUserRepository extends JpaRepository<ClassUser, Long> {
 
     List<ClassUser> findByUserId(Long userId);
 
+    List<ClassUser> findByClassroomId(Long classroomId);
+
     Optional<ClassUser> findByUserIdAndClassroomId(Long userId, Long classroomId);
 
 
