@@ -28,7 +28,7 @@ class ClassApi {
     return res.data;
   };
 
-  getClassDetail = async (classId: string) => {
+  getClassDetail = async (classId: number) => {
     const res = await instance.get(`/classrooms/${classId}`);
     return res.data;
   };
