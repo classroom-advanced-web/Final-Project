@@ -29,9 +29,9 @@ public class UserController {
     }
 
 
-    @GetMapping("/classrooms/{id}")
-    public ResponseEntity<List<ClassroomsOfUserDTO>> getClassrooms(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getClassrooms(id));
+    @GetMapping("/classrooms")
+    public ResponseEntity<List<ClassroomsOfUserDTO>> getClassrooms() {
+        return ResponseEntity.ok(userService.getClassrooms());
     }
 
 }

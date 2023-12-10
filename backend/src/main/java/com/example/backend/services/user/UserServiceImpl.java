@@ -12,10 +12,7 @@ import com.example.backend.entities.User;
 import com.example.backend.exceptions.AuthenticationErrorException;
 import com.example.backend.exceptions.ConflictException;
 import com.example.backend.exceptions.NotFoundException;
-import com.example.backend.repositories.ClassroomRepository;
-import com.example.backend.repositories.OTPRepository;
-import com.example.backend.repositories.RoleRepository;
-import com.example.backend.repositories.UserRepository;
+import com.example.backend.repositories.*;
 import com.example.backend.services.email.IEmailService;
 import com.example.backend.services.google.IGoogleService;
 import com.example.backend.services.otp.IOTPService;
@@ -31,6 +28,7 @@ import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +46,7 @@ public class UserServiceImpl implements IUserService {
     private final RoleRepository roleRepository;
     private final OTPRepository otpRepository;
     private final ClassroomRepository classroomRepository;
+    private final ClassUserRepository classUserRepository;
     private final ClassroomMapper classRoomMapper;
     private final RoleMapper roleMapper;
     private final ITokenService tokenService;
@@ -315,13 +314,15 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public List<ClassroomsOfUserDTO> getClassrooms(Long id) {
+    public List<ClassroomsOfUserDTO> getClassrooms() {
 
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new NotFoundException("User not found")
-        );
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        List<ClassUser> classUsers = user.getClassUsers();
+
+        List<ClassUser> classUsers = classUserRepository.findByUserId(user.getId());
+        if(classUsers == null) {
+            return new ArrayList<>();
+        }
         return classUsers.stream()
                 .map(classUser -> {
 

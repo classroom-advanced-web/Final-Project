@@ -72,7 +72,7 @@ public class ClassroomServiceImpl implements IClassroomService {
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        if(classUserRepository.existsByUserAndClassroom(user, classRoom)) {
+        if(classUserRepository.existsByUserIdAndClassroomId(user.getId(), classRoom.getId())) {
             throw new ConflictException("User already joined this class");
         }
 
@@ -95,7 +95,7 @@ public class ClassroomServiceImpl implements IClassroomService {
         );
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(!classUserRepository.existsByUserAndClassroom(user, classRoom)) {
+        if(!classUserRepository.existsByUserIdAndClassroomId(user.getId(), classRoom.getId())) {
             throw new AccessDeniedException("User is not in this class");
         }
 

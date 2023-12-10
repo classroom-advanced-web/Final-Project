@@ -33,5 +33,5 @@ public interface IUserService {
     Map<String, String> renewPassword(String email, String password);
     Map<String, String> verifyEmail(String email);
 
-    List<ClassroomsOfUserDTO> getClassrooms(Long id);
+    List<ClassroomsOfUserDTO> getClassrooms();
 }
