@@ -1,9 +1,12 @@
 package com.example.backend.services.classroom;
 
 import com.example.backend.configurations.converter.ClassroomMapper;
+import com.example.backend.configurations.converter.RoleMapper;
+import com.example.backend.configurations.converter.UserMapper;
 import com.example.backend.constants.RoleEnum;
 import com.example.backend.dtos.ClassroomDTO;
 import com.example.backend.dtos.JoinClassRequestDTO;
+import com.example.backend.dtos.UsersOfClassroomDTO;
 import com.example.backend.entities.Classroom;
 import com.example.backend.entities.ClassUser;
 import com.example.backend.entities.Role;
@@ -17,13 +20,14 @@ import com.example.backend.repositories.UserRepository;
 import com.example.backend.services.helper.Helper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.nio.channels.AcceptPendingException;
-import java.nio.file.AccessDeniedException;
+
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,6 +40,8 @@ public class ClassroomServiceImpl implements IClassroomService {
     private final UserRepository userRepository;
     private final ClassUserRepository classUserRepository;
     private final ClassroomMapper classRoomMapper;
+    private final UserMapper userMapper;
+    private final RoleMapper roleMapper;
     private final Helper helper;
 
     private final int SHORT_IDENTIFIER_LENGTH = 6;
@@ -116,11 +122,11 @@ public class ClassroomServiceImpl implements IClassroomService {
     }
 
     @Override
-    public ClassroomDTO updateClassRoom(ClassroomDTO classRoomDTO) throws AccessDeniedException {
+    public ClassroomDTO updateClassRoom(Long id, ClassroomDTO classRoomDTO) {
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        Classroom classRoom = classRoomRepository.findById(classRoomDTO.getId()).orElseThrow(
+        Classroom classRoom = classRoomRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Classroom not found")
         );
 
@@ -138,6 +144,30 @@ public class ClassroomServiceImpl implements IClassroomService {
         Classroom savedClassroom = classRoomRepository.save(classRoom);
 
         return classRoomMapper.toDTO(savedClassroom);
+    }
+
+    @Override
+    public List<UsersOfClassroomDTO> getUsersOfClassroom(Long id) throws AccessDeniedException {
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!classUserRepository.existsByUserIdAndClassroomId(user.getId(), id)) {
+            throw new AccessDeniedException("User is not in this class");
+        }
+
+        return classUserRepository.findByClassroomId(id).stream().map(
+                classUser -> {
+                   Role role = roleRepository.findById(classUser.getRole().getId()).orElseThrow(
+                           () -> new NotFoundException("Role not found")
+                     );
+                   User _user = userRepository.findById(classUser.getUser().getId()).orElseThrow(
+                           () -> new NotFoundException("User not found")
+                     );
+                    return UsersOfClassroomDTO.builder()
+                            .role(roleMapper.toDTO(role))
+                            .user(userMapper.toDTO(_user))
+                           .build();
+                }
+        ).toList();
     }
 
     private static String generateShortIdentifier(int length) {

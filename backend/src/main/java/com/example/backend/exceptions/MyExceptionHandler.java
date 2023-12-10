@@ -59,7 +59,7 @@ public class MyExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> resolveException(AccessDeniedException exception) {
         return new ResponseEntity<>(
                 ErrorResponseDTO.builder()
-                        .error("You are not authorized")
+                        .error(exception.getMessage())
                         .build(),
 
                 HttpStatus.FORBIDDEN);
