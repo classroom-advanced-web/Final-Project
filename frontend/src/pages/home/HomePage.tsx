@@ -8,35 +8,44 @@ import './home.css';
 import { useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import classApi from '@/api/classApi';
+import Loading from '@/components/loading/Loading';
 
-const classes = Array(10).fill(0);
+type getClassApi = {
+  classroom: Classroom;
+  role: Role;
+};
 
 const HomePage = () => {
   const { data, isLoading } = useQuery('classes', () => classApi.getClasses());
   const navigate = useNavigate();
-  const navigateToClass = () => {
-    navigate('/class/1');
+  const navigateToClass = (classId: number) => {
+    navigate(`/class/${classId}`);
   };
-  console.log(data);
+
+  if (!data) return;
+
+  if (isLoading) return <Loading />;
+
+  const classes = data;
   return (
     <main className='container h-[1200px]'>
       <h1 className='py-10 text-center text-4xl font-bold'>Your classes</h1>
       <section>
         <ul className='grid grid-cols-2 gap-6 md:flex md:flex-wrap md:justify-center'>
-          {classes.map(() => (
-            <li>
+          {classes.map((item: getClassApi) => (
+            <li key={item.classroom.id}>
               <Card
-                onClick={navigateToClass}
+                onClick={() => navigateToClass(item.classroom.id)}
                 className='cursor-pointer overflow-hidden rounded-md shadow-sm hover:shadow-md md:w-[300px]'
               >
                 <CardHeader className='h-[90px] p-0'>
                   <div
-                    style={{ backgroundImage: 'url(' + DEFAULT_THUMB + ')', backgroundSize: 'cover' }}
+                    style={{ backgroundImage: `url('${item.classroom.image_url}')`, backgroundSize: 'cover' }}
                     className='class-card__thumb flex h-full w-full items-center justify-between p-3'
                   >
                     <div className='overflow-hidden text-white'>
-                      <h2 className='truncate text-xl'>Classroom</h2>
-                      <p className='truncate text-sm'>Phát triển ứng dụng web nâng cao</p>
+                      <h2 className='truncate text-xl'>{item.classroom.name}</h2>
+                      <p className='truncate text-sm'>{item.classroom.section}</p>
                     </div>
                     <Button variant='ghost' className='text-xl text-white'>
                       <HiDotsVertical />
