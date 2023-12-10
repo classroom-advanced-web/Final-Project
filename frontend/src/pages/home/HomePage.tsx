@@ -8,6 +8,9 @@ import { LuUserSquare2 } from 'react-icons/lu';
 import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
 import './home.css';
+import { join } from 'path';
+import { useEffect } from 'react';
+import { ROLE } from '@/constance/constance';
 
 type getClassApi = {
   classroom: Classroom;
@@ -20,6 +23,25 @@ const HomePage = () => {
   const navigateToClass = (classId: number) => {
     navigate(`/class/${classId}`);
   };
+  const code = localStorage.getItem('code');
+  useEffect(() => {
+    const joinClass = async () => {
+      try {
+        if (code) {
+          const res = await classApi.joinClass(code, ROLE.STUDENT);
+          localStorage.removeItem('code');
+          navigate(`/class/${res.class_id}`);
+        }
+      } catch (error: any) {
+        console.log(error);
+      } finally {
+        localStorage.removeItem('code');
+      }
+    };
+    if (code) {
+      joinClass();
+    }
+  }, []);
 
   if (!data) return;
 
