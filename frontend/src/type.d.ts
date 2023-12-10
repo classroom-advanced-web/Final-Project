@@ -40,3 +40,8 @@ type Role = {
   id: number;
   name: string;
 };
+
+type ClassMember = {
+  user: User;
+  role: Role;
+};

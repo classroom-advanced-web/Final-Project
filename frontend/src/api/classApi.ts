@@ -65,6 +65,23 @@ class ClassApi {
     });
     return res.data;
   };
+
+  getStudents = async (classId: number) => {
+    const res = await instance.get(`/classrooms/users/${classId}`);
+    const data = res.data;
+    const students: ClassMember[] = data.map((student: any) => {
+      return {
+        ...student,
+        user: {
+          ...student.user,
+          firstName: student.user.first_name,
+          lastName: student.user.last_name
+        }
+      };
+    });
+
+    return students;
+  };
 }
 
 const classApi = new ClassApi();
