@@ -1,12 +1,14 @@
 package com.example.backend.services.classroom;
 
 import com.example.backend.configurations.converter.ClassroomMapper;
+import com.example.backend.constants.RoleEnum;
 import com.example.backend.dtos.ClassroomDTO;
 import com.example.backend.dtos.JoinClassRequestDTO;
 import com.example.backend.entities.Classroom;
 import com.example.backend.entities.ClassUser;
 import com.example.backend.entities.Role;
 import com.example.backend.entities.User;
+import com.example.backend.exceptions.ConflictException;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.repositories.ClassroomRepository;
 import com.example.backend.repositories.ClassUserRepository;
@@ -16,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.nio.channels.AcceptPendingException;
+import java.nio.file.AccessDeniedException;
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Map;
@@ -36,10 +40,21 @@ public class ClassroomServiceImpl implements IClassroomService {
     @Override
     public ClassroomDTO createClassRoom(ClassroomDTO classRoomDTO) {
 
-        System.out.println(classRoomDTO.getImageUrl());
         Classroom classRoom = classRoomMapper.toEntity(classRoomDTO);
         classRoom.setCode(generateShortIdentifier(SHORT_IDENTIFIER_LENGTH));
         Classroom savedClassroom = classRoomRepository.save(classRoom);
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        classUserRepository.save(
+                ClassUser.builder()
+                .classroom(savedClassroom)
+                .role(roleRepository.findByName(RoleEnum.Owner.name()).orElseThrow(
+                        () -> new NotFoundException("Role not found")
+                ))
+                .user(user)
+                .build()
+        );
+
         return classRoomMapper.toDTO(savedClassroom);
 
     }
@@ -55,9 +70,11 @@ public class ClassroomServiceImpl implements IClassroomService {
                 () -> new NotFoundException("Role not found")
         );
 
-        User user = userRepository.findById(body.getUserId()).orElseThrow(
-                () -> new NotFoundException("User not found")
-        );
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(classUserRepository.existsByUserAndClassroom(user, classRoom)) {
+            throw new ConflictException("User already joined this class");
+        }
 
         ClassUser classUser = ClassUser.builder()
                 .classroom(classRoom)
@@ -71,13 +88,16 @@ public class ClassroomServiceImpl implements IClassroomService {
     }
 
     @Override
-    public ClassroomDTO getClassRoom(Long id) {
+    public ClassroomDTO getClassRoom(Long id) throws AccessDeniedException {
 
         Classroom classRoom = classRoomRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Classroom not found")
         );
 
-        SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!classUserRepository.existsByUserAndClassroom(user, classRoom)) {
+            throw new AccessDeniedException("User is not in this class");
+        }
 
         return classRoomMapper.toDTO(classRoom);
     }
