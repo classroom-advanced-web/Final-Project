@@ -1,6 +1,7 @@
 package com.example.backend.services.classroom;
 
 import com.example.backend.configurations.converter.ClassroomMapper;
+import com.example.backend.constants.RoleEnum;
 import com.example.backend.dtos.ClassroomDTO;
 import com.example.backend.dtos.JoinClassRequestDTO;
 import com.example.backend.entities.Classroom;
@@ -39,10 +40,21 @@ public class ClassroomServiceImpl implements IClassroomService {
     @Override
     public ClassroomDTO createClassRoom(ClassroomDTO classRoomDTO) {
 
-        System.out.println(classRoomDTO.getImageUrl());
         Classroom classRoom = classRoomMapper.toEntity(classRoomDTO);
         classRoom.setCode(generateShortIdentifier(SHORT_IDENTIFIER_LENGTH));
         Classroom savedClassroom = classRoomRepository.save(classRoom);
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        classUserRepository.save(
+                ClassUser.builder()
+                .classroom(savedClassroom)
+                .role(roleRepository.findByName(RoleEnum.Owner.name()).orElseThrow(
+                        () -> new NotFoundException("Role not found")
+                ))
+                .user(user)
+                .build()
+        );
+
         return classRoomMapper.toDTO(savedClassroom);
 
     }
