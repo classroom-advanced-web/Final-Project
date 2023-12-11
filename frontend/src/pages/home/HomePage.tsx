@@ -2,13 +2,13 @@ import classApi from '@/api/classApi';
 import Loading from '@/components/loading/Loading';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import { ROLE } from '@/constance/constance';
 import { FaArrowTrendUp } from 'react-icons/fa6';
 import { HiDotsVertical } from 'react-icons/hi';
 import { LuUserSquare2 } from 'react-icons/lu';
 import { useQuery } from 'react-query';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './home.css';
-import { ROLE } from '@/constance/constance';
 
 type getClassApi = {
   classroom: Classroom;
@@ -42,9 +42,7 @@ const HomePage = () => {
   if (localStorage.getItem('redirect-url')) {
     const url = localStorage.getItem('redirect-url') ?? '';
     localStorage.removeItem('redirect-url');
-    const redirectUrl = new URL(url);
-    const path = redirectUrl.pathname;
-    console.log(path);
+
     return (window.location.href = url);
   }
 
