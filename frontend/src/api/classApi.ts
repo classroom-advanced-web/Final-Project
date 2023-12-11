@@ -82,6 +82,16 @@ class ClassApi {
 
     return students;
   };
+
+  inviteMember = async (classId: number, email: string, roleId: number) => {
+    const res = await instance.post(`/classrooms/invite/${classId}`, {
+      receiver_email: email,
+      redirect_url: `${window.location.host}/invite`,
+      role_id: roleId,
+      classroom_id: classId
+    });
+    return res.data;
+  };
 }
 
 const classApi = new ClassApi();

@@ -82,3 +82,7 @@ export const updateClassSchema = z.object({
   room: z.string().trim(),
   subject: z.string().trim()
 });
+
+export const inviteSchema = z.object({
+  email: z.string().min(1, 'Please enter your email').email('Please enter a valid email').trim()
+});

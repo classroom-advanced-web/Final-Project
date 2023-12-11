@@ -1,15 +1,18 @@
-import { useAuth } from "@/hooks/useAuth";
-import { Navigate } from "react-router-dom";
+import { useAuth } from '@/hooks/useAuth';
+import { Navigate } from 'react-router-dom';
 
 type Props = {
   redirectPath?: string;
   children: React.ReactNode;
 };
 
-const PrivateRoute = ({ redirectPath = "/login", children }: Props) => {
+const PrivateRoute = ({ redirectPath = '/login', children }: Props) => {
   useAuth();
 
-  if (!localStorage.getItem("access-token")) {
+  // const { host } = useLocation();
+  // console.log(host);
+
+  if (!localStorage.getItem('access-token')) {
     return <Navigate to={redirectPath} />;
   }
 

@@ -1,21 +1,15 @@
+import { useState } from 'react';
 import { MdPersonAddAlt } from 'react-icons/md';
+import InviteModal from './InviteModal';
 import StudentRow from './StudentRow';
-
-const students = [
-  {
-    name: 'Toàn Trần'
-  },
-  {
-    name: 'Lê Trần Thiện Thắng',
-    avatar: 'https://lh3.googleusercontent.com/a-/ALV-UjWxiiPvj0vI2j47V0SE_e2M5aiJRNJXKpmXHTe0LVkD970=s32-c'
-  }
-];
+import { ROLE } from '@/constance/constance';
 
 type Props = {
   students: ClassMember[];
 };
 
 const Students = ({ students }: Props) => {
+  const [open, setOpen] = useState(false);
   const numberStudent = students.length;
 
   return (
@@ -24,7 +18,7 @@ const Students = ({ students }: Props) => {
         <h1 className='text-2xl font-medium leading-10 '>Students</h1>
         <div className='flex gap-4'>
           <span>{numberStudent} student</span>
-          <span className='text-xl'>
+          <span className='cursor-pointer text-xl' onClick={() => setOpen(true)}>
             <MdPersonAddAlt />
           </span>
         </div>
@@ -39,6 +33,7 @@ const Students = ({ students }: Props) => {
           </li>
         ))}
       </ul>
+      <InviteModal open={open} onOpenChange={setOpen} roleId={ROLE.STUDENT} />
     </div>
   );
 };
