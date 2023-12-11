@@ -18,7 +18,12 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "classes_user")
+@Table(name = "classes_user",
+uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"class_id", "user_id"})
+}
+
+)
 @Where(clause = "revoked = false")
 public class ClassUser {
 
