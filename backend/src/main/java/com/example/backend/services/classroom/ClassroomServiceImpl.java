@@ -5,19 +5,15 @@ import com.example.backend.configurations.converter.RoleMapper;
 import com.example.backend.configurations.converter.UserMapper;
 import com.example.backend.constants.RoleEnum;
 import com.example.backend.dtos.ClassroomDTO;
+import com.example.backend.dtos.InvitationEmailRequestDTO;
 import com.example.backend.dtos.JoinClassRequestDTO;
 import com.example.backend.dtos.UsersOfClassroomDTO;
-import com.example.backend.entities.Classroom;
-import com.example.backend.entities.ClassUser;
-import com.example.backend.entities.Role;
-import com.example.backend.entities.User;
+import com.example.backend.entities.*;
 import com.example.backend.exceptions.ConflictException;
 import com.example.backend.exceptions.NotFoundException;
-import com.example.backend.repositories.ClassroomRepository;
-import com.example.backend.repositories.ClassUserRepository;
-import com.example.backend.repositories.RoleRepository;
-import com.example.backend.repositories.UserRepository;
+import com.example.backend.repositories.*;
 import com.example.backend.services.helper.Helper;
+import com.example.backend.services.token.ITokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Scope;
@@ -26,12 +22,10 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-
+import java.net.URI;
 import java.security.SecureRandom;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -41,6 +35,8 @@ public class ClassroomServiceImpl implements IClassroomService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final ClassUserRepository classUserRepository;
+    private final InvitationUrlRepository invitationUrlRepository;
+    private final ITokenService tokenService;
     private final ClassroomMapper classRoomMapper;
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;
@@ -82,7 +78,7 @@ public class ClassroomServiceImpl implements IClassroomService {
 
 
     @Override
-    public Map<String, Long> joinClassRoom(JoinClassRequestDTO body) {
+    public Map<String, Long> joinClassRoomByCode(JoinClassRequestDTO body) {
 
 
 
@@ -175,6 +171,44 @@ public class ClassroomServiceImpl implements IClassroomService {
         ).toList();
     }
 
+    @Override
+    public Map<String, Object> sendInvitationEmail(InvitationEmailRequestDTO body) {
+
+        Classroom classRoom = classRoomRepository.findById(body.getClassroomId()).orElseThrow(
+                () -> new NotFoundException("Classroom not found")
+        );
+
+        String accessToken = tokenService.generateEmailToken(body.getReceiverEmail());
+        StringBuilder url = new StringBuilder(body.getRedirectUrl());
+        url.append("?role_id=").append(body.getRoleId());
+        url.append("&token=").append(accessToken);
+        url.append("&code=").append(classRoom.getCode());
+
+        InvitationUrl invitationUrl = invitationUrlRepository.save(InvitationUrl.builder()
+                .email(body.getReceiverEmail())
+                .value(url.toString())
+                .build()
+        );
+
+
+
+        return Map.of("url", invitationUrl.getValue());
+    }
+
+    // Helper method to split the query parameters into a map
+    // Helper method to extract query parameters from URI
+    private static Map<String, List<String>> getQueryParameters(URI uri) {
+        String query = uri.getQuery();
+        if (query != null) {
+            return Arrays.stream(query.split("&"))
+                    .map(param -> param.split("="))
+                    .collect(Collectors.groupingBy(
+                            param -> param[0],
+                            Collectors.mapping(param -> param.length > 1 ? param[1] : null, Collectors.toList())
+                    ));
+        }
+        return new HashMap<>();
+    }
     private static String generateShortIdentifier(int length) {
         SecureRandom random = new SecureRandom();
         byte[] randomBytes = new byte[length];

@@ -1,13 +1,13 @@
 package com.example.backend.controllers;
 
 import com.example.backend.dtos.ClassroomDTO;
+import com.example.backend.dtos.InvitationEmailRequestDTO;
 import com.example.backend.dtos.JoinClassRequestDTO;
 import com.example.backend.dtos.UsersOfClassroomDTO;
 import com.example.backend.services.classroom.IClassroomService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -38,7 +38,7 @@ public class ClassroomController {
     @PostMapping("/join")
     public ResponseEntity<Map<String, Long>> joinClassRoom(@RequestBody JoinClassRequestDTO body) {
         return ResponseEntity.ok(
-                classroomService.joinClassRoom(body)
+                classroomService.joinClassRoomByCode(body)
         );
     }
 
@@ -53,6 +53,13 @@ public class ClassroomController {
     public ResponseEntity<List<UsersOfClassroomDTO>> getUsersOfClassroom(@PathVariable Long id) throws AccessDeniedException {
         return ResponseEntity.ok(
                 classroomService.getUsersOfClassroom(id)
+        );
+    }
+
+    @PostMapping("/invite")
+    public ResponseEntity<Map<String, Object>> inviteUserToClassroom(@RequestBody InvitationEmailRequestDTO body) {
+        return ResponseEntity.ok(
+                classroomService.sendInvitationEmail(body)
         );
     }
 }

@@ -24,8 +24,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -245,7 +243,7 @@ public class UserServiceImpl implements IUserService {
 
         String otpString = otpService.generateOTP();
 
-        emailService.sendHtmlMessage(email, "OTP", otpString);
+        emailService.sendOTPHtmlMessage(email, "OTP", otpString);
 
         OTP savedOTP = otpRepository.save(
                 OTP.builder()

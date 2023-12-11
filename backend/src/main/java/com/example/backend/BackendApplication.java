@@ -2,6 +2,7 @@ package com.example.backend;
 
 import com.example.backend.constants.GenderEnum;
 import com.example.backend.constants.RoleEnum;
+import com.example.backend.dtos.InvitationEmailDTO;
 import com.example.backend.entities.Role;
 import com.example.backend.entities.User;
 import com.example.backend.services.otp.OTPServiceImpl;
@@ -30,6 +31,18 @@ public class BackendApplication {
                           OTPServiceImpl otpServiceImpl
                           ) {
         return args -> {
+
+//            emailService.sendInvitationHtmlMessage(
+//                    "zduytruongz@gmail.com",
+//                    "Invitation to join class",
+//                    InvitationEmailDTO.builder()
+//                            .url("http://localhost:3000/join-class/123456")
+//                            .role(RoleEnum.Teacher.name())
+//                            .className("Math")
+//                            .senderName("Toan Tran")
+//                            .senderEmail("tranminhtoan@gmail.com")
+//                            .build()
+//            );
 
             roleRepository.save(Role.builder()
                     .name(RoleEnum.Owner.name())
