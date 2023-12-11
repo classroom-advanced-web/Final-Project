@@ -4,20 +4,18 @@ import com.example.backend.configurations.converter.ClassroomMapper;
 import com.example.backend.configurations.converter.RoleMapper;
 import com.example.backend.configurations.converter.UserMapper;
 import com.example.backend.constants.RoleEnum;
-import com.example.backend.dtos.ClassroomDTO;
-import com.example.backend.dtos.InvitationEmailRequestDTO;
-import com.example.backend.dtos.JoinClassRequestDTO;
-import com.example.backend.dtos.UsersOfClassroomDTO;
+import com.example.backend.dtos.*;
 import com.example.backend.entities.*;
 import com.example.backend.exceptions.ConflictException;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.repositories.*;
+import com.example.backend.services.email.IEmailService;
 import com.example.backend.services.helper.Helper;
 import com.example.backend.services.token.ITokenService;
+import io.jsonwebtoken.Claims;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -36,6 +34,7 @@ public class ClassroomServiceImpl implements IClassroomService {
     private final UserRepository userRepository;
     private final ClassUserRepository classUserRepository;
     private final InvitationUrlRepository invitationUrlRepository;
+    private final IEmailService emailService;
     private final ITokenService tokenService;
     private final ClassroomMapper classRoomMapper;
     private final UserMapper userMapper;
@@ -78,7 +77,7 @@ public class ClassroomServiceImpl implements IClassroomService {
 
 
     @Override
-    public Map<String, Long> joinClassRoomByCode(JoinClassRequestDTO body) {
+    public Map<String, Long> joinClassroomByCode(JoinClassByOTPRequestDTO body) {
 
 
 
@@ -172,11 +171,17 @@ public class ClassroomServiceImpl implements IClassroomService {
     }
 
     @Override
-    public Map<String, Object> sendInvitationEmail(InvitationEmailRequestDTO body) {
+    public Map<String, Object> sendInvitationEmail(InvitationEmailRequestDTO body) throws MessagingException {
 
         Classroom classRoom = classRoomRepository.findById(body.getClassroomId()).orElseThrow(
                 () -> new NotFoundException("Classroom not found")
         );
+
+        Role role = roleRepository.findById(body.getRoleId()).orElseThrow(
+                () -> new NotFoundException("Role not found")
+        );
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String accessToken = tokenService.generateEmailToken(body.getReceiverEmail());
         StringBuilder url = new StringBuilder(body.getRedirectUrl());
@@ -184,15 +189,52 @@ public class ClassroomServiceImpl implements IClassroomService {
         url.append("&token=").append(accessToken);
         url.append("&code=").append(classRoom.getCode());
 
-        InvitationUrl invitationUrl = invitationUrlRepository.save(InvitationUrl.builder()
-                .email(body.getReceiverEmail())
-                .value(url.toString())
-                .build()
+
+
+        InvitationEmailDTO invitationEmailDTO = InvitationEmailDTO.builder()
+                .role(role.getName())
+                .senderEmail(user.getEmail())
+                .senderName(user.getFirstName() + " " + user.getLastName())
+                .className(classRoom.getName())
+                .url(url.toString())
+                .build();
+
+        emailService.sendInvitationHtmlMessage(body.getReceiverEmail(), "Invitation to join classroom", invitationEmailDTO);
+
+
+
+
+        return Map.of("url", url.toString());
+    }
+
+    @Override
+    public Map<String, Object> joinClassroomByInvitationUrl(JoinClassByEmailRequestDTO body) {
+
+        String email = tokenService.extractClaim(body.getAccessToken(), Claims::getSubject);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(!user.getEmail().equals(email)) {
+            throw new ConflictException("User is wrong");
+        }
+
+        Role role = roleRepository.findById(body.getRoleId()).orElseThrow(
+                () -> new NotFoundException("Role not found")
+        );
+        Classroom classRoom = classRoomRepository.findByCode(body.getClassroomCode()).orElseThrow(
+                () -> new NotFoundException("Classroom not found")
         );
 
+        if(classUserRepository.existsByUserIdAndClassroomId(user.getId(), classRoom.getId())) {
+            throw new ConflictException("User already joined this class");
+        }
 
+        ClassUser classUser = ClassUser.builder()
+                .classroom(classRoom)
+                .role(role)
+                .user(user)
+                .build();
 
-        return Map.of("url", invitationUrl.getValue());
+        return Map.of("classroom_id", classUserRepository.save(classUser).getClassroom().getId());
     }
 
     // Helper method to split the query parameters into a map

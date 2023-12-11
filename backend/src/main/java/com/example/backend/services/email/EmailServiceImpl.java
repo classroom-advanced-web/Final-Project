@@ -50,6 +50,7 @@ public class EmailServiceImpl implements IEmailService {
     }
 
 
+    @Async
     public void sendInvitationHtmlMessage(String to, String subject, InvitationEmailDTO invitationEmailDTO) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);

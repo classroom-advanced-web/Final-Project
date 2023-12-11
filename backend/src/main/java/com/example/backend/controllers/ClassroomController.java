@@ -1,10 +1,8 @@
 package com.example.backend.controllers;
 
-import com.example.backend.dtos.ClassroomDTO;
-import com.example.backend.dtos.InvitationEmailRequestDTO;
-import com.example.backend.dtos.JoinClassRequestDTO;
-import com.example.backend.dtos.UsersOfClassroomDTO;
+import com.example.backend.dtos.*;
 import com.example.backend.services.classroom.IClassroomService;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -36,9 +34,9 @@ public class ClassroomController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity<Map<String, Long>> joinClassRoom(@RequestBody JoinClassRequestDTO body) {
+    public ResponseEntity<Map<String, Long>> joinClassRoom(@RequestBody JoinClassByOTPRequestDTO body) {
         return ResponseEntity.ok(
-                classroomService.joinClassRoomByCode(body)
+                classroomService.joinClassroomByCode(body)
         );
     }
 
@@ -57,9 +55,16 @@ public class ClassroomController {
     }
 
     @PostMapping("/invite")
-    public ResponseEntity<Map<String, Object>> inviteUserToClassroom(@RequestBody InvitationEmailRequestDTO body) {
+    public ResponseEntity<Map<String, Object>> inviteUserToClassroom(@RequestBody InvitationEmailRequestDTO body) throws MessagingException {
         return ResponseEntity.ok(
                 classroomService.sendInvitationEmail(body)
+        );
+    }
+
+    @PostMapping("/join-by-email")
+    public ResponseEntity<Map<String, Object>> joinClassroomByInvitationUrl(@RequestBody JoinClassByEmailRequestDTO body) {
+        return ResponseEntity.ok(
+                classroomService.joinClassroomByInvitationUrl(body)
         );
     }
 }
