@@ -29,7 +29,7 @@ const PeoplePage = () => {
       <ClassNav page='people' />
       <main className='mx-20 flex flex-col justify-center gap-5 p-8'>
         <Teachers teachers={teachers} />
-        <Students students={students}/>
+        <Students students={students} />
       </main>
     </div>
   );

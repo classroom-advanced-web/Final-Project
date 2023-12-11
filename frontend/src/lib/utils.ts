@@ -11,3 +11,7 @@ export function formatDate(date: Date) {
 
   return date.getFullYear() + '-' + month + '-' + day;
 }
+
+export function getInviteUrl(involuteId: string) {
+  return `${window.location.host}/invite?code=${involuteId}`;
+}

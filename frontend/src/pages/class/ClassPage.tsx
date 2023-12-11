@@ -1,19 +1,20 @@
 import classApi from '@/api/classApi';
 import streamSvg from '@/assets/stream.svg';
 import ClassNav from '@/components/class/ClassNav';
-import { DEFAULT_THUMB } from '@/constance/constance';
-import { useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
-import ClassCode from './ClassCode';
 import Loading from '@/components/loading/Loading';
+import { useQuery } from 'react-query';
+import { useParams } from 'react-router-dom';
+import ClassCode from './ClassCode';
 
 const ClassPage = () => {
   const { id } = useParams();
 
   if (!id) return <div>Class not found</div>;
-  const { data, isLoading } = useQuery('classDetail', () => classApi.getClassDetail(id), {
+
+  const { data, isLoading } = useQuery('classDetail', () => classApi.getClassDetail(+id), {
     enabled: !!id
   });
+  
   if (isLoading) return <Loading />;
 
   console.log({ data });
