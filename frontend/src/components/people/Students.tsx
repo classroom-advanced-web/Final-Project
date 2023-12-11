@@ -25,7 +25,7 @@ const Students = ({ students }: Props) => {
       </div>
       <ul>
         {students.map((student) => (
-          <li className='border-b-[1px] p-4 last:border-0'>
+          <li key={student.user.id} className='border-b-[1px] p-4 last:border-0'>
             <StudentRow
               name={`${student.user.firstName} ${student.user.lastName}`}
               avatar={'https://lh3.googleusercontent.com/a/default-user=s40-c'}

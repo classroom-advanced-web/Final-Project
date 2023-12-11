@@ -6,7 +6,7 @@ import { FaArrowTrendUp } from 'react-icons/fa6';
 import { HiDotsVertical } from 'react-icons/hi';
 import { LuUserSquare2 } from 'react-icons/lu';
 import { useQuery } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import './home.css';
 import { ROLE } from '@/constance/constance';
 
@@ -22,6 +22,7 @@ const HomePage = () => {
   const navigateToClass = (classId: number) => {
     navigate(`/class/${classId}`);
   };
+
   const code = localStorage.getItem('code');
 
   useQuery('invite', async () => {
@@ -37,6 +38,15 @@ const HomePage = () => {
       localStorage.removeItem('code');
     }
   });
+
+  if (localStorage.getItem('redirect-url')) {
+    const url = localStorage.getItem('redirect-url') ?? '';
+    localStorage.removeItem('redirect-url');
+    const redirectUrl = new URL(url);
+    const path = redirectUrl.pathname;
+    console.log(path);
+    return (window.location.href = url);
+  }
 
   if (!data) return;
 
