@@ -13,7 +13,6 @@ const ClassSetting = () => {
 
   if (isLoading) return <Loading />;
 
-  console.log(data);
   return (
     <div>
       <Dialog>
@@ -22,14 +21,28 @@ const ClassSetting = () => {
             <IoSettingsOutline />
           </span>
         </DialogTrigger>
-        <DialogContent className='container inset-0 flex w-screen max-w-none translate-x-0 translate-y-0 flex-col'>
+        <DialogContent className='container inset-0 flex w-screen max-w-none translate-x-0 translate-y-0 flex-col overflow-auto'>
           <DialogHeader>
             <DialogTitle>Class settings</DialogTitle>
           </DialogHeader>
-          <div className='mt-6 w-full self-center rounded-md border p-4 lg:w-[700px]'>
-            <section>
+          <div className='mt-6 flex w-full flex-col gap-8 self-center  lg:w-[700px]'>
+            <section className='rounded-md border p-4'>
               <h2 className='mb-4 text-2xl font-medium text-blue-700'>Class Details</h2>
               <UpdateClassForm classroom={data} />
+            </section>
+            <section className='rounded-md border p-4'>
+              <h2 className='mb-4 text-2xl font-medium text-blue-700'>General</h2>
+              <div className='mt-8 flex flex-col gap-3'>
+                <h3 className='text-lg font-medium'>Invite codes</h3>
+                <div className='flex items-center justify-between text-sm'>
+                  <h4>Invite link</h4>
+                  <p>{`${window.location.host}/invite?code=${data.code}`}</p>
+                </div>
+                <div className='flex items-center justify-between text-sm'>
+                  <h4>Class code</h4>
+                  <p>{data.code}</p>
+                </div>
+              </div>
             </section>
           </div>
         </DialogContent>
