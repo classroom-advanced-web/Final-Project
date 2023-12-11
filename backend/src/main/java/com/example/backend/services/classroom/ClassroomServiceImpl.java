@@ -33,7 +33,6 @@ public class ClassroomServiceImpl implements IClassroomService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final ClassUserRepository classUserRepository;
-    private final InvitationUrlRepository invitationUrlRepository;
     private final IEmailService emailService;
     private final ITokenService tokenService;
     private final ClassroomMapper classRoomMapper;
