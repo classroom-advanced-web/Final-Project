@@ -20,6 +20,8 @@ import com.example.backend.repositories.UserRepository;
 import com.example.backend.services.helper.Helper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -78,32 +80,35 @@ public class ClassroomServiceImpl implements IClassroomService {
 
     }
 
+
     @Override
     public Map<String, Long> joinClassRoom(JoinClassRequestDTO body) {
 
-        Classroom classRoom = classRoomRepository.findByCode(body.getCode()).orElseThrow(
-                () -> new NotFoundException("Classroom not found")
-        );
-
-        Role role = roleRepository.findById(body.getRoleId()).orElseThrow(
-                () -> new NotFoundException("Role not found")
-        );
-
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
-        if(classUserRepository.existsByUserIdAndClassroomId(user.getId(), classRoom.getId())) {
-            throw new ConflictException("User already joined this class");
-        }
-
-        ClassUser classUser = ClassUser.builder()
-                .classroom(classRoom)
-                .role(role)
-                .user(user)
-                .build();
-        ClassUser savedData = classUserRepository.save(classUser);
 
 
-        return Map.of("class_id", savedData.getClassroom().getId());
+            Classroom classRoom = classRoomRepository.findByCode(body.getCode()).orElseThrow(
+                    () -> new NotFoundException("Classroom not found")
+            );
+
+            Role role = roleRepository.findById(body.getRoleId()).orElseThrow(
+                    () -> new NotFoundException("Role not found")
+            );
+
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+            if (classUserRepository.existsByUserIdAndClassroomId(user.getId(), classRoom.getId())) {
+                throw new ConflictException("User already joined this class");
+            }
+
+            ClassUser classUser = ClassUser.builder()
+                    .classroom(classRoom)
+                    .role(role)
+                    .user(user)
+                    .build();
+            ClassUser savedData = classUserRepository.save(classUser);
+
+            return Map.of("class_id", savedData.getClassroom().getId());
+
     }
 
     @Override
