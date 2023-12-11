@@ -5,11 +5,15 @@ export const useAuth = () => {
   const context = useContext(AuthContext);
 
   useEffect(() => {
-    if (context != null && localStorage.getItem('access-token')) {
-      if (context.user === null) {
-        context.loadUser();
+    const loadUser = async () => {
+      if (context != null && localStorage.getItem('access-token')) {
+        if (context.user === null) {
+          await context.loadUser();
+        }
       }
-    }
+    };
+
+    loadUser();
   }, []);
 
   if (!context) {
