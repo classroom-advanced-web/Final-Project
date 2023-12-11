@@ -3,6 +3,7 @@ package com.example.backend.services.user;
 import com.example.backend.configurations.converter.ClassroomMapper;
 import com.example.backend.configurations.converter.IMapper;
 import com.example.backend.configurations.converter.RoleMapper;
+import com.example.backend.configurations.converter.UserMapper;
 import com.example.backend.constants.AppConstant;
 import com.example.backend.constants.GenderEnum;
 import com.example.backend.dtos.*;
@@ -48,6 +49,7 @@ public class UserServiceImpl implements IUserService {
     private final ClassUserRepository classUserRepository;
     private final ClassroomMapper classRoomMapper;
     private final RoleMapper roleMapper;
+    private final UserMapper userMapper;
     private final ITokenService tokenService;
     private final PasswordEncoder passwordEncoder;
     private final IGoogleService googleService;
@@ -78,10 +80,14 @@ public class UserServiceImpl implements IUserService {
 
             String accessToken = tokenService.generateToken(user);
             String refreshToken = tokenService.generateRefreshToken(user);
-
-            return AuthenticationResponseDTO.builder()
+            TokenDTO tokenDTO = TokenDTO.builder()
                     .accessToken(accessToken)
                     .refreshToken(refreshToken)
+                    .build();
+
+            return AuthenticationResponseDTO.builder()
+                    .token(tokenDTO)
+                    .user(userMapper.toDTO(user))
                     .build();
     }
 
@@ -112,10 +118,14 @@ public class UserServiceImpl implements IUserService {
             User savedUser = userRepository.save(user);
             String accessToken = tokenService.generateToken(savedUser);
             String refreshToken = tokenService.generateRefreshToken(savedUser);
-
-            return AuthenticationResponseDTO.builder()
+            TokenDTO tokenDTO = TokenDTO.builder()
                     .accessToken(accessToken)
                     .refreshToken(refreshToken)
+                    .build();
+
+            return AuthenticationResponseDTO.builder()
+                    .token(tokenDTO)
+                    .user(userMapper.toDTO(savedUser))
                     .build();
 
 
@@ -136,9 +146,14 @@ public class UserServiceImpl implements IUserService {
             User user = userRepository.findById(userID).orElse(null);
             if (user != null && tokenService.isValidToken(token, user)) {
                 String accessToken = tokenService.generateToken(user);
-                return AuthenticationResponseDTO.builder()
+                TokenDTO tokenDTO = TokenDTO.builder()
                         .accessToken(accessToken)
                         .refreshToken(token)
+                        .build();
+
+                return AuthenticationResponseDTO.builder()
+                        .token(tokenDTO)
+                        .user(userMapper.toDTO(user))
                         .build();
 
             }
@@ -221,16 +236,29 @@ public class UserServiceImpl implements IUserService {
 
 
             User savedUser = userRepository.save(user);
-            return AuthenticationResponseDTO.builder()
+
+            TokenDTO tokenDTO = TokenDTO.builder()
                     .accessToken(tokenService.generateToken(savedUser))
                     .refreshToken(tokenService.generateRefreshToken(savedUser))
                     .build();
+
+            return AuthenticationResponseDTO.builder()
+                    .token(tokenDTO)
+                    .user(userMapper.toDTO(savedUser))
+                    .build();
+
         }
 
-        return AuthenticationResponseDTO.builder()
+        TokenDTO tokenDTO = TokenDTO.builder()
                 .accessToken(tokenService.generateToken(existedUser))
                 .refreshToken(tokenService.generateRefreshToken(existedUser))
                 .build();
+
+        return AuthenticationResponseDTO.builder()
+                .token(tokenDTO)
+                .user(userMapper.toDTO(existedUser))
+                .build();
+
 
     }
 
