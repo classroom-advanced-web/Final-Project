@@ -21,6 +21,7 @@ const ClassPage = lazy(() => import('./pages/class/ClassPage'));
 const ClassworkPage = lazy(() => import('./pages/classwork/ClassworkPage'));
 const PeoplePage = lazy(() => import('./pages/people/PeoplePage'));
 const GradesPage = lazy(() => import('./pages/grades/GradesPage'));
+const InviteLinkPage = lazy(() => import('./pages/invite-link/InviteLinkPage'));
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
               </PrivateRoute>
             }
           />
+          <Route path='/invite-link' element={<InviteLinkPage />} />
           <Route path='/invite' element={<InvitePage />} />
 
           <Route

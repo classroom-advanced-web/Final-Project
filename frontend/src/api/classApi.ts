@@ -84,11 +84,20 @@ class ClassApi {
   };
 
   inviteMember = async (classId: number, email: string, roleId: number) => {
-    const res = await instance.post(`/classrooms/invite/${classId}`, {
+    const res = await instance.post(`/classrooms/invite`, {
       receiver_email: email,
-      redirect_url: `${window.location.host}/invite`,
+      redirect_url: `${location.protocol}//${location.host}/invite-link`,
       role_id: roleId,
       classroom_id: classId
+    });
+    return res.data;
+  };
+
+  joinClassEmail = async (accessToken: string, classroomCode: string, roleId: number) => {
+    const res = await instance.post(`/classrooms/join-by-email`, {
+      access_token: accessToken,
+      role_id: roleId,
+      classroom_code: classroomCode
     });
     return res.data;
   };
