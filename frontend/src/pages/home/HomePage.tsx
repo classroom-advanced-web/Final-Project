@@ -7,8 +7,9 @@ import { FaArrowTrendUp } from 'react-icons/fa6';
 import { HiDotsVertical } from 'react-icons/hi';
 import { LuUserSquare2 } from 'react-icons/lu';
 import { useQuery } from 'react-query';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import './home.css';
+import { useAuth } from '@/hooks/useAuth';
 
 type getClassApi = {
   classroom: Classroom;
@@ -17,6 +18,7 @@ type getClassApi = {
 
 const HomePage = () => {
   const { data, isLoading } = useQuery('classes', () => classApi.getClasses());
+  const { user } = useAuth();
 
   const navigate = useNavigate();
   const navigateToClass = (classId: number) => {
@@ -39,16 +41,18 @@ const HomePage = () => {
     }
   });
 
-  if (localStorage.getItem('redirect-url')) {
-    const url = localStorage.getItem('redirect-url') ?? '';
-    localStorage.removeItem('redirect-url');
+  if (isLoading) return <Loading />;
 
-    return (window.location.href = url);
+  if (user && localStorage.getItem('redirect-url')) {
+    const url = localStorage.getItem('redirect-url') ?? '';
+    // localStorage.removeItem('redirect-url');
+    const path = new URL(url).pathname;
+    const searchParams = new URL(url).searchParams;
+    console.log(path);
+    return <Navigate to={path + '?' + searchParams} replace />;
   }
 
   if (!data) return;
-
-  if (isLoading) return <Loading />;
 
   const classes = data;
   return (

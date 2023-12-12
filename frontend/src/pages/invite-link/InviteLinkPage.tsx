@@ -21,6 +21,7 @@ const inviteLinkPage = () => {
             title: 'Join class successfully'
           });
 
+          localStorage.removeItem('redirect-url');
           navigate(`/class/${res.classroom_id}`);
         }
       } catch (error: any) {
