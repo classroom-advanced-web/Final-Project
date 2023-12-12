@@ -33,6 +33,7 @@ public class ClassroomServiceImpl implements IClassroomService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final ClassUserRepository classUserRepository;
+    private final InvitationUrlRepository invitationUrlRepository;
     private final IEmailService emailService;
     private final ITokenService tokenService;
     private final ClassroomMapper classRoomMapper;
@@ -84,7 +85,7 @@ public class ClassroomServiceImpl implements IClassroomService {
                     () -> new NotFoundException("Classroom not found")
             );
 
-            Role role = roleRepository.findById(body.getRoleId()).orElseThrow(
+            Role role = roleRepository.findByName(RoleEnum.Student.name()).orElseThrow(
                     () -> new NotFoundException("Role not found")
             );
 
@@ -182,11 +183,19 @@ public class ClassroomServiceImpl implements IClassroomService {
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
+        InvitationUrl savedInvitationUrl = invitationUrlRepository.save(
+                InvitationUrl.builder()
+                        .role(role)
+                        .accessToken(tokenService.generateEmailToken(body.getReceiverEmail()))
+                        .classroom(classRoom)
+                        .build()
+        );
+
+
         String accessToken = tokenService.generateEmailToken(body.getReceiverEmail());
         StringBuilder url = new StringBuilder(body.getRedirectUrl());
-        url.append("?role_id=").append(body.getRoleId());
-        url.append("&token=").append(accessToken);
-        url.append("&code=").append(classRoom.getCode());
+        url.append("?invitation_id=").append(savedInvitationUrl.getId());
+
 
 
 
@@ -209,23 +218,32 @@ public class ClassroomServiceImpl implements IClassroomService {
     @Override
     public Map<String, Object> joinClassroomByInvitationUrl(JoinClassByEmailRequestDTO body) {
 
-        String email = tokenService.extractClaim(body.getAccessToken(), Claims::getSubject);
+        InvitationUrl invitationUrl = invitationUrlRepository.findById(body.getInvitationId()).orElseThrow(
+                () -> new NotFoundException("Invitation not found")
+        );
+
+        String accessToken = invitationUrl.getAccessToken();
+
+        String email = tokenService.extractClaim(accessToken, Claims::getSubject);
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        if(tokenService.isExpiredToken(accessToken)) {
+            throw new AccessDeniedException("Token is expired");
+        }
 
         if(!user.getEmail().equals(email)) {
             throw new ConflictException("User is wrong");
         }
 
-        Role role = roleRepository.findById(body.getRoleId()).orElseThrow(
-                () -> new NotFoundException("Role not found")
-        );
-        Classroom classRoom = classRoomRepository.findByCode(body.getClassroomCode()).orElseThrow(
-                () -> new NotFoundException("Classroom not found")
-        );
+        Role role = invitationUrl.getRole();
+
+        Classroom classRoom = invitationUrl.getClassroom();
 
         if(classUserRepository.existsByUserIdAndClassroomId(user.getId(), classRoom.getId())) {
             throw new ConflictException("User already joined this class");
         }
+
+
 
         ClassUser classUser = ClassUser.builder()
                 .classroom(classRoom)

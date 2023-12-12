@@ -18,7 +18,7 @@ const InvitePage = () => {
   const code = searchParams.get('code') ?? '';
   console.log(code);
 
-  const { data, error } = useQuery('invite', async () => classApi.joinClass(code, ROLE.STUDENT));
+  const { data, error } = useQuery('invite', async () => classApi.joinClass(code));
 
   if (data) {
     localStorage.removeItem('redirect-url');

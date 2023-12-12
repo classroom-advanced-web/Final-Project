@@ -11,10 +11,12 @@ const inviteLinkPage = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  const invitationId = searchParams.get('invitation_id') ?? '';
+
   useEffect(() => {
-    const joinClass = async (token: string, classCode: string, roleId: number) => {
+    const joinClass = async (invitationId: string) => {
       try {
-        const res = await classApi.joinClassEmail(token, classCode, roleId);
+        const res = await classApi.joinClassEmail(invitationId);
 
         if (res) {
           toast({
@@ -36,15 +38,8 @@ const inviteLinkPage = () => {
       }
     };
 
-    const roleId = searchParams.get('role_id');
-    const token = searchParams.get('token');
-
-    if (!roleId || !token) {
-      return;
-    }
-
     if (user) {
-      joinClass(token, searchParams.get('code') ?? '', +roleId);
+      joinClass(invitationId);
     }
   }, []);
 

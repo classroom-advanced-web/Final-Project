@@ -14,8 +14,6 @@ public class JoinClassByOTPRequestDTO {
 
     String code;
 
-    @JsonProperty("role_id")
-    Long roleId;
 
 
 }

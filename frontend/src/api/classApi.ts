@@ -58,10 +58,9 @@ class ClassApi {
     return res.data;
   };
 
-  joinClass = async (code: string, role_id: number) => {
-    const res = await instance.post('/classrooms/join', {
-      code,
-      role_id
+  joinClass = async (code: string) => {
+    const res = await instance.post('/classrooms/join/code', {
+      code
     });
     return res.data;
   };
@@ -93,11 +92,9 @@ class ClassApi {
     return res.data;
   };
 
-  joinClassEmail = async (accessToken: string, classroomCode: string, roleId: number) => {
-    const res = await instance.post(`/classrooms/join-by-email`, {
-      access_token: accessToken,
-      role_id: roleId,
-      classroom_code: classroomCode
+  joinClassEmail = async (invitationId: string) => {
+    const res = await instance.post(`/classrooms/join/email`, {
+      invitation_id: +invitationId
     });
     return res.data;
   };

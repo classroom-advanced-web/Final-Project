@@ -47,5 +47,9 @@ public class Role {
     @LastModifiedDate
     private Date updatedDate;
 
+    @OneToMany(mappedBy = "role")
+    @JsonIgnore
+    private List<InvitationUrl> invitationUrls;
+
 
 }

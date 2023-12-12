@@ -33,7 +33,7 @@ public class ClassroomController {
         return ResponseEntity.ok(classroomService.getClassRoom(id));
     }
 
-    @PostMapping("/join")
+    @PostMapping("/join/code")
     public ResponseEntity<Map<String, Long>> joinClassRoom(@RequestBody JoinClassByOTPRequestDTO body) {
         return ResponseEntity.ok(
                 classroomService.joinClassroomByCode(body)
@@ -61,10 +61,15 @@ public class ClassroomController {
         );
     }
 
-    @PostMapping("/join-by-email")
-    public ResponseEntity<Map<String, Object>> joinClassroomByInvitationUrl(@RequestBody JoinClassByEmailRequestDTO body) {
+    @PostMapping("/join/email")
+    public ResponseEntity<Map<String, Object>> joinClassroomByInvitationUrl(@RequestBody Map<String, Long> body) {
+        System.out.println(body.get("invitation_id"));
+
         return ResponseEntity.ok(
-                classroomService.joinClassroomByInvitationUrl(body)
+                classroomService.joinClassroomByInvitationUrl(JoinClassByEmailRequestDTO.builder()
+                        .invitationId(body.get("invitation_id"))
+                        .build()
+                )
         );
     }
 }
