@@ -17,7 +17,7 @@ type getClassApi = {
 };
 
 const HomePage = () => {
-  const { data, isLoading } = useQuery('classes', () => classApi.getClasses());
+  const { data, isLoading } = useQuery('classes', () => classApi.getClasses(), { refetchOnWindowFocus: false });
   const { user } = useAuth();
 
   const navigate = useNavigate();
@@ -25,27 +25,10 @@ const HomePage = () => {
     navigate(`/class/${classId}`);
   };
 
-  const code = localStorage.getItem('code');
-
-  useQuery('invite', async () => {
-    try {
-      if (code) {
-        const res = await classApi.joinClass(code, ROLE.STUDENT);
-        localStorage.removeItem('code');
-        navigate(`/class/${res.class_id}`);
-      }
-    } catch (error: any) {
-      console.log(error);
-    } finally {
-      localStorage.removeItem('code');
-    }
-  });
-
   if (isLoading) return <Loading />;
 
   if (user && localStorage.getItem('redirect-url')) {
     const url = localStorage.getItem('redirect-url') ?? '';
-    // localStorage.removeItem('redirect-url');
     const path = new URL(url).pathname;
     const searchParams = new URL(url).searchParams;
     console.log(path);
