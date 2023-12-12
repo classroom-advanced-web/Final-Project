@@ -54,9 +54,23 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const res = await authApi.login({ email, password });
 
-      if (res?.access_token) {
-        localStorage.setItem('access-token', res.access_token);
-        localStorage.setItem('refresh-token', res.refresh_token);
+      if (res) {
+        const { token, user } = res;
+        localStorage.setItem('access-token', token.access_token);
+        localStorage.setItem('refresh-token', token.refresh_token);
+
+        const { id, email, dob, first_name, last_name, gender, is_activated } = user;
+        const newUser = {
+          id,
+          email,
+          dob: dob ? new Date(dob) : new Date('1/1/2000'),
+          firstName: first_name ?? '',
+          lastName: last_name ?? '',
+          activated: is_activated ?? false,
+          gender: gender
+        };
+
+        setUser(newUser);
       }
     } catch (error: any) {
       if (error?.response) {
@@ -74,9 +88,23 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const res = await authApi.loginWithGoogle(accessToken);
 
-      if (res?.access_token) {
-        localStorage.setItem('access-token', res.access_token);
-        localStorage.setItem('refresh-token', res.refresh_token);
+      if (res) {
+        const { token, user } = res;
+        localStorage.setItem('access-token', token.access_token);
+        localStorage.setItem('refresh-token', token.refresh_token);
+
+        const { id, email, dob, first_name, last_name, gender, is_activated } = user;
+        const newUser = {
+          id,
+          email,
+          dob: dob ? new Date(dob) : new Date('1/1/2000'),
+          firstName: first_name ?? '',
+          lastName: last_name ?? '',
+          activated: is_activated ?? false,
+          gender: gender
+        };
+
+        setUser(newUser);
       }
     } catch (error: any) {
       if (error?.response) {
@@ -98,9 +126,24 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(true);
     try {
       const res = await authApi.register(registerInstance);
-      if (res?.access_token) {
-        localStorage.setItem('access-token', res.access_token);
-        localStorage.setItem('refresh-token', res.refresh_token);
+
+      if (res) {
+        const { token, user } = res;
+        localStorage.setItem('access-token', token.access_token);
+        localStorage.setItem('refresh-token', token.refresh_token);
+
+        const { id, email, dob, first_name, last_name, gender, is_activated } = user;
+        const newUser = {
+          id,
+          email,
+          dob: dob ? new Date(dob) : new Date('1/1/2000'),
+          firstName: first_name ?? '',
+          lastName: last_name ?? '',
+          activated: is_activated ?? false,
+          gender: gender
+        };
+
+        setUser(newUser);
       }
     } catch (error: any) {
       if (error?.response) {
