@@ -9,7 +9,7 @@ import { useQuery } from 'react-query';
 
 const ClassSetting = () => {
   const { id } = useParams<{ id: string }>() ?? 0;
-  const { data, isLoading } = useQuery('class', () => classApi.getClassDetail(+id!));
+  const { data, isLoading } = useQuery('class', () => classApi.getClassDetail(id!));
 
   if (isLoading) return <Loading />;
 
