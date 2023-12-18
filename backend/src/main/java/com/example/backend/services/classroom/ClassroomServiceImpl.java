@@ -178,7 +178,7 @@ public class ClassroomServiceImpl implements IClassroomService {
                 () -> new NotFoundException("Classroom not found")
         );
 
-        Role role = roleRepository.findById(body.getRoleId()).orElseThrow(
+        Role role = roleRepository.findByCode(body.getRoleCode()).orElseThrow(
                 () -> new NotFoundException("Role not found")
         );
 

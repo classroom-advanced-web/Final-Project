@@ -21,7 +21,7 @@ import java.util.List;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "roles", indexes = {
-        @Index(name = "role_code_index", columnList = "role_code", unique = true),
+        @Index(name = "role_code_index", columnList = "role_code ASC", unique = true),
 //        @Index(name = "role_name_index", columnList = "role_name", unique = true)
 }
 )

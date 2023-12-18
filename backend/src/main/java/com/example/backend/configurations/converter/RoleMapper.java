@@ -14,7 +14,7 @@ public class RoleMapper implements IMapper<Role, RoleDTO>{
     @Override
     public RoleDTO toDTO(Role obj) {
         return RoleDTO.builder()
-                .id(obj.getId())
+                .code(obj.getCode())
                 .name(obj.getName())
                 .build();
     }
