@@ -15,8 +15,8 @@ public class InvitationEmailRequestDTO {
     String receiverEmail;
 
     @JsonProperty("role_id")
-    Long roleId;
+    String roleId;
 
     @JsonProperty("classroom_id")
-    Long classroomId;
+    String classroomId;
 }

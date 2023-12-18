@@ -1,10 +1,8 @@
 package com.example.backend.services.token;
 
 import io.jsonwebtoken.Claims;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -13,7 +11,7 @@ import java.util.function.Function;
 
 public interface ITokenService {
 
-    Long extractUserId(String jwt);
+    String extractUserId(String jwt);
 
     <T> T extractClaim(String token, Function<Claims, T> claimResolver);
 

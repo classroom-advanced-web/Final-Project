@@ -46,7 +46,7 @@ public class JWTFilter extends OncePerRequestFilter {
                 return;
             }
             String token = authHeader.substring(AppConstant.TOKEN_PREFIX.length());
-            Long userID = tokenService.extractUserId(token);
+            String userID = tokenService.extractUserId(token);
             if (userID != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 User user = userRepository.findById(userID).orElse(null);
                 if (user != null && tokenService.isValidToken(token, user)) {

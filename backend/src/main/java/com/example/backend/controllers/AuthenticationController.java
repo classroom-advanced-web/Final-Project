@@ -66,7 +66,7 @@ public class AuthenticationController {
     public ResponseEntity<Map<String, String>> verifyOTP(@RequestBody Map<String, String> data,
                                                          @RequestParam("access_token") String accessToken) {
         String otpString = data.get("otp_value");
-        Long otpID = Long.valueOf(data.get("otp_id"));
+        String otpID = data.get("otp_id");
         String email = data.get("email");
         String extractedEmail = tokenService.extractClaim(accessToken, Claims::getSubject);
 

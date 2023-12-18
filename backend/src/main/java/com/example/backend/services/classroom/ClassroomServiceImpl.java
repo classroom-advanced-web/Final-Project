@@ -78,7 +78,7 @@ public class ClassroomServiceImpl implements IClassroomService {
 
 
     @Override
-    public Map<String, Long> joinClassroomByCode(JoinClassByOTPRequestDTO body) {
+    public Map<String, String> joinClassroomByCode(JoinClassByOTPRequestDTO body) {
 
 
 
@@ -108,7 +108,7 @@ public class ClassroomServiceImpl implements IClassroomService {
     }
 
     @Override
-    public ClassroomDTO getClassRoom(Long id) throws AccessDeniedException {
+    public ClassroomDTO getClassRoom(String id) throws AccessDeniedException {
 
         Classroom classRoom = classRoomRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("Classroom not found")
@@ -123,7 +123,7 @@ public class ClassroomServiceImpl implements IClassroomService {
     }
 
     @Override
-    public ClassroomDTO updateClassRoom(Long id, ClassroomDTO classRoomDTO) {
+    public ClassroomDTO updateClassRoom(String id, ClassroomDTO classRoomDTO) {
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -148,7 +148,7 @@ public class ClassroomServiceImpl implements IClassroomService {
     }
 
     @Override
-    public List<UsersOfClassroomDTO> getUsersOfClassroom(Long id) throws AccessDeniedException {
+    public List<UsersOfClassroomDTO> getUsersOfClassroom(String id) throws AccessDeniedException {
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if(!classUserRepository.existsByUserIdAndClassroomId(user.getId(), id)) {

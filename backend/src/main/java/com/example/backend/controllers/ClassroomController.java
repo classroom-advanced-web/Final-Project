@@ -26,7 +26,7 @@ public class ClassroomController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ClassroomDTO> getClassRoom(@PathVariable Long id) throws AccessDeniedException {
+    public ResponseEntity<ClassroomDTO> getClassRoom(@PathVariable String id) throws AccessDeniedException {
 
 
 
@@ -34,21 +34,21 @@ public class ClassroomController {
     }
 
     @PostMapping("/join/code")
-    public ResponseEntity<Map<String, Long>> joinClassRoom(@RequestBody JoinClassByOTPRequestDTO body) {
+    public ResponseEntity<Map<String, String>> joinClassRoom(@RequestBody JoinClassByOTPRequestDTO body) {
         return ResponseEntity.ok(
                 classroomService.joinClassroomByCode(body)
         );
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ClassroomDTO> updateClassRoom(@PathVariable Long id, @RequestBody ClassroomDTO classRoomDTO) throws AccessDeniedException {
+    public ResponseEntity<ClassroomDTO> updateClassRoom(@PathVariable String id, @RequestBody ClassroomDTO classRoomDTO) throws AccessDeniedException {
         return ResponseEntity.ok(
                 classroomService.updateClassRoom(id, classRoomDTO)
         );
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<List<UsersOfClassroomDTO>> getUsersOfClassroom(@PathVariable Long id) throws AccessDeniedException {
+    public ResponseEntity<List<UsersOfClassroomDTO>> getUsersOfClassroom(@PathVariable String id) throws AccessDeniedException {
         return ResponseEntity.ok(
                 classroomService.getUsersOfClassroom(id)
         );
@@ -62,7 +62,7 @@ public class ClassroomController {
     }
 
     @PostMapping("/join/email")
-    public ResponseEntity<Map<String, Object>> joinClassroomByInvitationUrl(@RequestBody Map<String, Long> body) {
+    public ResponseEntity<Map<String, Object>> joinClassroomByInvitationUrl(@RequestBody Map<String, String> body) {
         System.out.println(body.get("invitation_id"));
 
         return ResponseEntity.ok(

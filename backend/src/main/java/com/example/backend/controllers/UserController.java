@@ -19,7 +19,7 @@ public class UserController {
     private final IUserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> getProfile(@PathVariable Long id) {
+    public ResponseEntity<UserDTO> getProfile(@PathVariable String id) {
         return ResponseEntity.ok(userService.getProfile(id));
     }
 

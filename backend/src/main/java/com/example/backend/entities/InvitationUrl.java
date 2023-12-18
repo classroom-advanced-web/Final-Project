@@ -23,9 +23,9 @@ import java.util.Date;
 public class InvitationUrl {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "invitation_url_id")
-    private Long id;
+    private String id;
 
     @Column(name = "access_token")
     private String accessToken;

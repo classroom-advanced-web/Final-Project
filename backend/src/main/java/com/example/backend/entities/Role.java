@@ -20,14 +20,21 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "roles")
+@Table(name = "roles", indexes = {
+        @Index(name = "role_code_index", columnList = "role_code", unique = true),
+//        @Index(name = "role_name_index", columnList = "role_name", unique = true)
+}
+)
 @Where(clause = "revoked = false")
 public class Role {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "role_id")
-    private Long id;
+    private String id;
+
+    @Column(name = "role_code", nullable = false, unique = true)
+    private Long code;
 
     @Column(name = "role_name", nullable = false, unique = true)
     private String name;

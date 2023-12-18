@@ -141,7 +141,7 @@ public class UserServiceImpl implements IUserService {
             throw new AuthenticationErrorException("Invalid token");
         }
         String token = authHeader.substring(AppConstant.TOKEN_PREFIX.length());
-        Long userID = tokenService.extractUserId(token);
+        String userID = tokenService.extractUserId(token);
         if (userID != null ) {
             User user = userRepository.findById(userID).orElse(null);
             if (user != null && tokenService.isValidToken(token, user)) {
@@ -162,7 +162,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public UserDTO getProfile(@NonNull Long id) {
+    public UserDTO getProfile(@NonNull String id) {
 
         User user = userRepository.findById(id).orElseThrow(
                 () -> new NotFoundException("User not found")
@@ -211,7 +211,7 @@ public class UserServiceImpl implements IUserService {
             throw new AuthenticationErrorException("Invalid token");
         }
         String token = authHeader.substring(AppConstant.TOKEN_PREFIX.length());
-        Long userID = tokenService.extractUserId(token);
+        String userID = tokenService.extractUserId(token);
         if (userID != null ) {
             User user = userRepository.findById(userID).orElse(null);
             if (user != null && tokenService.isValidToken(token, user)) {
@@ -289,7 +289,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public Map<String, String> verifyOTP(Long otpID, String otpStr) {
+    public Map<String, String> verifyOTP(String otpID, String otpStr) {
 
 
         OTP foundOTP = otpRepository.findById(otpID).orElseThrow(

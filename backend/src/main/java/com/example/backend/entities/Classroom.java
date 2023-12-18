@@ -25,9 +25,9 @@ import java.util.List;
 public class Classroom {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "class_id")
-    private Long id;
+    private String id;
 
     @Column(name = "class_name", nullable = false)
     private String name;

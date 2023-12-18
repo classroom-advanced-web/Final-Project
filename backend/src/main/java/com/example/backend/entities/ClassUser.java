@@ -28,9 +28,9 @@ uniqueConstraints = {
 public class ClassUser {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "class_user_id")
-    private Long id;
+    private String id;
 
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)

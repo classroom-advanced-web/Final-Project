@@ -24,14 +24,16 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "users")
+@Table(name = "users", indexes = {
+        @Index(name = "email_index", columnList = "email", unique = true),
+})
 @Where(clause = "revoked = false")
 public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "user_id")
-    private Long id;
+    private String id;
 
     @Column(name = "email", nullable = false, unique = true)
      private String email;
