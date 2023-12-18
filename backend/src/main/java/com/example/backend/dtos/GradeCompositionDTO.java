@@ -10,8 +10,8 @@ public class GradeCompositionDTO {
 
     String id;
     String name;
-    String scale;
-    String weight;
+    Double scale;
+    Integer weight;
 
     @JsonProperty("classroom_id")
     String classroomId;

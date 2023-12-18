@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.nio.file.AccessDeniedException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/grade-composition")
@@ -17,7 +17,7 @@ public class GradeCompositionController {
 
     @PostMapping("")
     public ResponseEntity<GradeCompositionDTO> createGradeComposition(@RequestParam("classroom_id") String classroomId,
-                                                 @RequestBody GradeCompositionDTO gradeCompositionDTO) throws AccessDeniedException {
+                                                 @RequestBody GradeCompositionDTO gradeCompositionDTO) {
             return ResponseEntity.ok(
                     gradeCompositionService.create(classroomId, gradeCompositionDTO)
             );
@@ -27,6 +27,21 @@ public class GradeCompositionController {
     public ResponseEntity<GradeCompositionDTO> removeGradeComposition(@PathVariable("id") String id) {
         return ResponseEntity.ok(
                 gradeCompositionService.remove(id)
+        );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<GradeCompositionDTO> updateGradeComposition(@PathVariable("id") String id,
+                                                 @RequestBody GradeCompositionDTO gradeCompositionDTO) {
+        return ResponseEntity.ok(
+                gradeCompositionService.update(id, gradeCompositionDTO)
+        );
+    }
+
+    @GetMapping("/classroom")
+    public ResponseEntity<List<GradeCompositionDTO>> getGradeCompositionsByClassroomId(@RequestParam("classroom_id") String classroomId) {
+        return ResponseEntity.ok(
+                gradeCompositionService.getGradeCompositionsByClassroomId(classroomId)
         );
     }
 }

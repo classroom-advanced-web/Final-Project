@@ -10,7 +10,7 @@ public class GradeCompositionMapper implements IMapper<GradeComposition, GradeCo
     public GradeComposition toEntity(GradeCompositionDTO obj) {
         return GradeComposition.builder()
                 .name(obj.getName())
-                .scale(Double.parseDouble(obj.getScale()))
+                .scale(obj.getScale())
                 .build();
     }
 
@@ -19,8 +19,8 @@ public class GradeCompositionMapper implements IMapper<GradeComposition, GradeCo
         return GradeCompositionDTO.builder()
                 .id(obj.getId())
                 .name(obj.getName())
-                .scale(obj.getScale().toString())
-                .weight(String.valueOf(obj.getWeight()))
+                .scale(obj.getScale())
+                .weight(obj.getWeight())
                 .classroomId(obj.getClassroom().getId())
                 .build();
 
