@@ -6,7 +6,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -36,8 +35,8 @@ public class TokenServiceImpl implements ITokenService{
     private long shortExpiration = 15 * 60 * 1000;
 
     @Override
-    public Long extractUserId(String jwt) {
-        return Long.valueOf(extractClaim(jwt, Claims::getSubject));
+    public String extractUserId(String jwt) {
+        return extractClaim(jwt, Claims::getSubject);
     }
 
     @Override

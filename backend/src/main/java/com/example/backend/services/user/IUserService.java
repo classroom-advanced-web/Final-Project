@@ -17,7 +17,7 @@ public interface IUserService {
     AuthenticationResponseDTO refreshToken(@NonNull HttpServletRequest request,
                                            @NonNull HttpServletResponse response);
 
-    UserDTO getProfile(@NonNull Long id);
+    UserDTO getProfile(@NonNull String id);
 
     UserDTO updateProfile(@NonNull UserDTO userDTO);
 
@@ -28,7 +28,7 @@ public interface IUserService {
 
     Map<String, Object> sendOTP(String email) throws MessagingException;
 
-    Map<String, String> verifyOTP(Long otpID, String otpStr);
+    Map<String, String> verifyOTP(String otpID, String otpStr);
 
     Map<String, String> renewPassword(String email, String password);
     Map<String, String> verifyEmail(String email);

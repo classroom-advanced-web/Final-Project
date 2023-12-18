@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public class RoleDTO {
 
-    Long id;
+    String id;
 
     String name;
 }

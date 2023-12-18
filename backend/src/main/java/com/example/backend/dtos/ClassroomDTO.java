@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ClassroomDTO {
 
-    Long id;
+    String id;
     String name;
     String description;
     String subject;

@@ -9,7 +9,7 @@ public class JoinClassByOTPRequestDTO {
 
     @JsonProperty("class _id")
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    Long classId;
+    String classId;
 
 
     String code;

@@ -46,16 +46,19 @@ public class BackendApplication {
 
             roleRepository.save(Role.builder()
                     .name(RoleEnum.Owner.name())
+                            .code(1L)
                     .build()
             );
 
             roleRepository.save(Role.builder()
                     .name(RoleEnum.Teacher.name())
+                            .code(2L)
                     .build()
             );
 
             roleRepository.save(Role.builder()
                     .name(RoleEnum.Student.name())
+                            .code(3L)
                     .build()
             );
 

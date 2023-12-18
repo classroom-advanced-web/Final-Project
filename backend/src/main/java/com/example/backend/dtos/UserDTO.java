@@ -16,7 +16,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class UserDTO {
 
-    private Long id;
+    private String id;
     private String email;
     @JsonProperty("first_name")
     private String firstName;

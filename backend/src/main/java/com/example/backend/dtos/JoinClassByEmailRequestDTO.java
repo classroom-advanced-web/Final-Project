@@ -10,5 +10,5 @@ import lombok.Getter;
 public class JoinClassByEmailRequestDTO {
 
     @JsonProperty("invitation_id")
-    private Long invitationId;
+    private String invitationId;
 }

@@ -11,13 +11,13 @@ public interface IClassroomService {
 
     ClassroomDTO createClassRoom(ClassroomDTO classRoomDTO);
 
-    Map<String, Long> joinClassroomByCode(JoinClassByOTPRequestDTO body);
+    Map<String, String> joinClassroomByCode(JoinClassByOTPRequestDTO body);
 
-    ClassroomDTO getClassRoom(Long id) throws AccessDeniedException;
+    ClassroomDTO getClassRoom(String id) throws AccessDeniedException;
 
-    ClassroomDTO updateClassRoom(Long id, ClassroomDTO classRoomDTO) throws AccessDeniedException;
+    ClassroomDTO updateClassRoom(String id, ClassroomDTO classRoomDTO) throws AccessDeniedException;
 
-    List<UsersOfClassroomDTO> getUsersOfClassroom(Long id) throws AccessDeniedException;
+    List<UsersOfClassroomDTO> getUsersOfClassroom(String id) throws AccessDeniedException;
 
     Map<String, Object> sendInvitationEmail(InvitationEmailRequestDTO body) throws MessagingException;
 

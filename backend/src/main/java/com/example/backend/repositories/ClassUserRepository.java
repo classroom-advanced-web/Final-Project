@@ -1,21 +1,20 @@
 package com.example.backend.repositories;
 
 import com.example.backend.entities.ClassUser;
-import com.example.backend.entities.Classroom;
-import com.example.backend.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface ClassUserRepository extends JpaRepository<ClassUser, Long> {
-    boolean existsByUserIdAndClassroomId(Long userId, Long classroomId);
+public interface ClassUserRepository extends JpaRepository<ClassUser, String> {
+    boolean existsByUserIdAndClassroomId(String userId, String classroomId);
 
-    List<ClassUser> findByUserId(Long userId);
+    List<ClassUser> findByUserId(String userId);
 
-    List<ClassUser> findByClassroomId(Long classroomId);
+    List<ClassUser> findByClassroomId(String classroomId);
 
-    Optional<ClassUser> findByUserIdAndClassroomId(Long userId, Long classroomId);
+
+    Optional<ClassUser> findByUserIdAndClassroomId(String userId, String classroomId);
 
 
 }

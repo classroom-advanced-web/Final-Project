@@ -27,9 +27,9 @@ import java.util.Date;
 public class OTP {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "otp_id")
-    private Long id;
+    private String id;
 
     private String value;
 
