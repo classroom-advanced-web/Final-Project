@@ -58,10 +58,9 @@ class ClassApi {
     return res.data;
   };
 
-  joinClass = async (code: string, role_id: number) => {
+  joinClass = async (code: string) => {
     const res = await instance.post('/classrooms/join', {
-      code,
-      role_id
+      code
     });
     return res.data;
   };
