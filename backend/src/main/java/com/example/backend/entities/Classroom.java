@@ -54,6 +54,9 @@ public class Classroom {
     @JsonIgnore
     private List<ClassUser> classUsers;
 
+    @OneToMany(mappedBy = "classroom")
+    @JsonIgnore
+    private List<InvitationUrl> invitationUrls;
 
 
     private boolean revoked;

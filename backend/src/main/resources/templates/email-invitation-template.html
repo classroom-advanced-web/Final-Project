@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 <!DOCTYPE HTML>
  <html xmlns:th="http://www.thymeleaf.org">
@@ -52,4 +53,59 @@
 
  </div>
  </body>
+=======
+<!DOCTYPE HTML>
+ <html xmlns:th="http://www.thymeleaf.org">
+ <head>
+   <title>Thymeleaf Variables</title>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+ </head>
+ <body>
+ <div style="padding: 24px; border: 1px solid grey; border-radius: 8px">
+   <div style="position: relative">
+     <img
+             src="https://lh3.googleusercontent.com/a/default-user=s72"
+             alt="avatar"
+             style="
+                        display: block;
+                        border-radius: 50%;
+                        width: 64px;
+                        margin-left: auto;
+                        margin-right: auto;
+                    "
+     />
+     <h2 style="font-size: 16px; font-weight: 600; text-align: center">
+       [[${senderName}]]
+     </h2>
+     <p style="font-size: 16px; text-align: center; font-weight: 300">
+       [[${senderEmail}]]
+     </p>
+   </div>
+
+   <p style="font-size: 20px; text-align: center">
+     Bạn đã được mời tham gia lớp học [[${className}]] với vai trò [[${role}]]
+   </p>
+
+   <a
+           th:href="${url}"
+           style="
+                        display: block;
+                    padding: 10px 20px;
+                    color: #1967d2;
+                    background-color: white;
+                    border: 1px solid grey;
+                    font-weight: 700;
+                    border-radius: 4px;
+                    cursor: pointer;
+                    text-decoration: none;
+                    margin: 0 auto;
+                    max-width: fit-content;
+                    text-align: center;
+                    "
+   >Chấp nhận lời mời</a
+   >
+
+ </div>
+ </body>
+>>>>>>> c83234da551f932e2f7d54eda9b81bcea5283c60
  </html>

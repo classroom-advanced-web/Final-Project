@@ -11,10 +11,8 @@ const ClassPage = () => {
 
   if (!id) return <div>Class not found</div>;
 
-  const { data, isLoading } = useQuery('classDetail', () => classApi.getClassDetail(+id), {
-    enabled: !!id
-  });
-  
+  const { data, isLoading } = useQuery(['classDetail', id], () => classApi.getClassDetail(+id));
+
   if (isLoading) return <Loading />;
 
   console.log({ data });

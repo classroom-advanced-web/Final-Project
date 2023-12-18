@@ -1,6 +1,5 @@
 package com.example.backend.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +11,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -20,21 +18,26 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "roles")
+@Table(name = "invitation_urls")
 @Where(clause = "revoked = false")
-public class Role {
+public class InvitationUrl {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "role_id")
+    @Column(name = "invitation_url_id")
     private Long id;
 
-    @Column(name = "role_name", nullable = false, unique = true)
-    private String name;
+    @Column(name = "access_token")
+    private String accessToken;
 
-   @OneToMany(mappedBy = "role")
-   @JsonIgnore
-    private List<ClassUser> classUsers;
+    @ManyToOne
+    @JoinColumn(name = "class_id")
+    private Classroom classroom;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
 
     @Column(name = "revoked")
     private boolean revoked;
@@ -47,9 +50,6 @@ public class Role {
     @LastModifiedDate
     private Date updatedDate;
 
-    @OneToMany(mappedBy = "role")
-    @JsonIgnore
-    private List<InvitationUrl> invitationUrls;
 
 
 }
