@@ -18,7 +18,7 @@ const ForgotPasswordPage = lazy(() => import('./pages/forgot-password/ForgotPass
 const RedeemOTPPage = lazy(() => import('./pages/profile/otp/RedeemOTP'));
 const ResetPasswordPage = lazy(() => import('./pages/forgot-password/ResetPassword'));
 const ClassPage = lazy(() => import('./pages/class/ClassPage'));
-const ClassworkPage = lazy(() => import('./pages/classwork/ClassworkPage'));
+const StructurePage = lazy(() => import('./pages/structure/StructurePage'));
 const PeoplePage = lazy(() => import('./pages/people/PeoplePage'));
 const GradesPage = lazy(() => import('./pages/grades/GradesPage'));
 const InviteLinkPage = lazy(() => import('./pages/invite-link/InviteLinkPage'));
@@ -49,10 +49,10 @@ function App() {
             }
           />
           <Route
-            path='/classwork/:id'
+            path='/structure/:id'
             element={
               <PrivateRoute>
-                <ClassworkPage />
+                <StructurePage />
               </PrivateRoute>
             }
           />

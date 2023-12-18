@@ -17,7 +17,6 @@ const PeoplePage = () => {
   });
 
   if (isLoading) return <Loading />;
-  console.log(data);
 
   if (!data) return;
 
