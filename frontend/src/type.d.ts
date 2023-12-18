@@ -1,5 +1,5 @@
 type User = {
-  id: number;
+  id: string;
   email: string;
   dob: Date;
   firstName: string;
@@ -18,7 +18,7 @@ type RegisterDTO = {
 };
 
 type ProfileFields = {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   birthday: Date;
@@ -26,7 +26,7 @@ type ProfileFields = {
 };
 
 type Classroom = {
-  id: number;
+  id: string;
   name: string;
   section?: string;
   description?: string;
@@ -37,7 +37,7 @@ type Classroom = {
 };
 
 type Role = {
-  id: number;
+  id: string;
   name: string;
 };
 
