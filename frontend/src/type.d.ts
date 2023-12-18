@@ -39,6 +39,7 @@ type Classroom = {
 type Role = {
   id: string;
   name: string;
+  code: number;
 };
 
 type ClassMember = {

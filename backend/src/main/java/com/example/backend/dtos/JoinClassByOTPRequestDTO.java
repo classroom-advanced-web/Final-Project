@@ -7,9 +7,6 @@ import lombok.Getter;
 @Getter
 public class JoinClassByOTPRequestDTO {
 
-    @JsonProperty("class _id")
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    String classId;
 
 
     String code;
