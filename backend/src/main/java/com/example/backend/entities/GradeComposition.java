@@ -18,34 +18,29 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "users_in_classroom",
-uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"class_id", "user_id"})
-}
-
-)
+@Table(name = "grade_composition")
 @Where(clause = "revoked = false")
-public class ClassUser {
+public class GradeComposition {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "class_user_id")
+    @Column(name = "grade_composition_id")
     private String id;
+
+    @Column(name = "grade_composition_name", nullable = false)
+    private String name;
+
+    @Column(name = "grade_composition_scale", nullable = false)
+    private Double scale;
+
+    @Column(name = "grade_composition_weight", nullable = false)
+    private int weight;
 
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
     private Classroom classroom;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
-
-
-
+    @Column(name = "revoked")
     private boolean revoked;
 
     @Column(name = "created_date")

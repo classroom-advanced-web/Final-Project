@@ -8,6 +8,8 @@ public class AppConstant {
 
     public static final String CLASSROOM_PATH = "/classrooms/**";
 
+    public static final String GRADE_COMPOSITION_PATH = "/grade-compositions/**";
+
     public static final int OTP_DIGITS = 6;
     public static final int OTP_PERIOD = 5 * 60; // Time period in seconds
     public static final String OTP_ALGORITHM = "HmacSHA1"; // You can also use HmacSHA256 or HmacSHA512

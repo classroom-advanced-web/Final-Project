@@ -55,6 +55,7 @@ public class SecurityConfig {
                         .requestMatchers(permitAllRequestMatchers().toArray(new RequestMatcher[0])).permitAll()
                         .requestMatchers(AppConstant.USER_PATH).authenticated()
                         .requestMatchers(AppConstant.CLASSROOM_PATH).authenticated()
+                        .requestMatchers(AppConstant.GRADE_COMPOSITION_PATH).authenticated()
                         .anyRequest().authenticated())
 //                .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -20,7 +20,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "classes")
+@Table(name = "classrooms")
 @Where(clause = "revoked = false")
 public class Classroom {
 
@@ -57,6 +57,10 @@ public class Classroom {
     @OneToMany(mappedBy = "classroom")
     @JsonIgnore
     private List<InvitationUrl> invitationUrls;
+
+    @OneToMany(mappedBy = "classroom")
+    @JsonIgnore
+    private List<GradeComposition> gradeCompositions;
 
 
     private boolean revoked;
