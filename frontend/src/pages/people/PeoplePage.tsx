@@ -12,7 +12,7 @@ const STUDENT = [ROLE.STUDENT];
 
 const PeoplePage = () => {
   const { id } = useParams() ?? '0';
-  const { data, isLoading } = useQuery(['class', id], () => classApi.getStudents(+id!), {
+  const { data, isLoading } = useQuery(['class', id], () => classApi.getStudents(id!), {
     enabled: !!id
   });
 
@@ -21,8 +21,8 @@ const PeoplePage = () => {
 
   if (!data) return;
 
-  const teachers = data.filter((user: ClassMember) => TEACHER.includes(user.role.id));
-  const students = data.filter((user: ClassMember) => STUDENT.includes(user.role.id));
+  const teachers = data.filter((user: ClassMember) => TEACHER.includes(user.role.code));
+  const students = data.filter((user: ClassMember) => STUDENT.includes(user.role.code));
 
   return (
     <div>

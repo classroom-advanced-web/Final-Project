@@ -68,6 +68,7 @@ class ClassApi {
   getStudents = async (classId: string) => {
     const res = await instance.get(`/classrooms/users/${classId}`);
     const data = res.data;
+    console.log(data);
     const students: ClassMember[] = data.map((student: any) => {
       return {
         ...student,
@@ -82,11 +83,11 @@ class ClassApi {
     return students;
   };
 
-  inviteMember = async (classId: string, email: string, roleId: number) => {
+  inviteMember = async (classId: string, email: string, roleCode: number) => {
     const res = await instance.post(`/classrooms/invite`, {
       receiver_email: email,
       redirect_url: `${location.protocol}//${location.host}/invite-link`,
-      role_id: roleId,
+      role_code: roleCode,
       classroom_id: classId
     });
     return res.data;
