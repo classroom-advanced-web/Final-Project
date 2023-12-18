@@ -36,7 +36,7 @@ class ClassApi {
     subject,
     room
   }: {
-    classId: number;
+    classId: string;
     className: string;
     description: string;
     section: string;
@@ -53,7 +53,7 @@ class ClassApi {
     return res.data;
   };
 
-  getClassDetail = async (classId: number) => {
+  getClassDetail = async (classId: string) => {
     const res = await instance.get(`/classrooms/${classId}`);
     return res.data;
   };
@@ -65,7 +65,7 @@ class ClassApi {
     return res.data;
   };
 
-  getStudents = async (classId: number) => {
+  getStudents = async (classId: string) => {
     const res = await instance.get(`/classrooms/users/${classId}`);
     const data = res.data;
     const students: ClassMember[] = data.map((student: any) => {
@@ -82,7 +82,7 @@ class ClassApi {
     return students;
   };
 
-  inviteMember = async (classId: number, email: string, roleId: number) => {
+  inviteMember = async (classId: string, email: string, roleId: number) => {
     const res = await instance.post(`/classrooms/invite`, {
       receiver_email: email,
       redirect_url: `${location.protocol}//${location.host}/invite-link`,
