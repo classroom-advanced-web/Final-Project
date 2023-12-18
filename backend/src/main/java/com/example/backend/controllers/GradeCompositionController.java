@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import java.nio.file.AccessDeniedException;
 
 @RestController
-@RequestMapping("/grade-compositions")
+@RequestMapping("/grade-composition")
 @RequiredArgsConstructor
 public class GradeCompositionController {
 
     private final IGradeCompositionService gradeCompositionService;
 
-    @PostMapping("/create")
+    @PostMapping("")
     public ResponseEntity<GradeCompositionDTO> createGradeComposition(@RequestParam("classroom_id") String classroomId,
                                                  @RequestBody GradeCompositionDTO gradeCompositionDTO) throws AccessDeniedException {
             return ResponseEntity.ok(

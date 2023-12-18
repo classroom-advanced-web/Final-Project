@@ -40,6 +40,7 @@ public class SecurityConfig {
     permitAllMatchers.add(new AntPathRequestMatcher(AppConstant.AUTHENTICATION_PATH));
 //    permitAllMatchers.add(new AntPathRequestMatcher(AppConstant.USER_PATH));
 //    permitAllMatchers.add(new AntPathRequestMatcher(AppConstant.CLASSROOM_PATH));
+//    permitAllMatchers.add(new AntPathRequestMatcher(AppConstant.GRADE_COMPOSITION_PATH));
 
     return permitAllMatchers;
 }

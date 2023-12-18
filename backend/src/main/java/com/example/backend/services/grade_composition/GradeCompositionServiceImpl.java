@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.nio.file.AccessDeniedException;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -48,5 +49,13 @@ public class GradeCompositionServiceImpl implements IGradeCompositionService{
         gradeComposition.setWeight(maxWeight + 1);
 
         return gradeCompositionMapper.toDTO(gradeCompositionRepository.save(gradeComposition));
+    }
+
+    @Override
+    public Map<String, String> remove(String id) {
+
+
+
+        return null;
     }
 }

@@ -1,6 +1,7 @@
 package com.example.backend.exceptions;
 
 import com.example.backend.dtos.ErrorResponseDTO;
+import io.jsonwebtoken.security.SignatureException;
 import jakarta.mail.MessagingException;
 import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.http.HttpStatus;
@@ -97,5 +98,27 @@ public class MyExceptionHandler {
                         .error(errorMessage)
                         .build(),
                 HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler({NumberFormatException.class})
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponseDTO> resolveException(NumberFormatException exception) {
+        String errorMessage = "Malformed JSON request. Please check the request body.";
+        return new ResponseEntity<>(
+                ErrorResponseDTO.builder()
+                        .error(errorMessage)
+                        .build(),
+                HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<ErrorResponseDTO> resolveException(SignatureException exception) {
+        String errorMessage = "Invalid token. Please check the token.";
+        return new ResponseEntity<>(
+                ErrorResponseDTO.builder()
+                        .error(errorMessage)
+                        .build(),
+                HttpStatus.UNAUTHORIZED);
     }
 }
