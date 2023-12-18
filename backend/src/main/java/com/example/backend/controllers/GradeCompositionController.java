@@ -22,4 +22,11 @@ public class GradeCompositionController {
                     gradeCompositionService.create(classroomId, gradeCompositionDTO)
             );
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<GradeCompositionDTO> removeGradeComposition(@PathVariable("id") String id) {
+        return ResponseEntity.ok(
+                gradeCompositionService.remove(id)
+        );
+    }
 }

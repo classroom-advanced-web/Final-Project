@@ -9,6 +9,6 @@ public interface IGradeCompositionService {
 
     GradeCompositionDTO create(String classroomId, GradeCompositionDTO gradeCompositionDTO) throws AccessDeniedException;
 
-    Map<String, String> remove(String id);
+    GradeCompositionDTO remove(String id);
 
 }

@@ -45,17 +45,23 @@ public class GradeCompositionServiceImpl implements IGradeCompositionService{
 
 
         gradeComposition.setClassroom(classroom);
-        int maxWeight = gradeCompositionRepository.findMaxWeightByClassroomId(classroomId);
+        Integer maxWeight = gradeCompositionRepository.findMaxWeightByClassroomId(classroomId).orElse(0);
         gradeComposition.setWeight(maxWeight + 1);
 
         return gradeCompositionMapper.toDTO(gradeCompositionRepository.save(gradeComposition));
     }
 
     @Override
-    public Map<String, String> remove(String id) {
+    public GradeCompositionDTO remove(String id) {
+
+        GradeComposition gradeComposition = gradeCompositionRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Grade composition not found")
+        );
+
+       gradeComposition.setRevoked(true);
 
 
 
-        return null;
+        return gradeCompositionMapper.toDTO(gradeCompositionRepository.save(gradeComposition));
     }
 }
