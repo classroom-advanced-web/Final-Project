@@ -45,6 +45,7 @@ public class GradeCompositionServiceImpl implements IGradeCompositionService{
 
 
         gradeComposition.setClassroom(classroom);
+        System.out.println(gradeCompositionRepository.findMaxWeightByClassroomId(classroomId));
         Integer maxWeight = gradeCompositionRepository.findMaxWeightByClassroomId(classroomId).orElse(0);
         gradeComposition.setWeight(maxWeight + 1);
 
