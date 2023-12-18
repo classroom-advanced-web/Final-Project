@@ -12,7 +12,7 @@ import java.util.Map;
 public interface IUserService {
 
     AuthenticationResponseDTO login(@NonNull LoginDTO loginDTO);
-
+` 
     AuthenticationResponseDTO register(@NonNull RegisterDTO newUserDTO);
     AuthenticationResponseDTO refreshToken(@NonNull HttpServletRequest request,
                                            @NonNull HttpServletResponse response);

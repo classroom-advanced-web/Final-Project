@@ -1,0 +1,40 @@
+.itemsContainer {
+  box-shadow: 0px 0px 10px 1px #acacac;
+  background-color: white;
+  border-radius: 10px;
+  width: 450px;
+  padding: 1px 10px;
+}
+.item {
+  display: flex;
+  border-radius: 5px;
+  background-color: #f8f8f6;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-family: 'Roboto', sans-serif !important;
+}
+.itemTrigger {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(247, 181, 0, 0.5);
+  border-bottom-left-radius: 5px;
+  border-top-left-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.itemTrigger:hover {
+  background-color: rgba(247, 181, 0, 1);
+}
+.itemContent {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px 15px;
+  border-bottom-right-radius: 5px;
+  border-top-right-radius: 5px;
+}
+.sortableHelper {
+  z-index: 9999;
+}
