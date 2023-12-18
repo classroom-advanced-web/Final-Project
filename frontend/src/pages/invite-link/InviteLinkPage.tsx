@@ -27,13 +27,13 @@ const inviteLinkPage = () => {
           navigate(`/class/${res.classroom_id}`);
         }
       } catch (error: any) {
-        if (error.response) {
-          toast({
-            title: 'Join class failed',
-            description: error.response.data.error,
-            variant: 'destructive'
-          });
-        }
+        // if (error.response) {
+        //   toast({
+        //     title: 'Join class failed',
+        //     description: error.response.data.error,
+        //     variant: 'destructive'
+        //   });
+        // }
         console.error(error);
       }
     };

@@ -22,7 +22,6 @@ const ClassNav = ({ page }: Props) => {
         </li>
         <li className={cn('px-4 py-1', page === 'classwork' && 'border-b-[2px] border-b-blue-700 text-blue-700')}>
           <Link to={`/classwork/${id}`}>
-            {' '}
             <Button variant='ghost'>Classwork</Button>
           </Link>
         </li>
@@ -33,7 +32,6 @@ const ClassNav = ({ page }: Props) => {
         </li>
         <li className={cn('px-4 py-1', page === 'grades' && 'border-b-[2px] border-b-blue-700 text-blue-700')}>
           <Link to={`/grades/${id}`}>
-            {' '}
             <Button variant='ghost'>Grades</Button>
           </Link>
         </li>
