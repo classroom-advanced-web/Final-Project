@@ -7,6 +7,7 @@ import { arrayMove } from 'react-sortable-hoc';
 import SortableTable from '../sortable/SortableTable';
 import CompisitionForm from './CompisitionForm';
 import CompisitionUpdateForm from './CompositionUpdateForm';
+import { IoMdAdd } from 'react-icons/io';
 
 type Props = {
   open: boolean;
@@ -51,12 +52,12 @@ const GradeStructureForm = ({ open, onOpenChange, items, setItems }: Props) => {
         <SortableTable handleEdit={handleEdit} setItems={setItems} items={items} onSortEnd={onSortEnd} />
         <Button
           type='button'
-          className='mx-auto mt-0 block'
+          className='mx-auto mt-0 block text-2xl font-bold'
           onClick={() => {
             formStatus !== 'create' ? setFormStatus('create') : setFormStatus('none');
           }}
         >
-          +
+          <IoMdAdd />
         </Button>
         {formStatus === 'create' && <CompisitionForm closeForm={closeForm} setItems={setItems} items={items} />}
 

@@ -24,12 +24,17 @@ const CompisitionUpdateForm = ({ setItems, items, closeForm, oldItem }: Props) =
 
   const onSubmit = async (data: z.infer<typeof gradesStructureSchema>) => {
     try {
-      const res = await classApi.createComposition(data.compositionName, data.scale, id!);
+      const res = await classApi.editComposition(data.compositionName, data.scale, oldItem.id);
       if (res) {
         toast({
-          title: 'Create class successfully'
+          title: 'Update class successfully'
         });
-        setItems([...items, res]);
+
+        const newItems = [...items];
+        const index = newItems.findIndex((item) => item.id === oldItem.id);
+        newItems[index] = res;
+        setItems(newItems);
+
         closeForm();
       }
     } catch (error) {
