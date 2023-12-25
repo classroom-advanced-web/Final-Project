@@ -115,11 +115,19 @@ public class ClassroomServiceImpl implements IClassroomService {
         );
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(!classUserRepository.existsByUserIdAndClassroomId(user.getId(), classRoom.getId())) {
-            throw new AccessDeniedException("User is not in this class");
-        }
 
-        return classRoomMapper.toDTO(classRoom);
+        ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classRoom.getId())
+                .orElseThrow(
+                        () -> new AccessDeniedException("User is not in this class")
+                );
+
+
+
+        RoleDTO role  = roleMapper.toDTO(classUser.getRole());
+        ClassroomDTO classroomDTO = classRoomMapper.toDTO(classRoom);
+        classroomDTO.setRole(role);
+
+        return classroomDTO;
     }
 
     @Override
