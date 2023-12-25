@@ -29,7 +29,7 @@ const GradeStructureForm = ({ open, onOpenChange, items, setItems }: Props) => {
         <DialogHeader>
           <DialogTitle>Composition Name</DialogTitle>
         </DialogHeader>
-        <SortableTable items={items} onSortEnd={onSortEnd} />
+        <SortableTable setItems={setItems} items={items} onSortEnd={onSortEnd} />
         <Button
           type='button'
           className='mx-auto mt-0 block'

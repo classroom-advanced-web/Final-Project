@@ -9,6 +9,8 @@ import {
 import './sortable.css';
 import { Button } from '../ui/button';
 import { MdOutlineDelete } from 'react-icons/md';
+import classApi from '@/api/classApi';
+import { useToast } from '../ui/use-toast';
 interface ISortableHandleElement {
   children: React.ReactNode;
   className?: string;
@@ -27,6 +29,7 @@ interface ISortableContainer extends SortableContainerProps {
 type Props = {
   items: any[];
   onSortEnd: any;
+  setItems: any;
 };
 
 const SortableTrigger: React.ComponentClass<ISortableHandleElement, any> = SortableHandle(
@@ -45,7 +48,25 @@ const SortableList: React.ComponentClass<ISortableContainer, any> = SortableCont
     return <div>{children}</div>;
   }
 );
-const SortableTable = ({ items, onSortEnd }: Props) => {
+const SortableTable = ({ items, onSortEnd, setItems }: Props) => {
+  const { toast } = useToast();
+  const handleDelete = async (compositionId: string) => {
+    try {
+      const res = await classApi.deleteComposition(compositionId);
+      if (res) {
+        const newItems = [...items];
+        const index = newItems.findIndex((item) => item.id === compositionId);
+        newItems.splice(index, 1);
+        setItems(newItems);
+        toast({
+          title: `Delete: ${items[index].name} successfully`
+        });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <SortableList
       lockAxis='y'
@@ -65,7 +86,7 @@ const SortableTable = ({ items, onSortEnd }: Props) => {
           <div className='itemContent text-xl font-semibold'>{value.name}</div>
           <div className='ml-auto flex items-center gap-2 pr-4'>
             <span>{value.scale} %</span>
-            <Button variant={'ghost'} className='text-xl'>
+            <Button variant={'ghost'} className='text-xl' onClick={() => handleDelete(value.id)}>
               <MdOutlineDelete />
             </Button>
           </div>

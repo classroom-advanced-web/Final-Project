@@ -112,6 +112,11 @@ class ClassApi {
     const res = await instance.get(`/grade-composition/classroom?classroom_id=${classId}`);
     return res.data;
   };
+
+  deleteComposition = async (compositionId: string) => {
+    const res = await instance.delete(`/grade-composition/${compositionId}`);
+    return res.data;
+  };
 }
 
 const classApi = new ClassApi();

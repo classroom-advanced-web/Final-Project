@@ -89,5 +89,10 @@ export const inviteSchema = z.object({
 
 export const gradesStructureSchema = z.object({
   compositionName: z.string().min(1, 'Please enter your name').trim(),
-  scale: z.coerce.number().min(1, 'Please enter your weight')
+  scale: z.coerce
+    .number()
+    .min(1, 'Please enter a positive number')
+    .int()
+    .gte(1, 'Please enter a positive number')
+    .lte(100, 'Please enter a number less than 100')
 });
