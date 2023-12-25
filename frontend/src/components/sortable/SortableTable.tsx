@@ -8,7 +8,7 @@ import {
 } from 'react-sortable-hoc';
 import './sortable.css';
 import { Button } from '../ui/button';
-
+import { MdOutlineDelete } from 'react-icons/md';
 interface ISortableHandleElement {
   children: React.ReactNode;
   className?: string;
@@ -53,17 +53,22 @@ const SortableTable = ({ items, onSortEnd }: Props) => {
       useDragHandle
       onSortEnd={onSortEnd}
       helperClass='sortableHelper'
-      className='itemsContainer container'
+      className='itemsContainer'
     >
       {items.map((value: any, index: number) => (
-        <SortableItem key={value.id} index={index} className='item container pl-0'>
+        <SortableItem key={value.id} index={index} className='item pl-0'>
           <SortableTrigger className='itemTrigger'>
             <Button className='text-md'>
               <GiHamburgerMenu />
             </Button>
           </SortableTrigger>
           <div className='itemContent text-xl font-semibold'>{value.name}</div>
-          <span className='ml-auto'>{value.scale} %</span>
+          <div className='ml-auto flex items-center gap-2 pr-4'>
+            <span>{value.scale} %</span>
+            <Button variant={'ghost'} className='text-xl'>
+              <MdOutlineDelete />
+            </Button>
+          </div>
         </SortableItem>
       ))}
     </SortableList>
