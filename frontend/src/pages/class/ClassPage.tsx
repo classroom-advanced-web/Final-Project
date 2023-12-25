@@ -14,7 +14,6 @@ const ClassPage = () => {
   const { data, isLoading } = useQuery(['classDetail', id], () => classApi.getClassDetail(id));
 
   if (isLoading) return <Loading />;
-
   return (
     <div>
       <ClassNav page='stream' />

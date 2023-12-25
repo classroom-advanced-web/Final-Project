@@ -18,7 +18,7 @@ const GradeStructureTable = ({ gradeCompositions }: Props) => {
         {gradeCompositions.map((item) => (
           <TableRow key={item.id}>
             <TableCell className='text-left font-medium'>{item.name}</TableCell>
-            <TableCell className='text-right'>{item.scale}</TableCell>
+            <TableCell className='text-right'>{item.scale} %</TableCell>
           </TableRow>
         ))}
       </TableBody>
