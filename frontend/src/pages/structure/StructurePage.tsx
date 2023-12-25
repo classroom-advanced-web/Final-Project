@@ -19,7 +19,6 @@ const StructurePage = () => {
     const fetchStructure = async () => {
       try {
         const res = await classApi.getComposition(id!);
-        console.log(res);
         if (res) {
           setItems(res);
         }
@@ -30,6 +29,7 @@ const StructurePage = () => {
     fetchStructure();
   }, []);
 
+  console.log('items: ', items);
   return (
     <div>
       <ClassNav page='structure' />

@@ -15,7 +15,7 @@ type Props = {
 };
 
 const GradeStructureForm = ({ open, onOpenChange, items, setItems }: Props) => {
-  const [showForm, setshowForm] = useState(false);
+  const [showForm, setShowForm] = useState(false);
 
   const onSortEnd = ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
     const newArr = arrayMove(items, oldIndex, newIndex);
@@ -23,7 +23,6 @@ const GradeStructureForm = ({ open, onOpenChange, items, setItems }: Props) => {
   };
 
   const { toast } = useToast();
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='container inset-0 flex w-screen max-w-none translate-x-0 translate-y-0 flex-col overflow-auto'>
@@ -35,7 +34,7 @@ const GradeStructureForm = ({ open, onOpenChange, items, setItems }: Props) => {
           type='button'
           className='mx-auto mt-0 block'
           onClick={() => {
-            setshowForm(!showForm);
+            setShowForm(!showForm);
           }}
         >
           +

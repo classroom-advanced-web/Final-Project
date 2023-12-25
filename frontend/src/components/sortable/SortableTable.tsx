@@ -57,7 +57,7 @@ const SortableTable = ({ items, onSortEnd }: Props) => {
           <SortableTrigger className='itemTrigger'>
             <GiHamburgerMenu />
           </SortableTrigger>
-          <div className='itemContent'>{value}</div>
+          <div className='itemContent'>{value.name}</div>
         </SortableItem>
       ))}
     </SortableList>
