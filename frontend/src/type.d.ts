@@ -46,3 +46,11 @@ type ClassMember = {
   user: User;
   role: Role;
 };
+
+type GradeComposition = {
+  id: string;
+  name: string;
+  scale: number;
+  weight: number;
+  classroom_id: string;
+};

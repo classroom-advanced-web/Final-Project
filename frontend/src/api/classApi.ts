@@ -99,6 +99,19 @@ class ClassApi {
     });
     return res.data;
   };
+
+  createComposition = async (name: string, scale: number, classId: string) => {
+    const res = await instance.post(`/grade-composition?classroom_id=${classId}`, {
+      name,
+      scale
+    });
+    return res.data;
+  };
+
+  getComposition = async (classId: string) => {
+    const res = await instance.get(`/grade-composition/classroom?classroom_id=${classId}`);
+    return res.data;
+  };
 }
 
 const classApi = new ClassApi();

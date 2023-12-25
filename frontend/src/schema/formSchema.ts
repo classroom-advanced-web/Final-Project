@@ -86,3 +86,8 @@ export const updateClassSchema = z.object({
 export const inviteSchema = z.object({
   email: z.string().min(1, 'Please enter your email').email('Please enter a valid email').trim()
 });
+
+export const gradesStructureSchema = z.object({
+  compositionName: z.string().min(1, 'Please enter your name').trim(),
+  scale: z.coerce.number().min(1, 'Please enter your weight')
+});

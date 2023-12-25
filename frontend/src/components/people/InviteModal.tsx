@@ -39,7 +39,7 @@ const InviteModal = ({ open, onOpenChange, desc = '', roleId }: Props) => {
   const onSubmit = async (data: z.infer<typeof inviteSchema>) => {
     try {
       const { email } = data;
-      const res = await classApi.inviteMember(+classroomId, email, roleId);
+      const res = await classApi.inviteMember(classroomId, email, roleId);
       if (res) {
         toast({
           title: 'Invited'
@@ -51,7 +51,6 @@ const InviteModal = ({ open, onOpenChange, desc = '', roleId }: Props) => {
       console.error(error);
     }
   };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='sm:max-w-[425px]'>
