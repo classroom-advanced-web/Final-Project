@@ -7,25 +7,29 @@
 }
 .item {
   display: flex;
+  align-items: center;
   border-radius: 5px;
-  background-color: #f8f8f6;
+  background-color: #fafafa;
   margin-top: 10px;
   margin-bottom: 10px;
-  font-family: 'Roboto', sans-serif !important;
+  /* font-family: 'Roboto', sans-serif !important; */
+  box-shadow: 0px 0px 1px 1px #acacac;
 }
 .itemTrigger {
   display: flex;
+  height: 100%;
   justify-content: center;
   align-items: center;
-  background-color: rgba(247, 181, 0, 0.5);
+  background-color: theme('colors.primary.DEFAULT');
+  color: white;
   border-bottom-left-radius: 5px;
   border-top-left-radius: 5px;
-  padding: 10px 15px;
+  padding: 4px 0px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .itemTrigger:hover {
-  background-color: rgba(247, 181, 0, 1);
+  opacity: 0.8;
 }
 .itemContent {
   display: flex;

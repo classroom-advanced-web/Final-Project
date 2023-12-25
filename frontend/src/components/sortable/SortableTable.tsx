@@ -7,6 +7,7 @@ import {
   SortableHandle
 } from 'react-sortable-hoc';
 import './sortable.css';
+import { Button } from '../ui/button';
 
 interface ISortableHandleElement {
   children: React.ReactNode;
@@ -35,7 +36,9 @@ const SortableTrigger: React.ComponentClass<ISortableHandleElement, any> = Sorta
 );
 
 const SortableItem: React.ComponentClass<ISortableItem, any> = SortableElement(
-  ({ children }: { children: React.ReactNode }) => <div>{children}</div>
+  ({ children, className }: { children: React.ReactNode; className: string }) => (
+    <div className={className || ''}>{children}</div>
+  )
 );
 const SortableList: React.ComponentClass<ISortableContainer, any> = SortableContainer(
   ({ children }: { children: React.ReactNode }) => {
@@ -50,14 +53,17 @@ const SortableTable = ({ items, onSortEnd }: Props) => {
       useDragHandle
       onSortEnd={onSortEnd}
       helperClass='sortableHelper'
-      className='itemsContainer'
+      className='itemsContainer container'
     >
       {items.map((value: any, index: number) => (
-        <SortableItem key={`item-${index}`} index={index} className='item'>
+        <SortableItem key={value.id} index={index} className='item container pl-0'>
           <SortableTrigger className='itemTrigger'>
-            <GiHamburgerMenu />
+            <Button className='text-md'>
+              <GiHamburgerMenu />
+            </Button>
           </SortableTrigger>
-          <div className='itemContent'>{value.name}</div>
+          <div className='itemContent text-xl font-semibold'>{value.name}</div>
+          <span className='ml-auto'>{value.scale} %</span>
         </SortableItem>
       ))}
     </SortableList>
