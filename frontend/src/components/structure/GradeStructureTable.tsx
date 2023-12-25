@@ -1,5 +1,10 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-const GradeStructureTable = () => {
+
+type Props = {
+  gradeCompositions: GradeComposition[];
+};
+
+const GradeStructureTable = ({ gradeCompositions }: Props) => {
   return (
     <Table className=''>
       <TableCaption>Grade structure of your class</TableCaption>
@@ -10,10 +15,12 @@ const GradeStructureTable = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell className='text-left font-medium'>Kiểm tra giữa kỳ</TableCell>
-          <TableCell className='text-right'>30</TableCell>
-        </TableRow>
+        {gradeCompositions.map((item) => (
+          <TableRow key={item.id}>
+            <TableCell className='text-left font-medium'>{item.name}</TableCell>
+            <TableCell className='text-right'>{item.scale}</TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );

@@ -1,10 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Form } from '@/components/ui/form';
-import { gradesStructureSchema } from '@/schema/formSchema';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '../ui/use-toast';
 
 import { useState } from 'react';
@@ -15,11 +10,13 @@ import CompisitionForm from './CompisitionForm';
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  items: GradeComposition[];
+  setItems: any;
 };
 
-const GradeStructureForm = ({ open, onOpenChange }: Props) => {
+const GradeStructureForm = ({ open, onOpenChange, items, setItems }: Props) => {
   const [showForm, setshowForm] = useState(false);
-  const [items, setItems] = useState<any[]>(['Item 1', 'Item 2']);
+
   const onSortEnd = ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
     const newArr = arrayMove(items, oldIndex, newIndex);
     setItems(newArr);

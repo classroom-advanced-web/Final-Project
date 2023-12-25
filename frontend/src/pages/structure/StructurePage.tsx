@@ -1,19 +1,34 @@
-import ClassNav from '@/components/class/ClassNav';
-import { useParams } from 'react-router-dom';
+import classApi from '@/api/classApi';
 import classworkSvg from '@/assets/classwork.svg';
-import GradeStructureTable from '@/components/structure/GradeStructureTable';
-import { TiEdit } from 'react-icons/ti';
-import { useState } from 'react';
+import ClassNav from '@/components/class/ClassNav';
 import GradeStructureForm from '@/components/structure/GradeStructureForm';
-import { arrayMove } from 'react-sortable-hoc';
-import SortableTable from '@/components/sortable/SortableTable';
+import GradeStructureTable from '@/components/structure/GradeStructureTable';
+import { useEffect, useState } from 'react';
+import { TiEdit } from 'react-icons/ti';
+import { useParams } from 'react-router-dom';
 
 const data = [1];
 
 const StructurePage = () => {
   const [open, setOpen] = useState(false);
+  const [items, setItems] = useState<GradeComposition[]>([]);
 
   const { id } = useParams();
+
+  useEffect(() => {
+    const fetchStructure = async () => {
+      try {
+        const res = await classApi.getComposition(id!);
+        console.log(res);
+        if (res) {
+          setItems(res);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchStructure();
+  }, []);
 
   return (
     <div>
@@ -34,11 +49,11 @@ const StructurePage = () => {
                 <TiEdit />
               </span>
             </div>
-            <GradeStructureTable />
+            <GradeStructureTable gradeCompositions={items} />
           </div>
         )}
       </main>
-      <GradeStructureForm open={open} onOpenChange={setOpen} />
+      <GradeStructureForm items={items} setItems={setItems} open={open} onOpenChange={setOpen} />
     </div>
   );
 };
