@@ -22,13 +22,13 @@ const CompisitionForm = ({ setItems, items }: Props) => {
   if (!id) navigate('/');
 
   const onSubmit = async (data: z.infer<typeof gradesStructureSchema>) => {
-    setItems([...items, data.compositionName]);
     try {
       const res = await classApi.createComposition(data.compositionName, data.scale, id!);
       if (res) {
         toast({
           title: 'Create class successfully'
         });
+        setItems([...items, res]);
         //form.reset();
         //onOpenChange(false);
       }
