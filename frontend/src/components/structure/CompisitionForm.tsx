@@ -14,9 +14,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 type Props = {
   setItems: any;
   items: any[];
+  setShowForm: any;
 };
 
-const CompisitionForm = ({ setItems, items }: Props) => {
+const CompisitionForm = ({ setItems, items, setShowForm }: Props) => {
   const { id } = useParams();
   const navigate = useNavigate();
   if (!id) navigate('/');
@@ -29,8 +30,7 @@ const CompisitionForm = ({ setItems, items }: Props) => {
           title: 'Create class successfully'
         });
         setItems([...items, res]);
-        //form.reset();
-        //onOpenChange(false);
+        setShowForm(false);
       }
     } catch (error) {
       console.error(error);

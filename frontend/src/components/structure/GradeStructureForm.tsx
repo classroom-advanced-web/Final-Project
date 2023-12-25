@@ -39,7 +39,7 @@ const GradeStructureForm = ({ open, onOpenChange, items, setItems }: Props) => {
         >
           +
         </Button>
-        {showForm && <CompisitionForm setItems={setItems} items={items} />}
+        {showForm && <CompisitionForm setShowForm={setShowForm} setItems={setItems} items={items} />}
 
         {/* {error && <div className='text-red-500'>{error}</div>} */}
       </DialogContent>
