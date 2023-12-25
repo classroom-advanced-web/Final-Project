@@ -14,9 +14,10 @@ type Props = {
   setItems: any;
   items: any[];
   closeForm: any;
+  oldItem: GradeComposition;
 };
 
-const CompisitionForm = ({ setItems, items, closeForm }: Props) => {
+const CompisitionUpdateForm = ({ setItems, items, closeForm, oldItem }: Props) => {
   const { id } = useParams();
   const navigate = useNavigate();
   if (!id) navigate('/');
@@ -39,14 +40,13 @@ const CompisitionForm = ({ setItems, items, closeForm }: Props) => {
   const form = useForm<z.infer<typeof gradesStructureSchema>>({
     resolver: zodResolver(gradesStructureSchema),
     defaultValues: {
-      compositionName: '',
-      scale: 0
+      compositionName: oldItem.name || '',
+      scale: oldItem.scale || 0
     }
   });
   return (
     <div>
-      <h2 className='text-2xl font-bold'>Create</h2>
-
+      <h2 className='text-2xl font-bold'>Edit</h2>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
           <FormField
@@ -57,7 +57,7 @@ const CompisitionForm = ({ setItems, items, closeForm }: Props) => {
                 <FormLabel>Grade name:</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder='Grade name (required)'
+                    placeholder='Class name (required)'
                     {...field}
                     className={cn(
                       form.formState.errors.compositionName && 'border-red-400 focus-visible:ring-red-400',
@@ -92,7 +92,7 @@ const CompisitionForm = ({ setItems, items, closeForm }: Props) => {
             Close
           </Button>
           <Button type='submit' disabled={form.formState.isLoading}>
-            Create
+            Save
           </Button>
         </form>
       </Form>
@@ -100,4 +100,4 @@ const CompisitionForm = ({ setItems, items, closeForm }: Props) => {
   );
 };
 
-export default CompisitionForm;
+export default CompisitionUpdateForm;

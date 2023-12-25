@@ -117,6 +117,14 @@ class ClassApi {
     const res = await instance.delete(`/grade-composition/${compositionId}`);
     return res.data;
   };
+
+  editComposition = async (name: string, scale: number, id: string) => {
+    const res = await instance.put(`/grade-composition/${id}`, {
+      name,
+      scale
+    });
+    return res.data;
+  };
 }
 
 const classApi = new ClassApi();

@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { arrayMove } from 'react-sortable-hoc';
 import SortableTable from '../sortable/SortableTable';
 import CompisitionForm from './CompisitionForm';
+import CompisitionUpdateForm from './CompositionUpdateForm';
 
 type Props = {
   open: boolean;
@@ -13,33 +14,55 @@ type Props = {
   items: GradeComposition[];
   setItems: any;
 };
+type FormStatus = 'none' | 'create' | 'update';
 
 const GradeStructureForm = ({ open, onOpenChange, items, setItems }: Props) => {
-  const [showForm, setShowForm] = useState(false);
+  const [formStatus, setFormStatus] = useState<FormStatus>('none');
+  const [oldItem, setOldItem] = useState<GradeComposition>({
+    name: '',
+    scale: 0,
+    id: ''
+  });
 
   const onSortEnd = ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
     const newArr = arrayMove(items, oldIndex, newIndex);
     setItems(newArr);
   };
 
-  const { toast } = useToast();
+  const handleEdit = async (composition: GradeComposition) => {
+    try {
+      setOldItem(composition);
+      setFormStatus('update');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const closeForm = () => {
+    setFormStatus('none');
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className='container inset-0 flex w-screen max-w-none translate-x-0 translate-y-0 flex-col overflow-auto'>
         <DialogHeader>
           <DialogTitle>Composition Name</DialogTitle>
         </DialogHeader>
-        <SortableTable setItems={setItems} items={items} onSortEnd={onSortEnd} />
+        <SortableTable handleEdit={handleEdit} setItems={setItems} items={items} onSortEnd={onSortEnd} />
         <Button
           type='button'
           className='mx-auto mt-0 block'
           onClick={() => {
-            setShowForm(!showForm);
+            formStatus !== 'create' ? setFormStatus('create') : setFormStatus('none');
           }}
         >
           +
         </Button>
-        {showForm && <CompisitionForm setShowForm={setShowForm} setItems={setItems} items={items} />}
+        {formStatus === 'create' && <CompisitionForm closeForm={closeForm} setItems={setItems} items={items} />}
+
+        {formStatus === 'update' && (
+          <CompisitionUpdateForm oldItem={oldItem} closeForm={closeForm} setItems={setItems} items={items} />
+        )}
 
         {/* {error && <div className='text-red-500'>{error}</div>} */}
       </DialogContent>

@@ -28,6 +28,7 @@ const StructurePage = () => {
     };
     fetchStructure();
   }, []);
+
   return (
     <div>
       <ClassNav page='structure' />

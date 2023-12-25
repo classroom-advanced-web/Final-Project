@@ -31,6 +31,7 @@ type Props = {
   items: any[];
   onSortEnd: any;
   setItems: any;
+  handleEdit: any;
 };
 
 const SortableTrigger: React.ComponentClass<ISortableHandleElement, any> = SortableHandle(
@@ -49,19 +50,24 @@ const SortableList: React.ComponentClass<ISortableContainer, any> = SortableCont
     return <div>{children}</div>;
   }
 );
-const SortableTable = ({ items, onSortEnd, setItems }: Props) => {
+const SortableTable = ({ items, onSortEnd, setItems, handleEdit }: Props) => {
   const { toast } = useToast();
   const handleDelete = async (compositionId: string) => {
     try {
-      const res = await classApi.deleteComposition(compositionId);
-      if (res) {
-        const newItems = [...items];
-        const index = newItems.findIndex((item) => item.id === compositionId);
-        newItems.splice(index, 1);
-        setItems(newItems);
-        toast({
-          title: `Delete: ${items[index].name} successfully`
-        });
+      const _delete = async () => {
+        const res = await classApi.deleteComposition(compositionId);
+        if (res) {
+          const newItems = [...items];
+          const index = newItems.findIndex((item) => item.id === compositionId);
+          newItems.splice(index, 1);
+          setItems(newItems);
+          toast({
+            title: `Delete: ${items[index].name} successfully`
+          });
+        }
+      };
+      if (window.confirm('Are you sure you want to delete this item?')) {
+        _delete();
       }
     } catch (error) {
       console.error(error);
@@ -90,7 +96,7 @@ const SortableTable = ({ items, onSortEnd, setItems }: Props) => {
             <Button variant={'ghost'} className='px-2 text-xl' onClick={() => handleDelete(value.id)}>
               <MdOutlineDelete />
             </Button>
-            <Button variant={'ghost'} className='px-2 text-lg' onClick={() => handleDelete(value.id)}>
+            <Button variant={'ghost'} className='px-2 text-lg' onClick={() => handleEdit(value)}>
               <FaRegEdit />
             </Button>
           </div>

@@ -51,6 +51,6 @@ type GradeComposition = {
   id: string;
   name: string;
   scale: number;
-  weight: number;
-  classroom_id: string;
+  weight?: number;
+  classroom_id?: string;
 };
