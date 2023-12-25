@@ -11,6 +11,7 @@ import { Button } from '../ui/button';
 import { MdOutlineDelete } from 'react-icons/md';
 import classApi from '@/api/classApi';
 import { useToast } from '../ui/use-toast';
+import { FaRegEdit } from 'react-icons/fa';
 interface ISortableHandleElement {
   children: React.ReactNode;
   className?: string;
@@ -86,8 +87,11 @@ const SortableTable = ({ items, onSortEnd, setItems }: Props) => {
           <div className='itemContent text-xl font-semibold'>{value.name}</div>
           <div className='ml-auto flex items-center gap-2 pr-4'>
             <span>{value.scale} %</span>
-            <Button variant={'ghost'} className='text-xl' onClick={() => handleDelete(value.id)}>
+            <Button variant={'ghost'} className='px-2 text-xl' onClick={() => handleDelete(value.id)}>
               <MdOutlineDelete />
+            </Button>
+            <Button variant={'ghost'} className='px-2 text-lg' onClick={() => handleDelete(value.id)}>
+              <FaRegEdit />
             </Button>
           </div>
         </SortableItem>
