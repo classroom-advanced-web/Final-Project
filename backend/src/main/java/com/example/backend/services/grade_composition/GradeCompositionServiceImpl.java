@@ -3,6 +3,7 @@ package com.example.backend.services.grade_composition;
 import com.example.backend.configurations.converter.GradeCompositionMapper;
 import com.example.backend.constants.RoleEnum;
 import com.example.backend.dtos.GradeCompositionDTO;
+import com.example.backend.dtos.SortGradeCompositionDTO;
 import com.example.backend.entities.*;
 import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.repositories.ClassUserRepository;
@@ -14,7 +15,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -96,6 +99,32 @@ public class GradeCompositionServiceImpl implements IGradeCompositionService{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    @Transactional
+    public SortGradeCompositionDTO sortGradeCompositions(SortGradeCompositionDTO sortGradeCompositionDTO) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Classroom classroom = classroomRepository.findById(sortGradeCompositionDTO.getClassroomId()).orElseThrow(
+                () -> new NotFoundException("Classroom not found")
+        );
+        preAuthorize(user, classroom);
+        List<GradeCompositionDTO> gradeCompositionDTOs = new ArrayList<>();
+        for(GradeCompositionDTO gradeCompositionDTO : sortGradeCompositionDTO.getGradeCompositions()) {
+            GradeComposition gradeComposition = gradeCompositionRepository.findById(gradeCompositionDTO.getId()).orElseThrow(
+                    () -> new NotFoundException("Grade composition not found")
+            );
+            if(!gradeComposition.getClassroom().getId().equals(classroom.getId())) {
+                throw new AccessDeniedException("Grade composition is not in classroom");
+            }
+            gradeComposition.setWeight(gradeCompositionDTO.getWeight());
+            gradeCompositionDTOs.add(gradeCompositionMapper.toDTO(gradeCompositionRepository.save(gradeComposition)));
+        }
+
+        return SortGradeCompositionDTO.builder()
+                .classroomId(sortGradeCompositionDTO.getClassroomId())
+                .gradeCompositions(gradeCompositionDTOs)
+                .build();
+    }
+
     private void preAuthorize(User user, Classroom classroom) {
         ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classroom.getId()).orElseThrow(
                 () -> new NotFoundException("User is not in classroom")
@@ -104,7 +133,7 @@ public class GradeCompositionServiceImpl implements IGradeCompositionService{
                 && !classUser.getRole().getName().equals(RoleEnum.Teacher.name())
         )
         {
-            throw new AccessDeniedException("User have not the right");
+            throw new AccessDeniedException("User is not the owner");
         }
 
     }

@@ -1,6 +1,7 @@
 package com.example.backend.controllers;
 
 import com.example.backend.dtos.GradeCompositionDTO;
+import com.example.backend.dtos.SortGradeCompositionDTO;
 import com.example.backend.services.grade_composition.IGradeCompositionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,13 @@ public class GradeCompositionController {
     public ResponseEntity<List<GradeCompositionDTO>> getGradeCompositionsByClassroomId(@RequestParam("classroom_id") String classroomId) {
         return ResponseEntity.ok(
                 gradeCompositionService.getGradeCompositionsByClassroomId(classroomId)
+        );
+    }
+
+    @PostMapping("/sort")
+    public ResponseEntity<SortGradeCompositionDTO> sortGradeCompositions(@RequestBody SortGradeCompositionDTO sortGradeCompositionDTO) {
+        return ResponseEntity.ok(
+                gradeCompositionService.sortGradeCompositions(sortGradeCompositionDTO)
         );
     }
 }
