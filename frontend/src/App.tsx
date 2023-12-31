@@ -8,6 +8,7 @@ import LoadingPage from './components/loading/LoadingPage';
 import PrivateRoute from './components/private-route/PrivateRoute';
 import NotFoundPage from './pages/not-found/NotFoundPage';
 import InvitePage from './pages/invite/InvitePage';
+import ClassLayout from './components/layout/ClassLayout';
 
 const HomePage = lazy(() => import('./pages/home/HomePage'));
 const SignUpPage = lazy(() => import('./pages/sign-up/SignUpPage'));
@@ -44,7 +45,9 @@ function App() {
             path='/class/:id'
             element={
               <PrivateRoute>
-                <ClassPage />
+                <ClassLayout page='stream'>
+                  <ClassPage />
+                </ClassLayout>
               </PrivateRoute>
             }
           />
@@ -52,7 +55,9 @@ function App() {
             path='/structure/:id'
             element={
               <PrivateRoute>
-                <StructurePage />
+                <ClassLayout page='structure'>
+                  <StructurePage />
+                </ClassLayout>
               </PrivateRoute>
             }
           />
@@ -60,7 +65,9 @@ function App() {
             path='/people/:id'
             element={
               <PrivateRoute>
-                <PeoplePage />
+                <ClassLayout page='people'>
+                  <PeoplePage />
+                </ClassLayout>
               </PrivateRoute>
             }
           />
@@ -68,7 +75,9 @@ function App() {
             path='/grades/:id'
             element={
               <PrivateRoute>
-                <GradesPage />
+                <ClassLayout page='grades'>
+                  <GradesPage />
+                </ClassLayout>
               </PrivateRoute>
             }
           />

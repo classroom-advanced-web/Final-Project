@@ -1,15 +1,12 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { IoSettingsOutline } from 'react-icons/io5';
 
-import UpdateClassForm from './UpdateClassForm';
-import classApi from '@/api/classApi';
-import { useParams } from 'react-router-dom';
+import { useClassroom } from '@/hooks/useClassroom';
 import Loading from '../loading/Loading';
-import { useQuery } from 'react-query';
+import UpdateClassForm from './UpdateClassForm';
 
 const ClassSetting = () => {
-  const { id } = useParams<{ id: string }>() ?? 0;
-  const { data, isLoading } = useQuery('class', () => classApi.getClassDetail(id!));
+  const { classDetail, isLoading } = useClassroom();
 
   if (isLoading) return <Loading />;
 
@@ -28,7 +25,7 @@ const ClassSetting = () => {
           <div className='mt-6 flex w-full flex-col gap-8 self-center  lg:w-[700px]'>
             <section className='rounded-md border p-4'>
               <h2 className='mb-4 text-2xl font-medium text-blue-700'>Class Details</h2>
-              <UpdateClassForm classroom={data} />
+              <UpdateClassForm classroom={classDetail} />
             </section>
             <section className='rounded-md border p-4'>
               <h2 className='mb-4 text-2xl font-medium text-blue-700'>General</h2>
@@ -36,11 +33,11 @@ const ClassSetting = () => {
                 <h3 className='text-lg font-medium'>Invite codes</h3>
                 <div className='flex items-center justify-between text-sm'>
                   <h4>Invite link</h4>
-                  <p>{`${window.location.host}/invite?code=${data.code}`}</p>
+                  <p>{`${window.location.host}/invite?code=${classDetail.code}`}</p>
                 </div>
                 <div className='flex items-center justify-between text-sm'>
                   <h4>Class code</h4>
-                  <p>{data.code}</p>
+                  <p>{classDetail.code}</p>
                 </div>
               </div>
             </section>
