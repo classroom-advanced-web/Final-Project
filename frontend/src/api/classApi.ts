@@ -73,7 +73,6 @@ class ClassApi {
   getStudents = async (classId: string) => {
     const res = await instance.get(`/classrooms/users/${classId}`);
     const data = res.data;
-    console.log(data);
     const students: ClassMember[] = data.map((student: any) => {
       return {
         ...student,

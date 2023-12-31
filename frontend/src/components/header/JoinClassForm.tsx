@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { ROLE } from '@/constance/constance';
 import { cn } from '@/lib/utils';
 import { joinClassSchema } from '@/schema/formSchema';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -30,10 +29,9 @@ const JoinClassForm = ({ open, onOpenChange }: Props) => {
 
   const onSubmit = async (data: z.infer<typeof joinClassSchema>) => {
     try {
-      const res = await classApi.joinClass(data.code, ROLE.STUDENT);
+      const res = await classApi.joinClass(data.code);
       onOpenChange(false);
       navigate(`/class/${res.class_id}`);
-      console.log(res);
     } catch (error: any) {
       console.log(error);
       if (error.response?.data?.error) {
