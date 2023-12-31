@@ -23,7 +23,7 @@ const PeoplePage = () => {
   const students = data.filter((user: ClassMember) => STUDENT.includes(user.role.code));
 
   return (
-    <main className='mx-20 flex flex-col justify-center gap-5 p-8'>
+    <main className='flex flex-col justify-center gap-5 p-8 lg:mx-20'>
       <Teachers teachers={teachers} />
       <Students students={students} />
     </main>
