@@ -16,7 +16,7 @@ const AddClassButton = () => {
   return (
     <>
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger className='focus-within:outline-none'>
           <Plus />
         </DropdownMenuTrigger>
         <DropdownMenuContent>
