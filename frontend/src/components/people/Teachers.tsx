@@ -1,8 +1,10 @@
-import { MdPersonAddAlt } from 'react-icons/md';
-import TeacherRow from './TeacherRow';
-import InviteModal from './InviteModal';
-import { useState } from 'react';
 import { ROLE } from '@/constance/constance';
+import { useClassroom } from '@/hooks/useClassroom';
+import { useState } from 'react';
+import { MdPersonAddAlt } from 'react-icons/md';
+import InviteModal from './InviteModal';
+import TeacherRow from './TeacherRow';
+import Loading from '../loading/Loading';
 
 type Props = {
   teachers: ClassMember[];
@@ -10,13 +12,19 @@ type Props = {
 
 const Teachers = ({ teachers }: Props) => {
   const [open, setOpen] = useState(false);
+  const { classDetail, isLoading } = useClassroom();
+
+  if (isLoading) return <Loading />;
+
   return (
     <div className='flex flex-col'>
       <div className='flex items-center justify-between border-b-[1px] border-b-blue-500 p-3 text-blue-600'>
         <h1 className='text-2xl font-medium leading-10 '>Teachers</h1>
-        <span className='cursor-pointer text-xl' onClick={() => setOpen(true)}>
-          <MdPersonAddAlt />
-        </span>
+        {classDetail.role?.code != ROLE.STUDENT && (
+          <span className='cursor-pointer text-xl' onClick={() => setOpen(true)}>
+            <MdPersonAddAlt />
+          </span>
+        )}
       </div>
       <ul>
         {teachers.map((teacher) => (

@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  scrollbar-width: thin;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -74,4 +77,19 @@
     font-family: 'Open Sans', sans-serif;
     @apply h-screen bg-background text-foreground;
   }
+}
+
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #d1d0cf;
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #9b9a9a;
+  border-radius: 100px;
 }

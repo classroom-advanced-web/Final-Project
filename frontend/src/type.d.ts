@@ -34,6 +34,7 @@ type Classroom = {
   code: string;
   room?: string;
   image_url?: string;
+  role?: Role;
 };
 
 type Role = {

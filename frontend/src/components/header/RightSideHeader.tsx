@@ -13,6 +13,7 @@ import Loading from '../loading/Loading';
 import { Button } from '../ui/button';
 import AddClassButton from './AddClassButton';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '../ui/dropdown-menu';
+import NotificationButton from './NotificationButton';
 
 const RightSideHeader = () => {
   const { user, logout, loading } = useAuth();
@@ -36,10 +37,11 @@ const RightSideHeader = () => {
   }
 
   return (
-    <div className='flex items-center gap-1'>
+    <div className='flex items-center gap-3'>
+      {user && <NotificationButton />}
       {user && <AddClassButton />}
       <DropdownMenu>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger className=' focus-within:outline-none'>
           <div className='flex items-center gap-2'>
             <h3>
               {user.firstName && user.lastName
@@ -70,7 +72,7 @@ const RightSideHeader = () => {
               </Link>
             </li>
             <li>
-              <Button variant='link' size={'lg'} className='grid w-full grid-cols-2 gap-4 ' onClick={handleLogOutClick}>
+              <Button variant='link' size={'lg'} className='grid w-full grid-cols-2 gap-4' onClick={handleLogOutClick}>
                 <LogOut size={20} className='ml-8' />
                 <span className='mr-auto'>Log out</span>
               </Button>

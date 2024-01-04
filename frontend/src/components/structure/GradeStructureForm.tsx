@@ -2,12 +2,13 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { useToast } from '../ui/use-toast';
 
+import classApi from '@/api/classApi';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { arrayMove } from 'react-sortable-hoc';
 import SortableTable from '../sortable/SortableTable';
 import CompisitionForm from './CompisitionForm';
 import CompisitionUpdateForm from './CompositionUpdateForm';
-import { IoMdAdd } from 'react-icons/io';
 
 type Props = {
   open: boolean;
@@ -24,10 +25,17 @@ const GradeStructureForm = ({ open, onOpenChange, items, setItems }: Props) => {
     scale: 0,
     id: ''
   });
+  const [isOrderChanging, setIsOrderChanging] = useState(false);
+
+  const { toast } = useToast();
+
+  const { id: classId } = useParams<{ id: string }>() ?? '';
+  if (!classId) return null;
 
   const onSortEnd = ({ oldIndex, newIndex }: { oldIndex: number; newIndex: number }) => {
     const newArr = arrayMove(items, oldIndex, newIndex);
     setItems(newArr);
+    setIsOrderChanging(true);
   };
 
   const handleEdit = async (composition: GradeComposition) => {
@@ -36,6 +44,31 @@ const GradeStructureForm = ({ open, onOpenChange, items, setItems }: Props) => {
       setFormStatus('update');
     } catch (error) {
       console.error(error);
+    }
+  };
+
+  const handleSort = async () => {
+    try {
+      const newOrderItems = items.map((item, index) => {
+        return {
+          id: item.id,
+          weight: index + 1
+        };
+      });
+      const res = await classApi.sortComposition(classId, newOrderItems);
+      if (res) {
+        toast({
+          title: 'Sort successfully'
+        });
+
+        setIsOrderChanging(false);
+      }
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: 'Sort failed',
+        variant: 'destructive'
+      });
     }
   };
 
@@ -50,15 +83,20 @@ const GradeStructureForm = ({ open, onOpenChange, items, setItems }: Props) => {
           <DialogTitle>Composition Name</DialogTitle>
         </DialogHeader>
         <SortableTable handleEdit={handleEdit} setItems={setItems} items={items} onSortEnd={onSortEnd} />
-        <Button
-          type='button'
-          className='mx-auto mt-0 block text-2xl font-bold'
-          onClick={() => {
-            formStatus !== 'create' ? setFormStatus('create') : setFormStatus('none');
-          }}
-        >
-          <IoMdAdd />
-        </Button>
+        <div className='flex justify-end gap-4'>
+          <Button
+            type='button'
+            className='mt-0 block font-bold'
+            onClick={() => {
+              formStatus !== 'create' ? setFormStatus('create') : setFormStatus('none');
+            }}
+          >
+            Add
+          </Button>
+          <Button type='button' className='mt-0 block font-bold' disabled={!isOrderChanging} onClick={handleSort}>
+            Save
+          </Button>
+        </div>
         {formStatus === 'create' && <CompisitionForm closeForm={closeForm} setItems={setItems} items={items} />}
 
         {formStatus === 'update' && (

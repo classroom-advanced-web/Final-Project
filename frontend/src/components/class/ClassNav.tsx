@@ -13,8 +13,8 @@ const ClassNav = ({ page }: Props) => {
   if (!id) return null;
 
   return (
-    <nav className='container border-b-[1px]'>
-      <ul className='flex items-center'>
+    <nav className='container overflow-x-scroll border-b-[1px] md:overflow-hidden '>
+      <ul className='relative flex items-center'>
         <li className={cn('px-4 py-1', page === 'stream' && 'border-b-[2px] border-b-blue-700 text-blue-700')}>
           <Link to={`/class/${id}`}>
             <Button variant='ghost'>Stream</Button>
@@ -37,7 +37,7 @@ const ClassNav = ({ page }: Props) => {
             <Button variant='ghost'>Grades</Button>
           </Link>
         </li>
-        <li className='ml-auto py-1 '>
+        <li className='absolute right-0 ml-auto flex items-center bg-white p-5 py-1 md:static md:p-0'>
           <ClassSetting />
         </li>
       </ul>

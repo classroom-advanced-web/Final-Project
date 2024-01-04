@@ -1,5 +1,4 @@
 import classApi from '@/api/classApi';
-import ClassNav from '@/components/class/ClassNav';
 import Loading from '@/components/loading/Loading';
 import Students from '@/components/people/Students';
 import Teachers from '@/components/people/Teachers';
@@ -24,13 +23,10 @@ const PeoplePage = () => {
   const students = data.filter((user: ClassMember) => STUDENT.includes(user.role.code));
 
   return (
-    <div>
-      <ClassNav page='people' />
-      <main className='mx-20 flex flex-col justify-center gap-5 p-8'>
-        <Teachers teachers={teachers} />
-        <Students students={students} />
-      </main>
-    </div>
+    <main className='flex flex-col justify-center gap-5 p-8 lg:mx-20'>
+      <Teachers teachers={teachers} />
+      <Students students={students} />
+    </main>
   );
 };
 export default PeoplePage;

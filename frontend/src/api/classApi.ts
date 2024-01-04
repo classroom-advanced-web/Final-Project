@@ -1,6 +1,11 @@
 import { DEFAULT_THUMB } from '@/constance/constance';
 import instance from './axiosConfig';
 
+type CompositionSort = {
+  id: string;
+  weight: number;
+};
+
 class ClassApi {
   getClasses = async () => {
     const res = await instance.get('/users/classrooms');
@@ -68,7 +73,6 @@ class ClassApi {
   getStudents = async (classId: string) => {
     const res = await instance.get(`/classrooms/users/${classId}`);
     const data = res.data;
-    console.log(data);
     const students: ClassMember[] = data.map((student: any) => {
       return {
         ...student,
@@ -122,6 +126,14 @@ class ClassApi {
     const res = await instance.put(`/grade-composition/${id}`, {
       name,
       scale
+    });
+    return res.data;
+  };
+
+  sortComposition = async (classroomId: string, compositionIds: CompositionSort[]) => {
+    const res = await instance.post(`/grade-composition/sort`, {
+      classroom_id: classroomId,
+      grade_compositions: compositionIds
     });
     return res.data;
   };

@@ -11,7 +11,7 @@ const Header = () => {
     <header className='sticky top-0 w-full border-b-[1px] bg-white py-5 shadow-sm'>
       <div className='container flex items-center gap-10'>
         {user && <MobileSideBar />}
-        <h2 className='text-3xl font-bold'>
+        <h2 className='text-xl font-bold md:text-3xl'>
           <Link to='/'>Classroom</Link>
         </h2>
         {user && (

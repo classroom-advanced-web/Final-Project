@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '../u
 
 const MobileSideBar = () => {
   return (
-    <div className='md:hidden '>
+    <div className='flex items-center md:hidden'>
       <Sheet>
         <SheetTrigger>
           <HamburgerMenuIcon className='h-4 w-4' />
