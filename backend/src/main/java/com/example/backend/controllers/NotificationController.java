@@ -23,9 +23,9 @@ public class NotificationController {
 
 
 
-    @GetMapping("/subscribe")
-    public ResponseEntity<SseEmitter> subscribe() {
-        return ResponseEntity.ok(notificationService.subscribe());
+    @GetMapping("/subscribe/{userId}")
+    public SseEmitter subscribe(@PathVariable String userId) {
+        return notificationService.subscribe(userId);
     }
 
     @PostMapping("/send")
