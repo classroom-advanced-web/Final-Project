@@ -63,9 +63,10 @@ public class NotificationServiceImpl implements INotificationService {
                 .content(notificationDTO.getContent())
                 .sender(sender)
                 .build();
-        notifyToAllUserInClassroom(notificationDTO);
 
-        return notificationMapper.toDTO(notificationRepository.save(notification));
+        NotificationDTO newNotification = notificationMapper.toDTO(notificationRepository.save(notification));
+        notifyToAllUserInClassroom(newNotification);
+        return newNotification;
     }
 
     @Override
