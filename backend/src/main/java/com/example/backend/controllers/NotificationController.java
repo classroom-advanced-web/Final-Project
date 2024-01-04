@@ -23,7 +23,7 @@ public class NotificationController {
 
 
 
-    @GetMapping("/subscribe/{userId}")
+    @GetMapping("/subscribe")
     public ResponseEntity<SseEmitter> subscribe() {
         return ResponseEntity.ok(notificationService.subscribe());
     }
