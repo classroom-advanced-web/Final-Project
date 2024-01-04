@@ -41,7 +41,7 @@ public class SecurityConfig {
 //    permitAllMatchers.add(new AntPathRequestMatcher(AppConstant.USER_PATH));
 //    permitAllMatchers.add(new AntPathRequestMatcher(AppConstant.CLASSROOM_PATH));
 //    permitAllMatchers.add(new AntPathRequestMatcher(AppConstant.GRADE_COMPOSITION_PATH));
-    permitAllMatchers.add(new AntPathRequestMatcher(AppConstant.NOTIFICATION_PATH));
+//    permitAllMatchers.add(new AntPathRequestMatcher(AppConstant.NOTIFICATION_PATH));
 
     return permitAllMatchers;
 }
@@ -58,6 +58,7 @@ public class SecurityConfig {
                         .requestMatchers(AppConstant.USER_PATH).authenticated()
                         .requestMatchers(AppConstant.CLASSROOM_PATH).authenticated()
                         .requestMatchers(AppConstant.GRADE_COMPOSITION_PATH).authenticated()
+                        .requestMatchers(AppConstant.NOTIFICATION_PATH).authenticated()
                         .anyRequest().authenticated())
 //                .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

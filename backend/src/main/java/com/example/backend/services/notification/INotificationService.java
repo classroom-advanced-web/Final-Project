@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface INotificationService {
 
-    SseEmitter subscribe(String userId);
+    SseEmitter subscribe();
 
     NotificationDTO createNotification(NotificationDTO notificationDTO);
 
