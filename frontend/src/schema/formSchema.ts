@@ -1,3 +1,4 @@
+import exp from 'constants';
 import * as z from 'zod';
 
 export const signUpSchema = z.object({
@@ -85,6 +86,16 @@ export const updateClassSchema = z.object({
 
 export const inviteSchema = z.object({
   email: z.string().min(1, 'Please enter your email').email('Please enter a valid email').trim()
+});
+
+export const requestReviewSchema = z.object({
+  expectationGrade: z.coerce
+    .number()
+    .min(1, 'Please enter a positive number')
+    .int()
+    .gte(1, 'Please enter a positive number')
+    .lte(100, 'Please enter a number less than 100'),
+  explanationMessage: z.string().min(1, 'Please enter your explanation').trim()
 });
 
 export const gradesStructureSchema = z.object({
