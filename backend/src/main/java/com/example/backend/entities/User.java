@@ -57,6 +57,10 @@ public class User implements UserDetails {
      @Column(name = "is_activated")
      private boolean isActivated;
 
+     @OneToMany(mappedBy = "receiver")
+        @JsonIgnore
+        private List<ReceivedNotification> receivedNotifications;
+
      @OneToMany(mappedBy = "user")
      @JsonIgnore
      private List<ClassUser> classUsers;

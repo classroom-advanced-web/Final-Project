@@ -1,5 +1,6 @@
 package com.example.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -39,6 +41,10 @@ public class GradeComposition {
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
     private Classroom classroom;
+
+    @OneToMany(mappedBy = "gradeComposition")
+    @JsonIgnore
+    private List<Grade> grades;
 
     @Column(name = "revoked")
     private boolean revoked;

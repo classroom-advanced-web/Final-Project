@@ -16,5 +16,5 @@ public interface ClassUserRepository extends JpaRepository<ClassUser, String> {
 
     Optional<ClassUser> findByUserIdAndClassroomId(String userId, String classroomId);
 
-
+    List<ClassUser> findAllByClassroomId(String classroomId);
 }

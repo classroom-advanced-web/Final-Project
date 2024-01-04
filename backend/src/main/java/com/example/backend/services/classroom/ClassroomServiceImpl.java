@@ -12,6 +12,7 @@ import com.example.backend.exceptions.NotFoundException;
 import com.example.backend.repositories.*;
 import com.example.backend.services.email.IEmailService;
 import com.example.backend.services.helper.Helper;
+import com.example.backend.services.helper.StudentIdGenerator;
 import com.example.backend.services.token.ITokenService;
 import io.jsonwebtoken.Claims;
 import jakarta.mail.MessagingException;
@@ -41,6 +42,7 @@ public class ClassroomServiceImpl implements IClassroomService {
     private final UserMapper userMapper;
     private final RoleMapper roleMapper;
     private final Helper helper;
+    private final StudentIdGenerator studentIdGenerator;
 
     private final int SHORT_IDENTIFIER_LENGTH = 6;
 

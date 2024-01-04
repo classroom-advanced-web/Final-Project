@@ -20,40 +20,32 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "users_in_classroom",
-uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"class_id", "user_id"})
-}
-
-)
+@Table(name = "notifications")
 @Where(clause = "revoked = false")
-public class ClassUser {
+public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "class_user_id")
+    @Column(name = "notification_id")
     private String id;
 
-    @ManyToOne
-    @JoinColumn(name = "class_id", nullable = false)
-    private Classroom classroom;
+    @Column(name = "notification_content", nullable = false)
+    private String content;
+
+    private String title;
+
+    @Column(name = "is_read")
+    private boolean isRead;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "notification_sender_id", referencedColumnName = "class_user_id" ,nullable = false)
+    private ClassUser sender;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
-
-    @OneToMany(mappedBy = "classUser")
+    @OneToMany(mappedBy = "notification")
     @JsonIgnore
-    private List<Grade> grades;
+    private List<ReceivedNotification> receivedNotification;
 
-    @OneToMany(mappedBy = "sender")
-    @JsonIgnore
-    private List<Notification> notifications;
-
+    @Column(name = "revoked")
     private boolean revoked;
 
     @Column(name = "created_date")
@@ -63,4 +55,5 @@ public class ClassUser {
     @Column(name = "updated_date")
     @LastModifiedDate
     private Date updatedDate;
+
 }
