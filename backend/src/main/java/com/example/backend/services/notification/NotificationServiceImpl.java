@@ -42,11 +42,10 @@ public class NotificationServiceImpl implements INotificationService {
     public SseEmitter subscribe(String userId) {
 
 //        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String id = userId;
         SseEmitter emitter = new SseEmitter();
-        userEmitters.put(id, emitter);
-        emitter.onCompletion(() -> userEmitters.remove(id));
-        emitter.onTimeout(() -> userEmitters.remove(id));
+        userEmitters.put(userId, emitter);
+        emitter.onCompletion(() -> userEmitters.remove(userId));
+        emitter.onTimeout(() -> userEmitters.remove(userId));
         return emitter;
 
 

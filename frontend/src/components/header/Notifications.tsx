@@ -3,19 +3,31 @@ import { useAuth } from '@/hooks/useAuth';
 import Loading from '../loading/Loading';
 import { useEffect } from 'react';
 import axios from '@/api/axiosConfig';
+import { over } from 'stompjs';
+import SockJS from 'sockjs-client';
 
 const SERVER_URL = import.meta.env.VITE_SERVER_HOST as string;
+let Sock = new SockJS('http://localhost:5000/api/v1/notifications');
+const stompClient = over(Sock);
 
 const Notifications = () => {
   const { user, loading } = useAuth();
 
   useEffect(() => {
-    const eventSource = new EventSource(`${SERVER_URL}/notifications/subscribe/${user.id}`);
-    eventSource.addEventListener('notification', (event) => {
-      const newNotification = JSON.parse(event.data);
-      console.log(newNotification);
+    stompClient.connect({}, onConnected, (err: any) => {
+      console.log(err);
     });
   }, []);
+
+  const onConnected = () => {
+    console.log('connected');
+    if (user) {
+      stompClient.subscribe(`/user/${user.id}/receiver`, (message: any) => {
+        console.log(message);
+      });
+      stompClient.send('/app/notifications', {}, JSON.stringify({ user_id: user.id, message: 'hello' }));
+    }
+  };
 
   if (loading) {
     return <Loading />;

@@ -42,6 +42,7 @@ public class JWTFilter extends OncePerRequestFilter {
 
             String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             if (authHeader == null || !authHeader.startsWith(AppConstant.TOKEN_PREFIX)) {
+//                System.out.println(request.getRequestURI().toString());
                 filterChain.doFilter(request, response);
                 return;
             }
@@ -67,7 +68,7 @@ public class JWTFilter extends OncePerRequestFilter {
         } catch (Exception e) {
             e.printStackTrace();
             response.setContentType("application/json");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getOutputStream().println("{ \"error\": \"" + e.getMessage() + "\" }");
         }
     }

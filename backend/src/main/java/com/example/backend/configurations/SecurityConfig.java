@@ -42,6 +42,8 @@ public class SecurityConfig {
 //    permitAllMatchers.add(new AntPathRequestMatcher(AppConstant.CLASSROOM_PATH));
 //    permitAllMatchers.add(new AntPathRequestMatcher(AppConstant.GRADE_COMPOSITION_PATH));
     permitAllMatchers.add(new AntPathRequestMatcher(AppConstant.NOTIFICATION_PATH));
+//    permitAllMatchers.add(new AntPathRequestMatcher("/ws/**"));
+
 
     return permitAllMatchers;
 }
@@ -58,23 +60,24 @@ public class SecurityConfig {
                         .requestMatchers(AppConstant.USER_PATH).authenticated()
                         .requestMatchers(AppConstant.CLASSROOM_PATH).authenticated()
                         .requestMatchers(AppConstant.GRADE_COMPOSITION_PATH).authenticated()
-//                        .requestMatchers(AppConstant.NOTIFICATION_PATH).authenticated()
                         .anyRequest().authenticated())
 //                .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("*");
+//        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+//        configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedOriginPattern("*");
         configuration.addAllowedMethod("*");
         configuration.addAllowedHeader("*");
-//        configuration.setAllowCredentials(true);
+//        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowCredentials(true);
         UrlBasedCorsConfigurationSource source = new
                 UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
