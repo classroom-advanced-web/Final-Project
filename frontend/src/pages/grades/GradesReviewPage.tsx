@@ -1,5 +1,6 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/table';
-
+import './ReviewComponent';
+import ReviewComponent from './ReviewComponent';
 function GradesReviewPage() {
   const gradeReviews: GradeReview[] = [
     {
@@ -26,8 +27,8 @@ function GradesReviewPage() {
     //example/ get from api
   ];
   return (
-    <div>
-      <Table className='container w-3/4'>
+    <div className='container w-3/4'>
+      {/* <Table className='container w-3/4'>
         <TableCaption>Your Request</TableCaption>
         <TableHeader>
           <TableRow>
@@ -46,12 +47,11 @@ function GradesReviewPage() {
               <TableCell className='text-center'>{gradeReview.explanation}</TableCell>
             </TableRow>
           ))}
-          {/* <TableRow>
-            <TableCell className='text-left font-bold'>Average</TableCell>
-            <TableCell className='text-right font-bold'>60 </TableCell>
-          </TableRow> */}
+          
         </TableBody>
-      </Table>
+      </Table> */}
+      <ReviewComponent />
+      <ReviewComponent />
     </div>
   );
 }
