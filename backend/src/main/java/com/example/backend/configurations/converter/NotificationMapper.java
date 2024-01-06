@@ -19,6 +19,7 @@ public class NotificationMapper implements IMapper<Notification, NotificationDTO
                 .title(obj.getTitle())
                 .content(obj.getContent())
                 .isRead(obj.isRead())
+                .createdAt(obj.getCreatedDate())
                 .senderId(obj.getSender().getId())
                 .classroomId(obj.getSender().getClassroom().getId())
                 .build();

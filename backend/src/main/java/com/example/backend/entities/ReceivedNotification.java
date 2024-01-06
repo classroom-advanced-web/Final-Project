@@ -6,7 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Where;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -30,4 +34,15 @@ public class ReceivedNotification {
     @ManyToOne
     @JoinColumn(name = "receiver_id", referencedColumnName = "user_id" ,nullable = false)
     private User receiver;
+
+    @Column(name = "revoked")
+    private boolean revoked;
+
+    @Column(name = "created_date")
+    @CreatedDate
+    private Date createdDate;
+
+    @Column(name = "updated_date")
+    @LastModifiedDate
+    private Date updatedDate;
 }

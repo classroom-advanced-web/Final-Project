@@ -11,6 +11,7 @@ import com.example.backend.entities.ClassUser;
 import com.example.backend.entities.Notification;
 import com.example.backend.entities.ReceivedNotification;
 import com.example.backend.entities.User;
+import com.example.backend.exceptions.AuthenticationErrorException;
 import com.example.backend.repositories.ClassUserRepository;
 import com.example.backend.repositories.NotificationRepository;
 import com.example.backend.repositories.ReceivedNotificationRepository;
@@ -101,5 +102,30 @@ public class NotificationServiceImpl implements INotificationService {
         Map<String, String> response = new HashMap<>();
         response.put("message", "OK");
         return response;
+    }
+
+    @Override
+    public List<NotificationResponseDTO> getNotifications() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(user == null) {
+            throw new AuthenticationErrorException("User is not logged in");
+        }
+        List<Notification> notifications = receivedNotificationRepository.findAllByReceiverId(user.getId())
+                .stream()
+                .map(ReceivedNotification::getNotification)
+                .toList();
+
+        return notifications.stream()
+                .map(notification -> {
+                    NotificationDTO notificationDTO = notificationMapper.toDTO(notification);
+                    UserDTO sender = userMapper.toDTO(notification.getSender().getUser());
+                    ClassroomDTO classroom = classroomMapper.toDTO(notification.getSender().getClassroom());
+                    return NotificationResponseDTO.builder()
+                            .notification(notificationDTO)
+                            .sender(sender)
+                            .classroom(classroom)
+                            .build();
+                })
+                .toList();
     }
 }

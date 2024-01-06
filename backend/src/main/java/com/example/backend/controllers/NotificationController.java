@@ -1,6 +1,7 @@
 package com.example.backend.controllers;
 
 import com.example.backend.dtos.NotificationDTO;
+import com.example.backend.dtos.NotificationResponseDTO;
 import com.example.backend.entities.Notification;
 import com.example.backend.services.notification.INotificationService;
 import com.example.backend.services.notification.NotificationServiceImpl;
@@ -19,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -39,6 +41,13 @@ public class NotificationController {
 //        simpMessagingTemplate.convertAndSend("/user/" + message.get("user_id"),message.get("message"));
         notificationService.createNotification(notificationDTO);
         return notificationService.createNotification(notificationDTO);
+    }
+
+    @GetMapping()
+    public ResponseEntity<Map> getNotifications() {
+        return ResponseEntity.ok(
+                Map.of("notifications", notificationService.getNotifications())
+        );
     }
 
 
