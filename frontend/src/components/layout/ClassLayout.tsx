@@ -6,7 +6,7 @@ import ClassNav from '../class/ClassNav';
 
 type Props = {
   children: React.ReactNode;
-  page: 'stream' | 'people' | 'grades' | 'structure';
+  page: 'stream' | 'people' | 'grades' | 'structure' | 'grades-review';
 };
 
 type ContextType = {

@@ -1,4 +1,3 @@
-import gradesSvg from '@/assets/grades.svg';
 import GradeTable from '@/components/grade/GradeTable';
 import { useParams } from 'react-router-dom';
 
