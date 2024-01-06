@@ -1,23 +1,16 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 
 import classApi from '@/api/classApi';
-import classworkSvg from '@/assets/classwork.svg';
-import Loading from '@/components/loading/Loading';
-import GradeStructureForm from '@/components/structure/GradeStructureForm';
-import GradeStructureTable from '@/components/structure/GradeStructureTable';
-import { ROLE } from '@/constance/constance';
-import { useClassroom } from '@/hooks/useClassroom';
 import { useEffect, useState } from 'react';
-import { TiEdit } from 'react-icons/ti';
-import { useParams } from 'react-router-dom';
 import { MdOutlineRateReview } from 'react-icons/md';
-import { Button } from '../ui/button';
+import { useParams } from 'react-router-dom';
 import GradeForm from './GradeForm';
 
 const GradeTable = () => {
   const [items, setItems] = useState<GradeComposition[]>([]);
   const { id } = useParams();
   const [onOpenChange, setonOpenChange] = useState(false);
+  const [compisitionName, setCompisitionName] = useState('');
 
   useEffect(() => {
     const fetchStructure = async () => {
@@ -32,6 +25,11 @@ const GradeTable = () => {
     };
     fetchStructure();
   }, []);
+
+  function handleReview(compisitionName: string) {
+    setonOpenChange(true);
+    setCompisitionName(compisitionName);
+  }
 
   return (
     <div>
@@ -50,12 +48,7 @@ const GradeTable = () => {
               <TableCell className='text-left'>{item.name}</TableCell>
               <TableCell className='text-right'>60 </TableCell>
               <TableCell className='text-right'>
-                <span
-                  className='cursor-pointer text-xl'
-                  onClick={() => {
-                    setonOpenChange(true);
-                  }}
-                >
+                <span className='cursor-pointer text-xl' onClick={() => handleReview(item.name)}>
                   <MdOutlineRateReview />
                 </span>
               </TableCell>
@@ -67,7 +60,7 @@ const GradeTable = () => {
           </TableRow>
         </TableBody>
       </Table>
-      <GradeForm compisitionName='giua ky' open={onOpenChange} onOpenChange={setonOpenChange} />
+      <GradeForm compisitionName={compisitionName} open={onOpenChange} onOpenChange={setonOpenChange} />
     </div>
   );
 };

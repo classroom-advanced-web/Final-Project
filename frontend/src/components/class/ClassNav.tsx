@@ -4,7 +4,7 @@ import { Button } from '../ui/button';
 import ClassSetting from './ClassSetting';
 
 type Props = {
-  page: 'stream' | 'people' | 'grades' | 'structure';
+  page: 'stream' | 'people' | 'grades' | 'structure' | 'grades-review';
 };
 
 const ClassNav = ({ page }: Props) => {
@@ -35,6 +35,12 @@ const ClassNav = ({ page }: Props) => {
           <Link to={`/grades/${id}`}>
             {' '}
             <Button variant='ghost'>Grades</Button>
+          </Link>
+        </li>
+        <li className={cn('px-4 py-1', page === 'grades-review' && 'border-b-[2px] border-b-blue-700 text-blue-700')}>
+          <Link to={`/grades-review/${id}`}>
+            {' '}
+            <Button variant='ghost'>Grades Review</Button>
           </Link>
         </li>
         <li className='absolute right-0 ml-auto flex items-center bg-white p-5 py-1 md:static md:p-0'>
