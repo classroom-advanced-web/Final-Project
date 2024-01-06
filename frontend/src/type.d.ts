@@ -55,3 +55,11 @@ type GradeComposition = {
   weight?: number;
   classroom_id?: string;
 };
+
+type GradeReview = {
+  id: string;
+  currentScore: number;
+  expectedScore: number;
+  explanation?: string;
+  compositionName: string;
+};
