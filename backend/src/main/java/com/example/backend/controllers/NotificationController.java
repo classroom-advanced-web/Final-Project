@@ -34,11 +34,11 @@ public class NotificationController {
 
 //    @GetMapping("/info")
     @MessageMapping("/notifications")
-    public String send(@Payload Map<String, String> message) {
-        System.out.println(message.get("user_id"));
+    public NotificationDTO receive(@Payload NotificationDTO notificationDTO) {
+
 //        simpMessagingTemplate.convertAndSend("/user/" + message.get("user_id"),message.get("message"));
-        simpMessagingTemplate.convertAndSendToUser(message.get("user_id"),"/receiver",message.get("message"));
-        return message.get("message");
+        notificationService.createNotification(notificationDTO);
+        return notificationService.createNotification(notificationDTO);
     }
 
 

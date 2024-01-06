@@ -14,6 +14,7 @@ import com.example.backend.repositories.NotificationRepository;
 import com.example.backend.repositories.ReceivedNotificationRepository;
 import com.example.backend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,7 @@ public class NotificationServiceImpl implements INotificationService {
     private final NotificationMapper notificationMapper;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
 
 
@@ -76,27 +78,18 @@ public class NotificationServiceImpl implements INotificationService {
     public Map<String, String> notifyToAllUserInClassroom(NotificationDTO notificationDTO) {
         List<ClassUser> receivers = classUserRepository.findAllByClassroomId(notificationDTO.getClassroomId());
         receivers.forEach(receiver -> {
-            SseEmitter emitter = userEmitters.get(receiver.getUser().getId());
-            if(emitter != null) {
-                UserDTO sender = userMapper.toDTO(userRepository.findById(receiver.getUser().getId()).get());
+
+                Notification notification = notificationRepository.findById(notificationDTO.getId()).get();
+                UserDTO sender = userMapper.toDTO(notification.getSender().getUser());
                 NotificationResponseDTO notificationResponseDTO = NotificationResponseDTO.builder()
                         .notification(notificationDTO)
                         .sender(sender)
                         .build();
-                try {
-                    emitter.send(SseEmitter.event()
-                            .name("notification")
-                            .data(notificationResponseDTO)
-                            .build());
-                } catch (IOException e) {
-                    emitter.completeWithError(e);
-                    userEmitters.remove(receiver.getUser().getId(), emitter);
-                    e.printStackTrace();
-                }
-            }
+
+            simpMessagingTemplate.convertAndSendToUser(receiver.getUser().getId(),"/receiver", notificationResponseDTO);
             ReceivedNotification receivedNotification = ReceivedNotification.builder()
                     .receiver(userRepository.findById(receiver.getUser().getId()).get())
-                    .notification(notificationRepository.findById(notificationDTO.getId()).get())
+                    .notification(notification)
                     .build();
             receivedNotificationRepository.save(receivedNotification);
         });
