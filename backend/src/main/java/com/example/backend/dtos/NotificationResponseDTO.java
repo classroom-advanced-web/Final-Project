@@ -9,4 +9,5 @@ public class NotificationResponseDTO {
 
     NotificationDTO notification;
     UserDTO sender;
+    ClassroomDTO classroom;
 }

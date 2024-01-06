@@ -1,7 +1,9 @@
 package com.example.backend.services.notification;
 
+import com.example.backend.configurations.converter.ClassroomMapper;
 import com.example.backend.configurations.converter.NotificationMapper;
 import com.example.backend.configurations.converter.UserMapper;
+import com.example.backend.dtos.ClassroomDTO;
 import com.example.backend.dtos.NotificationDTO;
 import com.example.backend.dtos.NotificationResponseDTO;
 import com.example.backend.dtos.UserDTO;
@@ -37,6 +39,7 @@ public class NotificationServiceImpl implements INotificationService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final ClassroomMapper classroomMapper;
 
 
 
@@ -81,9 +84,11 @@ public class NotificationServiceImpl implements INotificationService {
 
                 Notification notification = notificationRepository.findById(notificationDTO.getId()).get();
                 UserDTO sender = userMapper.toDTO(notification.getSender().getUser());
+            ClassroomDTO classroom = classroomMapper.toDTO(notification.getSender().getClassroom());
                 NotificationResponseDTO notificationResponseDTO = NotificationResponseDTO.builder()
                         .notification(notificationDTO)
                         .sender(sender)
+                        .classroom(classroom)
                         .build();
 
             simpMessagingTemplate.convertAndSendToUser(receiver.getUser().getId(),"/receiver", notificationResponseDTO);
