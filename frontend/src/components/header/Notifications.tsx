@@ -1,33 +1,62 @@
 import { DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/useAuth';
-import Loading from '../loading/Loading';
-import { useEffect } from 'react';
-import axios from '@/api/axiosConfig';
-import { over } from 'stompjs';
+import { useEffect, useState } from 'react';
 import SockJS from 'sockjs-client';
+import { over } from 'stompjs';
+import Loading from '../loading/Loading';
+import UserAvatar from '../UserAvatar';
 
 const SERVER_URL = import.meta.env.VITE_SERVER_HOST as string;
-let Sock = new SockJS('http://localhost:5000/api/v1/notifications');
-const stompClient = over(Sock);
+let Sock = new SockJS(`${SERVER_URL}/notifications`);
+export const stompClient = over(Sock);
+
+type NotificationInfo = {
+  sender: User;
+  classroom: Classroom;
+  notification: NotificationContent;
+};
 
 const Notifications = () => {
   const { user, loading } = useAuth();
+  const [notifications, setNotifications] = useState<NotificationInfo[]>([]);
 
   useEffect(() => {
-    stompClient.connect({}, onConnected, (err: any) => {
-      console.log(err);
-    });
+    console.log('run');
+    if (user) {
+      stompClient.connect({}, onConnected, (err: any) => {
+        console.log(err);
+      });
+    }
+
+    // return () => {
+    //   stompClient.disconnect(() => {
+    //     console.log('disconnected');
+    //   });
+    // };
   }, []);
 
   const onConnected = () => {
     console.log('connected');
     if (user) {
       stompClient.subscribe(`/user/${user.id}/receiver`, (message: any) => {
-        console.log(message);
+        const messageBody = JSON.parse(message.body);
+        const map = {
+          ...messageBody,
+          sender: {
+            ...messageBody.sender,
+            firstName: messageBody.sender.first_name,
+            lastName: messageBody.sender.last_name
+          }
+        };
+        const newNotifications = [map, ...notifications];
+        console.log(newNotifications);
+        setNotifications(newNotifications);
       });
-      stompClient.send('/app/notifications', {}, JSON.stringify({ user_id: user.id, message: 'hello' }));
+      // stompClient.send('/app/notifications', {}, JSON.stringify({ user_id: user.id, message: 'hello' }));
     }
   };
+
+  console.log(notifications);
 
   if (loading) {
     return <Loading />;
@@ -41,26 +70,23 @@ const Notifications = () => {
       <div className='border-b-[1px] px-1 py-3'>
         <h2>Notifications</h2>
       </div>
-      {/* {notifications.map((notification) => (
-        <DropdownMenuItem key={notification.id} className='py-6'>
-          <div className='flex items-center gap-3'>
-            <div className='relative h-8 w-8'>
-              <img className='absolute z-0 h-full w-full rounded-full object-cover' src={notification.avatar} alt='' />
-              <h3 className='z-1 absolute left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] text-lg font-semibold text-white'>
-                {notification.name[0].toUpperCase()}
-              </h3>
-            </div>
-            <div className='flex flex-col gap-1'>
-              <h3 className='font-semibold'>
-                {notification.name}: {notification.content}
-              </h3>
+      {notifications.length > 0 &&
+        notifications.map((notification) => (
+          <DropdownMenuItem className='py-6'>
+            <div className='flex items-center gap-3'>
+              <UserAvatar keyword={notification.sender.firstName[0]} />
+              <div className='flex flex-col gap-1'>
+                <h3 className='font-semibold'>
+                  {`${notification.sender.firstName} ${notification.sender.lastName}`}:{' '}
+                  {notification.notification.title}
+                </h3>
 
-              <p className='text-xs text-gray-500'>{notification.className}</p>
-              <p className='text-xs text-gray-500'>{notification.time}</p>
+                <p className='text-xs text-gray-500'>{notification.classroom.name}</p>
+                {/* <p className='text-xs text-gray-500'>{notification.notification.created_at.toISOString()}</p> */}
+              </div>
             </div>
-          </div>
-        </DropdownMenuItem>
-      ))} */}
+          </DropdownMenuItem>
+        ))}
     </DropdownMenuContent>
   );
 };
