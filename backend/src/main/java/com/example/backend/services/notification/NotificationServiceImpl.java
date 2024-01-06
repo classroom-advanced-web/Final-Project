@@ -57,7 +57,7 @@ public class NotificationServiceImpl implements INotificationService {
     @Override
     public NotificationDTO createNotification(NotificationDTO notificationDTO) {
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findById(notificationDTO.getSenderId()).get();
         ClassUser sender = classUserRepository
                 .findByUserIdAndClassroomId(user.getId(), notificationDTO.getClassroomId())
                 .orElseThrow(
