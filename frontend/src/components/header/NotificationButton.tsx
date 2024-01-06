@@ -40,10 +40,8 @@ const data = [
   }
 ];
 
-
 const NotificationButton = () => {
   const [notifications, setNotifications] = useState(data);
-
 
   return (
     <>
