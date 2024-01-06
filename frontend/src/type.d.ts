@@ -63,3 +63,11 @@ type GradeReview = {
   explanation?: string;
   compositionName: string;
 };
+
+type CommentOnGradeReview = {
+  id: string;
+  content: string;
+  grade_review_id: string;
+  user_id: string;
+  created_at: Date;
+};
