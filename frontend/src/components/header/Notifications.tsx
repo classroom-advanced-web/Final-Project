@@ -5,6 +5,7 @@ import SockJS from 'sockjs-client';
 import { over } from 'stompjs';
 import Loading from '../loading/Loading';
 import UserAvatar from '../UserAvatar';
+import notificationApi from '@/api/notificationApi';
 
 const SERVER_URL = import.meta.env.VITE_SERVER_HOST as string;
 let Sock = new SockJS(`${SERVER_URL}/notifications`);
@@ -16,13 +17,38 @@ type NotificationInfo = {
   notification: NotificationContent;
 };
 
+const mapData = (notification: any): NotificationInfo => {
+  return {
+    ...notification,
+    sender: {
+      ...notification.sender,
+      firstName: notification.sender.first_name,
+      lastName: notification.sender.last_name
+    }
+  };
+};
+
 const Notifications = () => {
   const { user, loading } = useAuth();
   const [notifications, setNotifications] = useState<NotificationInfo[]>([]);
 
   useEffect(() => {
-    console.log('run');
+    const fetchNotifications = async () => {
+      try {
+        const res = await notificationApi.getNotifications();
+        if (res) {
+          const newNotification = res.map((notification: any) => {
+            return mapData(notification);
+          });
+          setNotifications(newNotification);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     if (user) {
+      fetchNotifications();
       stompClient.connect({}, onConnected, (err: any) => {
         console.log(err);
       });
