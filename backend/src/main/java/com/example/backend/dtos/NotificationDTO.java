@@ -14,4 +14,6 @@ public class NotificationDTO {
     Boolean isRead;
     @JsonProperty("classroom_id")
     String classroomId;
+    @JsonProperty("sender_id")
+    String senderId;
 }

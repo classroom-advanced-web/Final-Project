@@ -1,7 +1,9 @@
 package com.example.backend.services.notification;
 
+import com.example.backend.configurations.converter.ClassroomMapper;
 import com.example.backend.configurations.converter.NotificationMapper;
 import com.example.backend.configurations.converter.UserMapper;
+import com.example.backend.dtos.ClassroomDTO;
 import com.example.backend.dtos.NotificationDTO;
 import com.example.backend.dtos.NotificationResponseDTO;
 import com.example.backend.dtos.UserDTO;
@@ -14,6 +16,7 @@ import com.example.backend.repositories.NotificationRepository;
 import com.example.backend.repositories.ReceivedNotificationRepository;
 import com.example.backend.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -35,6 +38,8 @@ public class NotificationServiceImpl implements INotificationService {
     private final NotificationMapper notificationMapper;
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final ClassroomMapper classroomMapper;
 
 
 
@@ -55,7 +60,7 @@ public class NotificationServiceImpl implements INotificationService {
     @Override
     public NotificationDTO createNotification(NotificationDTO notificationDTO) {
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userRepository.findById(notificationDTO.getSenderId()).get();
         ClassUser sender = classUserRepository
                 .findByUserIdAndClassroomId(user.getId(), notificationDTO.getClassroomId())
                 .orElseThrow(
@@ -76,27 +81,20 @@ public class NotificationServiceImpl implements INotificationService {
     public Map<String, String> notifyToAllUserInClassroom(NotificationDTO notificationDTO) {
         List<ClassUser> receivers = classUserRepository.findAllByClassroomId(notificationDTO.getClassroomId());
         receivers.forEach(receiver -> {
-            SseEmitter emitter = userEmitters.get(receiver.getUser().getId());
-            if(emitter != null) {
-                UserDTO sender = userMapper.toDTO(userRepository.findById(receiver.getUser().getId()).get());
+
+                Notification notification = notificationRepository.findById(notificationDTO.getId()).get();
+                UserDTO sender = userMapper.toDTO(notification.getSender().getUser());
+            ClassroomDTO classroom = classroomMapper.toDTO(notification.getSender().getClassroom());
                 NotificationResponseDTO notificationResponseDTO = NotificationResponseDTO.builder()
                         .notification(notificationDTO)
                         .sender(sender)
+                        .classroom(classroom)
                         .build();
-                try {
-                    emitter.send(SseEmitter.event()
-                            .name("notification")
-                            .data(notificationResponseDTO)
-                            .build());
-                } catch (IOException e) {
-                    emitter.completeWithError(e);
-                    userEmitters.remove(receiver.getUser().getId(), emitter);
-                    e.printStackTrace();
-                }
-            }
+
+            simpMessagingTemplate.convertAndSendToUser(receiver.getUser().getId(),"/receiver", notificationResponseDTO);
             ReceivedNotification receivedNotification = ReceivedNotification.builder()
                     .receiver(userRepository.findById(receiver.getUser().getId()).get())
-                    .notification(notificationRepository.findById(notificationDTO.getId()).get())
+                    .notification(notification)
                     .build();
             receivedNotificationRepository.save(receivedNotification);
         });
