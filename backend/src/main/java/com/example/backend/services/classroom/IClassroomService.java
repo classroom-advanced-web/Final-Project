@@ -23,4 +23,8 @@ public interface IClassroomService {
 
     Map<String, Object> joinClassroomByInvitationUrl(JoinClassByEmailRequestDTO body);
 
+    List<UsersOfClassroomDTO> getStudentsOfClassroom(String classroomId) throws AccessDeniedException;
+
+    UserDTO mapStudentIdToAccount(String studentId, String accountId, String studentName) throws AccessDeniedException;
+
 }

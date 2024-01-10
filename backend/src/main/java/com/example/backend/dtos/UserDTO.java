@@ -33,4 +33,7 @@ public class UserDTO {
     @JsonProperty("is_activated")
     private Boolean isActivated;
 
+    @JsonProperty("student_id")
+    private String studentId;
+
 }

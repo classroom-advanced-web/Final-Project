@@ -73,4 +73,18 @@ public class ClassroomController {
         );
     }
 
+    @GetMapping("/students/{classroomId}")
+    public ResponseEntity<List<UsersOfClassroomDTO>> getStudentsOfClassroom(@PathVariable String classroomId) throws AccessDeniedException {
+        return ResponseEntity.ok(
+                classroomService.getStudentsOfClassroom(classroomId)
+        );
+    }
+
+    @PostMapping("/student-id/mapping")
+    public ResponseEntity<UserDTO> mapStudentIdToAccount(@RequestBody Map<String, String> body) throws AccessDeniedException {
+        return ResponseEntity.ok(
+                classroomService.mapStudentIdToAccount(body.get("student_id"), body.get("account_id"), body.get("student_name"))
+        );
+    }
+
 }

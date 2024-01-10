@@ -34,6 +34,9 @@ public class ClassUser {
     @Column(name = "class_user_id")
     private String id;
 
+    @Column(name = "user_name")
+    private String userName;
+
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
     private Classroom classroom;
