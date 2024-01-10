@@ -12,19 +12,26 @@ type Props = {
 type ContextType = {
   classDetail: Classroom;
   isLoading: boolean;
+  updateClassDetail: (data: Classroom) => void;
 };
 
 export const ClassContext = createContext<ContextType | null>(null);
 
 const ClassLayout = ({ children, page }: Props) => {
   const { id } = useParams<{ id: string }>() ?? '';
-  const { data: classDetail, isLoading } = useQuery('class', () => classApi.getClassDetail(id!), {
+  const { data: classDetail, isLoading } = useQuery(['class', id], () => classApi.getClassDetail(id!), {
     refetchOnWindowFocus: false
   });
 
+  const updateClassDetail = (data: Classroom) => {
+    console.log(`data::::${JSON.stringify(data)}`);
+    
+  };
+
   const value = {
     classDetail,
-    isLoading
+    isLoading,
+    updateClassDetail
   };
 
   return (
