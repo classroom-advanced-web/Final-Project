@@ -31,7 +31,6 @@ const UpdateClassForm = ({ classroom }: Props) => {
   });
 
   const { toast } = useToast();
-  const navigate = useNavigate();
 
   const queryClient = useQueryClient();
 

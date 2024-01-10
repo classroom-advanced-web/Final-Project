@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { arrayMove } from 'react-sortable-hoc';
 import SortableTable from '../sortable/SortableTable';
-import CompisitionForm from './CompisitionForm';
+import CompositionForm from './CompisitionForm';
 import CompisitionUpdateForm from './CompositionUpdateForm';
 
 type Props = {
@@ -97,7 +97,7 @@ const GradeStructureForm = ({ open, onOpenChange, items, setItems }: Props) => {
             Save
           </Button>
         </div>
-        {formStatus === 'create' && <CompisitionForm closeForm={closeForm} setItems={setItems} items={items} />}
+        {formStatus === 'create' && <CompositionForm closeForm={closeForm} setItems={setItems} items={items} />}
 
         {formStatus === 'update' && (
           <CompisitionUpdateForm oldItem={oldItem} closeForm={closeForm} setItems={setItems} items={items} />

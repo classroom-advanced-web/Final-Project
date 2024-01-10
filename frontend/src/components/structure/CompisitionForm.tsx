@@ -19,7 +19,7 @@ type Props = {
   closeForm: any;
 };
 
-const CompisitionForm = ({ setItems, items, closeForm }: Props) => {
+const CompositionForm = ({ setItems, items, closeForm }: Props) => {
   const { id: classroomId } = useParams();
   const { user, loading } = useAuth();
 
@@ -124,4 +124,4 @@ const CompisitionForm = ({ setItems, items, closeForm }: Props) => {
   );
 };
 
-export default CompisitionForm;
+export default CompositionForm;
