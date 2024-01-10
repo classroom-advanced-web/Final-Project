@@ -60,6 +60,7 @@ public class ClassroomServiceImpl implements IClassroomService {
                 () -> new NotFoundException("Role not found")
         );
         ClassUser classUser =  ClassUser.builder()
+                .userName(user.getLastName() + " " + user.getFirstName())
                 .classroom(savedClassroom)
                 .role(role)
                 .user(user)
@@ -102,6 +103,7 @@ public class ClassroomServiceImpl implements IClassroomService {
             }
 
             ClassUser classUser = ClassUser.builder()
+                    .userName(user.getLastName() + " " + user.getFirstName())
                     .classroom(classRoom)
                     .role(role)
                     .user(user)
@@ -247,6 +249,7 @@ public class ClassroomServiceImpl implements IClassroomService {
 
 
         ClassUser classUser = ClassUser.builder()
+                .userName(user.getLastName() + " " + user.getFirstName())
                 .classroom(classRoom)
                 .role(role)
                 .user(user)
@@ -269,6 +272,29 @@ public class ClassroomServiceImpl implements IClassroomService {
         return getUsersOfClassroomDTOs(classroomId, RoleEnum.Student);
     }
 
+    @Override
+    public UserDTO mapStudentIdToAccount(String studentId, String accountId, String studentName) throws AccessDeniedException {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), accountId)
+                .orElseThrow(
+                        () -> new AccessDeniedException("User is not in this class")
+                );
+        if(!classUser.getRole().getName().equals(RoleEnum.Teacher.name()) && !classUser.getRole().getName().equals(RoleEnum.Owner.name())) {
+            throw new AccessDeniedException("User is not teacher or owner of this class");
+        }
+        User student = userRepository.findById(accountId).orElseThrow(
+                () -> new NotFoundException("Student not found")
+        );
+        ClassUser classStudent = classUserRepository.findByUserIdAndClassroomId(student.getId(), classUser.getClassroom().getId())
+                .orElseThrow(
+                        () -> new NotFoundException("Student is not in this class")
+                );
+        classStudent.setUserName(studentName);
+        classUserRepository.save(classStudent);
+        student.setStudentId(studentId);
+        return userMapper.toDTO(userRepository.save(student));
+    }
+
     private List<UsersOfClassroomDTO> getUsersOfClassroomDTOs(String classroomId, @Nullable RoleEnum roleEnum) {
         if(roleEnum == null) {
             return classUserRepository.findByClassroomId(classroomId).stream().map(
@@ -276,6 +302,7 @@ public class ClassroomServiceImpl implements IClassroomService {
                         Role role = classUser.getRole();
                         User _user = classUser.getUser();
                         return UsersOfClassroomDTO.builder()
+                                .userName(classUser.getUserName())
                                 .role(roleMapper.toDTO(role))
                                 .user(userMapper.toDTO(_user))
                                 .build();
@@ -290,6 +317,7 @@ public class ClassroomServiceImpl implements IClassroomService {
                     Role role = classUser.getRole();
                     User _user = classUser.getUser();
                     return UsersOfClassroomDTO.builder()
+                            .userName(classUser.getUserName())
                             .role(roleMapper.toDTO(role))
                             .user(userMapper.toDTO(_user))
                             .build();

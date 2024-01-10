@@ -25,4 +25,6 @@ public interface IClassroomService {
 
     List<UsersOfClassroomDTO> getStudentsOfClassroom(String classroomId) throws AccessDeniedException;
 
+    UserDTO mapStudentIdToAccount(String studentId, String accountId, String studentName) throws AccessDeniedException;
+
 }
