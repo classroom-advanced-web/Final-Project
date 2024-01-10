@@ -9,6 +9,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 import * as z from 'zod';
 import { Button } from '../ui/button';
 import { toast } from '../ui/use-toast';
+import { useAuth } from '@/hooks/useAuth';
+import Loading from '../loading/Loading';
+import { stompClient } from '../header/Notifications';
 
 type Props = {
   setItems: any;
@@ -17,18 +20,30 @@ type Props = {
 };
 
 const CompisitionForm = ({ setItems, items, closeForm }: Props) => {
-  const { id } = useParams();
+  const { id: classroomId } = useParams();
+  const { user, loading } = useAuth();
+
   const navigate = useNavigate();
-  if (!id) navigate('/');
+  if (!classroomId) navigate('/');
 
   const onSubmit = async (data: z.infer<typeof gradesStructureSchema>) => {
     try {
-      const res = await classApi.createComposition(data.compositionName, data.scale, id!);
+      const res = await classApi.createComposition(data.compositionName, data.scale, classroomId!);
       if (res) {
         toast({
-          title: 'Create class successfully'
+          title: 'Create Grade Structure successfully'
         });
         setItems([...items, res]);
+        stompClient.send(
+          '/app/notifications',
+          {},
+          JSON.stringify({
+            sender_id: user?.id,
+            classroom_id: classroomId,
+            title: 'New Grade Structure',
+            content: 'New Grade Structure has been created'
+          })
+        );
         closeForm();
       }
     } catch (error) {
@@ -43,6 +58,15 @@ const CompisitionForm = ({ setItems, items, closeForm }: Props) => {
       scale: 0
     }
   });
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <div>
       <h2 className='text-2xl font-bold'>Create</h2>

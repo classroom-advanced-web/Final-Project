@@ -29,10 +29,7 @@ const Teachers = ({ teachers }: Props) => {
       <ul>
         {teachers.map((teacher) => (
           <li key={teacher.user.id} className='border-b-[1px] p-4 last:border-0'>
-            <TeacherRow
-              name={`${teacher.user.firstName} ${teacher.user.lastName}`}
-              avatar={'https://lh3.googleusercontent.com/a/default-user=s40-c'}
-            />
+            <TeacherRow name={`${teacher.user.firstName} ${teacher.user.lastName}`} />
           </li>
         ))}
       </ul>
