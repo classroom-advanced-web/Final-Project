@@ -1,19 +1,18 @@
-import GradeTable from '@/components/grade/GradeTable';
+import StudentGradeTable from '@/components/grade/StudentGradeTable';
+import TeacherGradeTable from '@/components/grade/TeacherGradeTable';
+import Loading from '@/components/loading/Loading';
+import { ROLE } from '@/constance/constance';
+import { useClassroom } from '@/hooks/useClassroom';
 import { useParams } from 'react-router-dom';
 
 const GradesPage = () => {
   const { id } = useParams();
+  const { classDetail, isLoading } = useClassroom();
   console.log(id);
-  return (
-    <main>
-      {/* <div className='mt-[135px] flex flex-col items-center justify-center gap-5'>
-        <img src={gradesSvg} className='w-[200px]' alt='classwork' />
-        <div className='text-center'>
-          <h3>Create assignment to see grades</h3>
-        </div>
-      </div> */}
-      <GradeTable />
-    </main>
-  );
+
+  if (isLoading) return <Loading />;
+
+  //student
+  return <main>{classDetail.role?.code === ROLE.STUDENT ? <StudentGradeTable /> : <TeacherGradeTable />}</main>;
 };
 export default GradesPage;
