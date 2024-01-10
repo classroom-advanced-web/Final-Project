@@ -73,4 +73,11 @@ public class ClassroomController {
         );
     }
 
+    @GetMapping("/students/{classroomId}")
+    public ResponseEntity<List<UsersOfClassroomDTO>> getStudentsOfClassroom(@PathVariable String classroomId) throws AccessDeniedException {
+        return ResponseEntity.ok(
+                classroomService.getStudentsOfClassroom(classroomId)
+        );
+    }
+
 }

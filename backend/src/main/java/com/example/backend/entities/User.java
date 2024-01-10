@@ -57,6 +57,9 @@ public class User implements UserDetails {
      @Column(name = "is_activated")
      private boolean isActivated;
 
+     @Column(name = "student_id")
+        private String studentId;
+
      @OneToMany(mappedBy = "receiver")
         @JsonIgnore
         private List<ReceivedNotification> receivedNotifications;

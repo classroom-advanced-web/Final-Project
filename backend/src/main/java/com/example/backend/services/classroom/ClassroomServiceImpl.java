@@ -15,6 +15,7 @@ import com.example.backend.services.helper.Helper;
 import com.example.backend.services.helper.StudentIdGenerator;
 import com.example.backend.services.token.ITokenService;
 import io.jsonwebtoken.Claims;
+import jakarta.annotation.Nullable;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -50,9 +51,9 @@ public class ClassroomServiceImpl implements IClassroomService {
     @Override
     public ClassroomDTO createClassRoom(ClassroomDTO classRoomDTO) {
 
-        Classroom classRoom = classRoomMapper.toEntity(classRoomDTO);
-        classRoom.setCode(generateShortIdentifier(SHORT_IDENTIFIER_LENGTH));
-        Classroom savedClassroom = classRoomRepository.save(classRoom);
+        Classroom classroom = classRoomMapper.toEntity(classRoomDTO);
+        classroom.setCode(generateShortIdentifier(SHORT_IDENTIFIER_LENGTH));
+        Classroom savedClassroom = classRoomRepository.save(classroom);
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Role role = roleRepository.findByName(RoleEnum.Owner.name()).orElseThrow(
@@ -72,9 +73,11 @@ public class ClassroomServiceImpl implements IClassroomService {
             throw  new ConflictException(e.getMessage());
         }
 
+        ClassroomDTO classroomDTO = classRoomMapper.toDTO(savedClassroom);
+        classroomDTO.setRole(roleMapper.toDTO(role));
 
 
-        return classRoomMapper.toDTO(savedClassroom);
+        return classroomDTO;
 
     }
 
@@ -165,20 +168,7 @@ public class ClassroomServiceImpl implements IClassroomService {
             throw new AccessDeniedException("User is not in this class");
         }
 
-        return classUserRepository.findByClassroomId(id).stream().map(
-                classUser -> {
-                   Role role = roleRepository.findById(classUser.getRole().getId()).orElseThrow(
-                           () -> new NotFoundException("Role not found")
-                     );
-                   User _user = userRepository.findById(classUser.getUser().getId()).orElseThrow(
-                           () -> new NotFoundException("User not found")
-                     );
-                    return UsersOfClassroomDTO.builder()
-                            .role(roleMapper.toDTO(role))
-                            .user(userMapper.toDTO(_user))
-                           .build();
-                }
-        ).toList();
+        return getUsersOfClassroomDTOs(id, null);
     }
 
     @Override
@@ -263,6 +253,48 @@ public class ClassroomServiceImpl implements IClassroomService {
                 .build();
 
         return Map.of("classroom_id", classUserRepository.save(classUser).getClassroom().getId());
+    }
+
+    @Override
+    public List<UsersOfClassroomDTO> getStudentsOfClassroom(String classroomId) throws AccessDeniedException {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classroomId)
+                .orElseThrow(
+                        () -> new AccessDeniedException("User is not in this class")
+                );
+        if(!classUser.getRole().getName().equals(RoleEnum.Teacher.name()) && !classUser.getRole().getName().equals(RoleEnum.Owner.name())) {
+            throw new AccessDeniedException("User is not teacher or owner of this class");
+        }
+
+        return getUsersOfClassroomDTOs(classroomId, RoleEnum.Student);
+    }
+
+    private List<UsersOfClassroomDTO> getUsersOfClassroomDTOs(String classroomId, @Nullable RoleEnum roleEnum) {
+        if(roleEnum == null) {
+            return classUserRepository.findByClassroomId(classroomId).stream().map(
+                    classUser -> {
+                        Role role = classUser.getRole();
+                        User _user = classUser.getUser();
+                        return UsersOfClassroomDTO.builder()
+                                .role(roleMapper.toDTO(role))
+                                .user(userMapper.toDTO(_user))
+                                .build();
+                    }
+            ).toList();
+        }
+        return classUserRepository
+                .findByClassroomIdAndRoleName(classroomId, roleEnum.name())
+                .stream()
+                .map(
+                classUser -> {
+                    Role role = classUser.getRole();
+                    User _user = classUser.getUser();
+                    return UsersOfClassroomDTO.builder()
+                            .role(roleMapper.toDTO(role))
+                            .user(userMapper.toDTO(_user))
+                            .build();
+                }
+        ).toList();
     }
 
     // Helper method to split the query parameters into a map
