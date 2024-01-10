@@ -24,6 +24,8 @@ const PeoplePage = lazy(() => import('./pages/people/PeoplePage'));
 const GradesPage = lazy(() => import('./pages/grades/GradesPage'));
 const InviteLinkPage = lazy(() => import('./pages/invite-link/InviteLinkPage'));
 const GradesReviewPage = lazy(() => import('./pages/grades/GradesReviewPage'));
+const AdminLayout = lazy(() => import('./pages/admin/AdminLayout'));
+const AdminUser = lazy(() => import('./components/admin/user/AdminUser'));
 
 function App() {
   return (
@@ -36,6 +38,26 @@ function App() {
             element={
               <PrivateRoute>
                 <HomePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/admin/user'
+            element={
+              <PrivateRoute>
+                <AdminLayout>
+                  <AdminUser />
+                </AdminLayout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path='/admin/classroom'
+            element={
+              <PrivateRoute>
+                <AdminLayout>
+                  <div>classroom</div>
+                </AdminLayout>
               </PrivateRoute>
             }
           />

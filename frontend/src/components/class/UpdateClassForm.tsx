@@ -9,9 +9,8 @@ import classApi from '@/api/classApi';
 import { cn } from '@/lib/utils';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
+import { useState } from 'react';
 
 type Props = {
   classroom: Classroom;

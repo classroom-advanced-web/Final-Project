@@ -1,6 +1,6 @@
 import { DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/useAuth';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import SockJS from 'sockjs-client';
 import { over } from 'stompjs';
 import Loading from '../loading/Loading';
@@ -79,7 +79,6 @@ const Notifications = () => {
         console.log(newNotifications);
         setNotifications(newNotifications);
       });
-      // stompClient.send('/app/notifications', {}, JSON.stringify({ user_id: user.id, message: 'hello' }));
     }
   };
 
