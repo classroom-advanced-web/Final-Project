@@ -12,6 +12,9 @@ const TeacherGradeTable = () => {
   const [onOpenChange, setonOpenChange] = useState(false);
   const [compisitionName, setCompisitionName] = useState('');
 
+  //sample data
+  var studentList = ['Student 1', 'Student 2'];
+
   useEffect(() => {
     const fetchStructure = async () => {
       try {
@@ -34,31 +37,25 @@ const TeacherGradeTable = () => {
   return (
     <div>
       <Table className='container w-3/4'>
-        <TableCaption>Your Grade</TableCaption>
+        <TableCaption>Teacher Grade</TableCaption>
         <TableHeader>
           <TableRow>
             {/* <TableHead className='w-[270px]'></TableHead> */}
             <TableHead className='w-[132px] text-left'>Student name</TableHead>
-            <TableHead className='w-[132px] text-right'>Gia Ky</TableHead>
-            <TableHead className='w-[132px] text-right'>Cuoi Ky</TableHead>
+
+            {items.map((item) => (
+              <TableHead className='w-[132px] text-right'>{item.name}</TableHead>
+            ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {items.map((item) => (
-            <TableRow key={item.id}>
-              <TableCell className='text-left'>{item.name}</TableCell>
+          {studentList.map((student) => (
+            <TableRow>
+              <TableCell className='text-left'>{student}</TableCell>
               <TableCell className='text-right'>60 </TableCell>
-              <TableCell className='text-right'>
-                <span className='cursor-pointer text-xl' onClick={() => handleReview(item.name)}>
-                  <MdOutlineRateReview />
-                </span>
-              </TableCell>
+              <TableCell className='text-right'>70</TableCell>
             </TableRow>
           ))}
-          <TableRow>
-            <TableCell className='text-left font-bold'>Average</TableCell>
-            <TableCell className='text-right font-bold'>60 </TableCell>
-          </TableRow>
         </TableBody>
       </Table>
       <GradeForm compisitionName={compisitionName} open={onOpenChange} onOpenChange={setonOpenChange} />
