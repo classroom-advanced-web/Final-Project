@@ -34,8 +34,7 @@ const data: User[] = [
     firstName: 'Toan',
     lastName: 'Tran',
     activated: false,
-    gender: 'MALE',
-    banned: true
+    gender: 'MALE'
   },
   {
     id: '2',
@@ -44,8 +43,7 @@ const data: User[] = [
     firstName: 'Toan2',
     lastName: 'Tran',
     activated: false,
-    gender: 'MALE',
-    banned: false
+    gender: 'MALE'
   },
   {
     id: '3',
@@ -54,8 +52,7 @@ const data: User[] = [
     firstName: 'Toan3',
     lastName: 'Tran',
     activated: true,
-    gender: 'MALE',
-    banned: true
+    gender: 'MALE'
   }
 ];
 
@@ -132,21 +129,31 @@ export const columns: ColumnDef<User>[] = [
     )
   },
   {
-    accessorKey: 'banned',
-    header: '',
-    cell: ({ row }) => (
-      <div>
-        {row.getValue('banned') ? (
-          <Button variant='destructive' className='min-w-[120px]'>
-            Ban Account
-          </Button>
-        ) : (
-          <Button variant='outline' className='min-w-[120px]'>
-            Unbanned
-          </Button>
-        )}
-      </div>
-    )
+    id: 'actions',
+    enableHiding: false,
+    cell: ({ row }) => {
+      const payment = row.original;
+
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant='ghost' className='h-8 w-8 p-0'>
+              <span className='sr-only'>Open menu</span>
+              <DotsHorizontalIcon className='h-4 w-4' />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end'>
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
+              Copy payment ID
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem>View customer</DropdownMenuItem>
+            <DropdownMenuItem>View payment details</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
+    }
   }
 ];
 

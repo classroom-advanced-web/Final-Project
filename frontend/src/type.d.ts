@@ -6,6 +6,7 @@ type User = {
   lastName: string;
   activated: boolean;
   gender: 'MALE' | 'FEMALE';
+  banned?: boolean;
 };
 
 type RegisterDTO = {
