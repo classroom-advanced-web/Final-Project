@@ -10,6 +10,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MdArrowDropDown } from 'react-icons/md';
 import { RiFolderDownloadLine } from 'react-icons/ri';
+import { useRef } from 'react';
 
 type Props = {
   students: StudentPreview[];
@@ -32,6 +33,8 @@ const StudentListAction = ({ students }: Props) => {
     writeExcelFile(data, `students - ${classDetail.name}.xlsx`);
   };
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='flex items-center gap-3 rounded-sm border px-4 py-2 focus:outline-none'>
@@ -46,6 +49,15 @@ const StudentListAction = ({ students }: Props) => {
             </span>
             <span>Export to XLSX</span>
           </div>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <div className='flex items-center gap-3' onClick={() => inputRef.current?.click()}>
+            <span className='text-xl'>
+              <RiFolderDownloadLine />
+            </span>
+            <span>Export to XLSX</span>
+          </div>
+          <input type='file' ref={inputRef} className='hidden' />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
