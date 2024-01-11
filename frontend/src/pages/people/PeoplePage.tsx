@@ -10,17 +10,23 @@ const TEACHER = [ROLE.OWNER, ROLE.TEACHER];
 const STUDENT = [ROLE.STUDENT];
 
 const PeoplePage = () => {
+  let teachers: ClassMember[] = [];
+  let students: ClassMember[] = [];
+
   const { id } = useParams() ?? '0';
-  const { data, isLoading } = useQuery(['class', id], () => classApi.getStudents(id!), {
+  const { data, isLoading, isSuccess } = useQuery(['member', id], () => classApi.getStudents(id!), {
+    refetchOnWindowFocus: false,
     enabled: !!id
   });
 
+  console.log(data);
+
   if (isLoading) return <Loading />;
 
-  if (!data) return null;
-
-  const teachers = data.filter((user: ClassMember) => TEACHER.includes(user.role.code));
-  const students = data.filter((user: ClassMember) => STUDENT.includes(user.role.code));
+  if (isSuccess) {
+    teachers = data.filter((user: ClassMember) => TEACHER.includes(user.role.code));
+    students = data.filter((user: ClassMember) => STUDENT.includes(user.role.code));
+  }
 
   return (
     <main className='flex flex-col justify-center gap-5 p-8 lg:mx-20'>

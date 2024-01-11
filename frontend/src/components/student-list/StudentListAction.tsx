@@ -8,8 +8,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
-import { MdArrowDropDown } from 'react-icons/md';
+import { MdArrowDropDown, MdOutlineDriveFolderUpload } from 'react-icons/md';
 import { RiFolderDownloadLine } from 'react-icons/ri';
+import { useRef } from 'react';
 
 type Props = {
   students: StudentPreview[];
@@ -17,6 +18,8 @@ type Props = {
 
 const StudentListAction = ({ students }: Props) => {
   const { classDetail, isLoading } = useClassroom();
+
+  const inputFileRef = useRef<HTMLInputElement>(null);
 
   if (isLoading) return <Loading />;
   if (!classDetail) return null;
@@ -32,6 +35,10 @@ const StudentListAction = ({ students }: Props) => {
     writeExcelFile(data, `students - ${classDetail.name}.xlsx`);
   };
 
+  const handleImportExcel = () => {
+    inputFileRef.current?.click();
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className='flex items-center gap-3 rounded-sm border px-4 py-2 focus:outline-none'>
@@ -45,6 +52,15 @@ const StudentListAction = ({ students }: Props) => {
               <RiFolderDownloadLine />
             </span>
             <span>Export to XLSX</span>
+          </div>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <div className='flex items-center gap-3' onClick={handleImportExcel}>
+            <span className='text-xl'>
+              <MdOutlineDriveFolderUpload />
+            </span>
+            <span>Import XLSX</span>
+            <input type='file' className='hidden' ref='inputFileRef' />
           </div>
         </DropdownMenuItem>
       </DropdownMenuContent>

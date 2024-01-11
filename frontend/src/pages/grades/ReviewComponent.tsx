@@ -16,7 +16,7 @@ const ReviewComponent = ({ gradeReview }: Props) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Handle comment submission logic here
+    //Handle comment submission logic here
     console.log('Comment submitted:', comment);
     setComment('');
 
