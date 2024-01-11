@@ -81,9 +81,19 @@ public class ClassroomController {
     }
 
     @PostMapping("/student-id/mapping")
-    public ResponseEntity<UserDTO> mapStudentIdToAccount(@RequestBody Map<String, String> body) throws AccessDeniedException {
+    public ResponseEntity<Map> mapStudentIdToAccount(@RequestBody Map<String, String> body) throws AccessDeniedException {
+        String accountId = body.get("account_id");
+        String studentId = body.get("student_id");
+        String studentName = body.get("student_name");
+        String classroomId = body.get("classroom_id");
+        if(accountId == null) {
+            return ResponseEntity.ok(
+                    classroomService.saveNonUserToClassroom(studentId, studentName, classroomId)
+            );
+        }
+
         return ResponseEntity.ok(
-                classroomService.mapStudentIdToAccount(body.get("student_id"), body.get("account_id"), body.get("student_name"))
+                classroomService.mapStudentIdToAccount(studentId, accountId, studentName, classroomId)
         );
     }
 

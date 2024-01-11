@@ -295,9 +295,9 @@ public class ClassroomServiceImpl implements IClassroomService {
     }
 
     @Override
-    public UserDTO mapStudentIdToAccount(String studentId, String accountId, String studentName) throws AccessDeniedException {
+    public Map<String, Object> mapStudentIdToAccount(String studentId, String accountId, String studentName, String classroomId) throws AccessDeniedException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), accountId)
+        ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classroomId)
                 .orElseThrow(
                         () -> new AccessDeniedException("User is not in this class")
                 );
@@ -311,13 +311,50 @@ public class ClassroomServiceImpl implements IClassroomService {
                 .orElseThrow(
                         () -> new NotFoundException("Student is not in this class")
                 );
-        classStudent.setUserName(studentName);
-        classUserRepository.save(classStudent);
+
         if(student.getStudentId() == null) {
             student.setStudentId(studentId);
+            classStudent.setUserName(studentName.trim());
+            classUserRepository.save(classStudent);
+            userRepository.save(student);
         }
+        Map<String, Object> response = new HashMap<>();
+        response.put("student_id", student.getStudentId());
+        response.put("student_name", classStudent.getUserName());
+        response.put("account_id", student.getId());
 
-        return userMapper.toDTO(userRepository.save(student));
+        return response;
+    }
+
+    @Override
+    public Map<String, Object> saveNonUserToClassroom(String studentId, String studentName, String classroomId) throws AccessDeniedException {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classroomId)
+                .orElseThrow(
+                        () -> new AccessDeniedException("User is not in this class")
+                );
+        if(!classUser.getRole().getName().equals(RoleEnum.Teacher.name()) && !classUser.getRole().getName().equals(RoleEnum.Owner.name())) {
+            throw new AccessDeniedException("User is not teacher or owner of this class");
+        }
+        NonUser existedNonUser = nonUserRepository.findByStudentId(studentId).orElse(null);
+        Map<String, Object> response = new HashMap<>();
+        if(existedNonUser == null) {
+            NonUser nonUser = NonUser.builder()
+                    .name(studentName)
+                    .studentId(studentId)
+                    .classroom(classUser.getClassroom())
+                    .build();
+            nonUserRepository.save(nonUser);
+            response.put("student_id", nonUser.getStudentId());
+            response.put("student_name", nonUser.getName());
+
+        } else {
+            response.put("student_id", existedNonUser.getStudentId());
+            response.put("student_name", existedNonUser.getName());
+        }
+        response.put("account_id", null);
+        return response;
+
     }
 
     private List<UsersOfClassroomDTO> getUsersOfClassroomDTOs(String classroomId, @Nullable RoleEnum roleEnum) {
