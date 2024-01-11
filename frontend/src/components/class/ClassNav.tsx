@@ -2,15 +2,25 @@ import { cn } from '@/lib/utils';
 import { Link, useParams } from 'react-router-dom';
 import { Button } from '../ui/button';
 import ClassSetting from './ClassSetting';
+import { useClassroom } from '@/hooks/useClassroom';
+import Loading from '../loading/Loading';
+import { ROLE } from '@/constance/constance';
 
 type Props = {
-  page: 'stream' | 'people' | 'grades' | 'structure' | 'grades-review';
+  page: 'stream' | 'people' | 'grades' | 'structure' | 'grades-review' | 'student-list';
 };
 
 const ClassNav = ({ page }: Props) => {
   const { id } = useParams<{ id: string }>();
 
   if (!id) return null;
+
+  const { classDetail, isLoading } = useClassroom();
+
+  if (isLoading) return <Loading />;
+  if (!classDetail) return null;
+
+  const { role } = classDetail;
 
   return (
     <nav className='container overflow-x-scroll border-b-[1px] md:overflow-hidden '>
@@ -43,6 +53,14 @@ const ClassNav = ({ page }: Props) => {
             <Button variant='ghost'>Grades Review</Button>
           </Link>
         </li>
+        {role?.code !== ROLE.STUDENT && (
+          <li className={cn('px-4 py-1', page === 'student-list' && 'border-b-[2px] border-b-blue-700 text-blue-700')}>
+            <Link to={`/student-list/${id}`}>
+              {' '}
+              <Button variant='ghost'>Student List</Button>
+            </Link>
+          </li>
+        )}
         <li className='absolute right-0 ml-auto flex items-center bg-white p-5 py-1 md:static md:p-0'>
           <ClassSetting />
         </li>

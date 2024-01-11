@@ -7,6 +7,7 @@ type User = {
   activated: boolean;
   gender: 'MALE' | 'FEMALE';
   banned?: boolean;
+  student_id?: string;
 };
 
 type RegisterDTO = {
@@ -83,4 +84,10 @@ type CommentOnGradeReview = {
   grade_review_id: string;
   user_id: string;
   created_at: Date;
+};
+
+type StudentPreview = {
+  user_name: String;
+  user: User;
+  role: Role;
 };

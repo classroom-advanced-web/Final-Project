@@ -1,16 +1,16 @@
 import { DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/useAuth';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
-import { over } from 'stompjs';
+import { Client, over } from 'stompjs';
 import Loading from '../loading/Loading';
 import UserAvatar from '../UserAvatar';
 import notificationApi from '@/api/notificationApi';
 import { useNavigate } from 'react-router-dom';
 
-const SERVER_URL = import.meta.env.VITE_SERVER_HOST as string;
-let Sock = new SockJS(`${SERVER_URL}/notifications`);
-export const stompClient = over(Sock);
+// const SERVER_URL = import.meta.env.VITE_SERVER_HOST as string;
+// let Sock = new SockJS(`${SERVER_URL}/notifications`);
+// export const stompClient = over(Sock);
 
 type NotificationInfo = {
   sender: User;
@@ -29,11 +29,16 @@ const mapData = (notification: any): NotificationInfo => {
   };
 };
 
+export let stompClient: Client | null = null;
+
 const Notifications = () => {
   const { user, loading } = useAuth();
   const [notifications, setNotifications] = useState<NotificationInfo[]>([]);
 
   useEffect(() => {
+    const SERVER_URL = import.meta.env.VITE_SERVER_HOST as string;
+    let Sock = new SockJS(`${SERVER_URL}/notifications`);
+    stompClient = over(Sock);
     const fetchNotifications = async () => {
       try {
         const res = await notificationApi.getNotifications();
@@ -48,7 +53,7 @@ const Notifications = () => {
       }
     };
 
-    if (user) {
+    if (user && stompClient) {
       fetchNotifications();
       stompClient.connect({}, onConnected, (err: any) => {
         console.log(err);
@@ -63,8 +68,7 @@ const Notifications = () => {
   }, []);
 
   const onConnected = () => {
-    console.log('connected');
-    if (user) {
+    if (user && stompClient) {
       stompClient.subscribe(`/user/${user.id}/receiver`, (message: any) => {
         const messageBody = JSON.parse(message.body);
         const map = {

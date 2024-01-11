@@ -17,7 +17,7 @@ const PeoplePage = () => {
 
   if (isLoading) return <Loading />;
 
-  if (!data) return;
+  if (!data) return null;
 
   const teachers = data.filter((user: ClassMember) => TEACHER.includes(user.role.code));
   const students = data.filter((user: ClassMember) => STUDENT.includes(user.role.code));

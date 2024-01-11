@@ -137,6 +137,11 @@ class ClassApi {
     });
     return res.data;
   };
+
+  getStudentList = async (classroomId: string) => {
+    const res = await instance.get(`/classrooms/students/${classroomId}`);
+    return res.data;
+  };
 }
 
 const classApi = new ClassApi();
