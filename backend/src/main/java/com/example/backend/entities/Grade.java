@@ -18,7 +18,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "grade_of_user")
+@Table(name = "grades")
 @Where(clause = "revoked = false")
 public class Grade {
 
@@ -30,13 +30,12 @@ public class Grade {
     @Column(name = "grade_value", nullable = false)
     private Double value;
 
+    @Column
+    private String studentId;
+
     @ManyToOne
     @JoinColumn(name = "grade_composition_id", nullable = false)
     private GradeComposition gradeComposition;
-
-    @ManyToOne
-    @JoinColumn(name = "class_user_id", nullable = false)
-    private ClassUser classUser;
 
     @Column(name = "revoked")
     private boolean revoked;

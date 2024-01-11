@@ -44,6 +44,7 @@ public class ClassroomServiceImpl implements IClassroomService {
     private final RoleMapper roleMapper;
     private final Helper helper;
     private final StudentIdGenerator studentIdGenerator;
+    private final NonUserRepository nonUserRepository;
 
     private final int SHORT_IDENTIFIER_LENGTH = 6;
 
@@ -269,7 +270,28 @@ public class ClassroomServiceImpl implements IClassroomService {
             throw new AccessDeniedException("User is not teacher or owner of this class");
         }
 
-        return getUsersOfClassroomDTOs(classroomId, RoleEnum.Student);
+        List<UsersOfClassroomDTO> usersOfClassroomDTOS = getUsersOfClassroomDTOs(classroomId, RoleEnum.Student);
+        nonUserRepository.findByClassroomId(classroomId)
+                .forEach(
+                        nonUser -> {
+                            usersOfClassroomDTOS.add(
+                                    UsersOfClassroomDTO.builder()
+                                            .userName(nonUser.getName())
+                                            .role(roleMapper.toDTO(roleRepository.findByName(RoleEnum.Student.name()).orElseThrow(
+                                                    () -> new NotFoundException("Role not found")
+                                            )))
+                                            .user(UserDTO.builder()
+                                                    .studentId(nonUser.getStudentId())
+                                                    .build()
+                                            )
+                                            .build()
+                            );
+                        }
+                )
+
+        ;
+
+        return usersOfClassroomDTOS;
     }
 
     @Override
@@ -291,7 +313,10 @@ public class ClassroomServiceImpl implements IClassroomService {
                 );
         classStudent.setUserName(studentName);
         classUserRepository.save(classStudent);
-        student.setStudentId(studentId);
+        if(student.getStudentId() == null) {
+            student.setStudentId(studentId);
+        }
+
         return userMapper.toDTO(userRepository.save(student));
     }
 

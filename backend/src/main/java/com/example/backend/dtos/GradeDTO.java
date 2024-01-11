@@ -15,6 +15,6 @@ public class GradeDTO {
 
     GradeCompositionDTO gradeComposition;
 
-    @JsonProperty("user_id")
-    String userId;
+    @JsonProperty("student_id")
+    String studentId;
 }
