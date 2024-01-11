@@ -144,16 +144,17 @@ class ClassApi {
   };
 
   MapStudentId = async ({
-    student_id = null,
+    student_id,
     account_id,
     student_name,
     classroom_id
   }: {
-    student_id?: string | null;
-    account_id: string;
+    student_id: string;
+    account_id: string | null;
     student_name: string;
     classroom_id: string;
   }) => {
+    account_id = account_id === '' ? null : account_id;
     const res = await instance.post(`/classrooms/student-id/mapping`, {
       student_id,
       account_id,
