@@ -29,7 +29,7 @@ public class NonUser {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "student_id", nullable = false)
+    @Column(name = "student_id", nullable = false, unique = true)
     private String studentId;
 
     @ManyToOne

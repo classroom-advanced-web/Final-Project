@@ -57,7 +57,7 @@ public class User implements UserDetails {
      @Column(name = "is_activated")
      private boolean isActivated;
 
-     @Column(name = "student_id")
+     @Column(name = "student_id", unique = true)
         private String studentId;
 
      @OneToMany(mappedBy = "receiver")
