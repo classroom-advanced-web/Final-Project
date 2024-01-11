@@ -1,6 +1,5 @@
 package com.example.backend.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +11,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -20,39 +18,25 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "users_in_classroom",
-uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"class_id", "user_id"})
-}
-
-)
+@Table(name = "non_users_in_classroom")
 @Where(clause = "revoked = false")
-public class ClassUser {
+public class NonUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "class_user_id")
     private String id;
 
-    @Column(name = "user_name")
-    private String userName;
+    @Column(name = "name", nullable = false)
+    private String name;
+
+    @Column(name = "student_id", nullable = false, unique = true)
+    private String studentId;
 
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
     private Classroom classroom;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
-    private Role role;
-
-    @OneToMany(mappedBy = "sender")
-    @JsonIgnore
-    private List<Notification> notifications;
-
+    @Column(name = "revoked")
     private boolean revoked;
 
     @Column(name = "created_date")

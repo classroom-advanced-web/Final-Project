@@ -62,6 +62,10 @@ public class Classroom {
     @JsonIgnore
     private List<GradeComposition> gradeCompositions;
 
+    @OneToMany(mappedBy = "classroom")
+    @JsonIgnore
+    private List<NonUser> nonUsers;
+
 
     private boolean revoked;
 

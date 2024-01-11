@@ -22,7 +22,7 @@ public class GradeMapper implements IMapper<Grade, GradeDTO>{
                         .weight(obj.getGradeComposition().getWeight())
                         .classroomId(obj.getGradeComposition().getClassroom().getId())
                         .build())
-                .userId(obj.getClassUser().getUser().getId())
+.studentId(obj.getStudentId())
                 .build();
     }
 }
