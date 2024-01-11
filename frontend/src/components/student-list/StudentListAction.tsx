@@ -2,15 +2,13 @@ import { useClassroom } from '@/hooks/useClassroom';
 import { writeExcelFile } from '@/lib/utils';
 import Loading from '../loading/Loading';
 
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import { MdArrowDropDown, MdOutlineDriveFolderUpload } from 'react-icons/md';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { MdOutlineDriveFolderUpload } from 'react-icons/md';
 import { RiFolderDownloadLine } from 'react-icons/ri';
-import { useRef } from 'react';
+import { Button } from '../ui/button';
+import { read, utils } from 'xlsx';
+import { promise } from 'zod';
+import classApi from '@/api/classApi';
 
 type Props = {
   students: StudentPreview[];
@@ -18,11 +16,16 @@ type Props = {
 
 const StudentListAction = ({ students }: Props) => {
   const { classDetail, isLoading } = useClassroom();
-
-  const inputFileRef = useRef<HTMLInputElement>(null);
-
+  const [file, setFile] = useState<File | undefined>(undefined);
+  const inputRef = useRef<HTMLInputElement>(null);
   if (isLoading) return <Loading />;
   if (!classDetail) return null;
+
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
 
   const handleExportExcel = () => {
     const data = students.map((student: StudentPreview) => {
@@ -36,35 +39,60 @@ const StudentListAction = ({ students }: Props) => {
   };
 
   const handleImportExcel = () => {
-    inputFileRef.current?.click();
+    inputRef.current?.click();
+    // if (inputRef.current?.files?.length === 0) return;
   };
 
+  useEffect(() => {
+    (async () => {
+      if (!file) return;
+      const f = await file.arrayBuffer();
+      const wb = read(f); // parse the array buffer
+      const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
+      const data = utils.sheet_to_json(ws); // generate HTML
+
+      Promise.all(
+        data.map(async (item: any) => {
+          const res = await classApi.MapStudentId({
+            student_id: item['Student ID'],
+            classroom_id: classDetail.id,
+            account_id: item['Account ID'],
+            student_name: item['Full Name']
+          });
+          if (res) {
+            console.log(res);
+          }
+        })
+      );
+    })();
+  }, [file?.name]);
+
+  // console.log(file);
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className='flex items-center gap-3 rounded-sm border px-4 py-2 focus:outline-none'>
-        <span>Action</span>
-        <MdArrowDropDown />
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className='p-5'>
-        <DropdownMenuItem>
-          <div className='flex items-center gap-3' onClick={handleExportExcel}>
-            <span className='text-xl'>
-              <RiFolderDownloadLine />
-            </span>
-            <span>Export to XLSX</span>
-          </div>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <div className='flex items-center gap-3' onClick={handleImportExcel}>
-            <span className='text-xl'>
-              <MdOutlineDriveFolderUpload />
-            </span>
-            <span>Import XLSX</span>
-            <input type='file' className='hidden' ref='inputFileRef' />
-          </div>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <section className='flex items-center gap-2'>
+      <Button variant={'outline'} className='flex items-center gap-3' onClick={handleExportExcel}>
+        <span className='text-xl'>
+          <RiFolderDownloadLine />
+        </span>
+        <span>Export to XLSX</span>
+      </Button>
+
+      <Button variant={'outline'} className='flex items-center gap-3' onClick={handleImportExcel}>
+        <span className='text-xl'>
+          <MdOutlineDriveFolderUpload />
+        </span>
+        <span>Import XLSX</span>
+
+        <input
+          type='file'
+          ref={inputRef}
+          onChange={(e) => {
+            handleFileChange(e);
+          }}
+          className='hidden'
+        />
+      </Button>
+    </section>
   );
 };
 export default StudentListAction;

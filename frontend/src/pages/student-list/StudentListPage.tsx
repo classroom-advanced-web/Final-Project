@@ -3,6 +3,7 @@ import Loading from '@/components/loading/Loading';
 import StudentListAction from '@/components/student-list/StudentListAction';
 import StudentListTable from '@/components/student-list/StudentListTable';
 import { ROLE } from '@/constance/constance';
+import { ChangeEvent, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 
@@ -26,6 +27,12 @@ const StudentListPage = () => {
         <StudentListAction students={students} />
       </div>
       <StudentListTable students={students} />
+      <input
+        type='file'
+        // ref={inputRef}
+        // onChange={onFileChange}
+        className=''
+      />
     </main>
   );
 };

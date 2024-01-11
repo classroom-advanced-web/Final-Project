@@ -53,6 +53,16 @@ public class MyExceptionHandler {
                 HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(AlreadyReportedException.class)
+    @ResponseStatus(code = HttpStatus.ALREADY_REPORTED)
+    public ResponseEntity<Map> resolveException(AlreadyReportedException exception, Object payload) {
+        Map<String, Object> response = new HashMap<>();
+        return new ResponseEntity<>(
+                response
+                ,
+                HttpStatus.ALREADY_REPORTED);
+    }
+
 
 
     /*---------------------- System exception ---------------------------*/
