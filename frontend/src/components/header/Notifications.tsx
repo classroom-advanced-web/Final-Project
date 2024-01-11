@@ -6,6 +6,7 @@ import { over } from 'stompjs';
 import Loading from '../loading/Loading';
 import UserAvatar from '../UserAvatar';
 import notificationApi from '@/api/notificationApi';
+import { useNavigate } from 'react-router-dom';
 
 const SERVER_URL = import.meta.env.VITE_SERVER_HOST as string;
 let Sock = new SockJS(`${SERVER_URL}/notifications`);
@@ -78,11 +79,16 @@ const Notifications = () => {
         console.log(newNotifications);
         setNotifications(newNotifications);
       });
-      // stompClient.send('/app/notifications', {}, JSON.stringify({ user_id: user.id, message: 'hello' }));
     }
   };
 
-  console.log(notifications);
+  const navigate = useNavigate();
+
+  const handleGoToNotificationLocation = (classroomId: String, notificationTitle: String) => {
+    if (notificationTitle === 'New Grade Structure') {
+      navigate(`/structure/${classroomId}`);
+    }
+  };
 
   if (loading) {
     return <Loading />;
@@ -98,7 +104,10 @@ const Notifications = () => {
       </div>
       {notifications.length > 0 &&
         notifications.map((notification) => (
-          <DropdownMenuItem className='py-6'>
+          <DropdownMenuItem
+            className='py-6'
+            onClick={() => handleGoToNotificationLocation(notification.classroom.id, notification.notification.title)}
+          >
             <div className='flex items-center gap-3'>
               <UserAvatar keyword={notification.sender.firstName[0]} />
               <div className='flex flex-col gap-1'>

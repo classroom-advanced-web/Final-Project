@@ -6,6 +6,7 @@ type User = {
   lastName: string;
   activated: boolean;
   gender: 'MALE' | 'FEMALE';
+  banned?: boolean;
 };
 
 type RegisterDTO = {
@@ -68,10 +69,12 @@ type NotificationContent = {
 
 type GradeReview = {
   id: string;
+  student_id: string;
   currentScore: number;
   expectedScore: number;
   explanation?: string;
   compositionName: string;
+  created_at: Date;
 };
 
 type CommentOnGradeReview = {

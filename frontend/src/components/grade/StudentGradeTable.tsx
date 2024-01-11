@@ -6,7 +6,7 @@ import { MdOutlineRateReview } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import GradeForm from './GradeForm';
 
-const GradeTable = () => {
+const StudentGradeTable = () => {
   const [items, setItems] = useState<GradeComposition[]>([]);
   const { id } = useParams();
   const [onOpenChange, setonOpenChange] = useState(false);
@@ -64,4 +64,4 @@ const GradeTable = () => {
     </div>
   );
 };
-export default GradeTable;
+export default StudentGradeTable;

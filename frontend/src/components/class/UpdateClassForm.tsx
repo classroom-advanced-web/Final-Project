@@ -9,8 +9,8 @@ import classApi from '@/api/classApi';
 import { cn } from '@/lib/utils';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import { useQueryClient } from 'react-query';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 type Props = {
   classroom: Classroom;
@@ -30,7 +30,8 @@ const UpdateClassForm = ({ classroom }: Props) => {
   });
 
   const { toast } = useToast();
-  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
 
   const onSubmit = async (data: z.infer<typeof updateClassSchema>) => {
     try {
@@ -42,8 +43,8 @@ const UpdateClassForm = ({ classroom }: Props) => {
         toast({
           title: 'Update class successfully'
         });
-        form.reset();
-        navigate(0);
+
+        queryClient.invalidateQueries(['class', classroom.id]);
       }
     } catch (error: any) {
       if (error?.response) {
