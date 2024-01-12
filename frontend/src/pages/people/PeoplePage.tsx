@@ -3,6 +3,7 @@ import Loading from '@/components/loading/Loading';
 import Students from '@/components/people/Students';
 import Teachers from '@/components/people/Teachers';
 import { ROLE } from '@/constance/constance';
+import { ClassMember } from '@/type';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 

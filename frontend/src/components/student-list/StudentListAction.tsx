@@ -33,10 +33,6 @@ const StudentListAction = ({ students, setStudents }: Props) => {
 
       const invalidIndexes: number[] = [];
       const processedData = data.map((item: any, index) => {
-        if (students.find((student) => student.student_id === item['Student ID'])) {
-          invalidIndexes.push(index + 2);
-        }
-
         if (!item['Student ID']) {
           invalidIndexes.push(index + 2);
         }
@@ -62,7 +58,12 @@ const StudentListAction = ({ students, setStudents }: Props) => {
         const res: StudentPreview[] = await classApi.mapStudentId(processedData);
 
         if (res) {
-          const newData = [...res, ...students];
+          const newData = [...students];
+          res.reverse();
+          res.forEach((student) => {
+            if (newData.find((item) => item.student_id === student.student_id)) return;
+            newData.unshift(student);
+          });
           setStudents(newData);
         }
       } catch (error: any) {
