@@ -1,5 +1,5 @@
 import { StudentPreview } from '@/type';
-import { TableCaption, TableHeader, TableRow, TableHead, Table, TableBody, TableCell } from '../ui/table';
+import { TableHeader, TableRow, TableHead, Table, TableBody, TableCell } from '../ui/table';
 
 type Props = {
   students: StudentPreview[];
@@ -8,7 +8,6 @@ type Props = {
 const StudentListTable = ({ students }: Props) => {
   return (
     <Table className='container w-3/4'>
-      <TableCaption>Your Grade</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className=' text-left'>Account ID</TableHead>

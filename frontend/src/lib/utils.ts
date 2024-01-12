@@ -35,7 +35,7 @@ export function writeExcelFile(data: any[], filename: string) {
   writeFile(workbook, filename);
 }
 
-export function readExcelFile(data: any[], filename: string) {
-  const worksheet = utils.json_to_sheet(data);
-  const workbook = utils.book_new();
-}
+// export function readExcelFile(data: any[], filename: string) {
+//   const worksheet = utils.json_to_sheet(data);
+//   const workbook = utils.book_new();
+// }

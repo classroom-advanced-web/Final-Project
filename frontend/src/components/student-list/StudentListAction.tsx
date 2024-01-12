@@ -2,15 +2,13 @@ import { useClassroom } from '@/hooks/useClassroom';
 import { writeExcelFile } from '@/lib/utils';
 import Loading from '../loading/Loading';
 
+import classApi from '@/api/classApi';
+import { StudentPreview } from '@/type';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { MdOutlineDriveFolderUpload } from 'react-icons/md';
 import { RiFolderDownloadLine } from 'react-icons/ri';
-import { Button } from '../ui/button';
 import { read, utils } from 'xlsx';
-import classApi from '@/api/classApi';
-import { StudentPreview } from '@/type';
-import { useQueryClient } from 'react-query';
-import { useParams } from 'react-router-dom';
+import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 
 type Props = {
@@ -22,8 +20,6 @@ const StudentListAction = ({ students, setStudents }: Props) => {
   const { classDetail, isLoading } = useClassroom();
   const [file, setFile] = useState<File | undefined>(undefined);
   const inputRef = useRef<HTMLInputElement>(null);
-  const { id } = useParams<{ id: string }>() ?? '0';
-  const queryClient = useQueryClient();
 
   const { toast } = useToast();
 
@@ -72,13 +68,22 @@ const StudentListAction = ({ students, setStudents }: Props) => {
   };
 
   const handleExportExcel = () => {
-    const data = students.map((student: StudentPreview) => {
-      return {
-        'Account ID': student.account_id,
-        'Student ID': student.student_id,
-        'Full Name': student.student_name
-      };
-    });
+    let data = [];
+    if (students.length === 0) {
+      data.push({
+        'Account ID': '',
+        'Student ID': '',
+        'Full Name': ''
+      });
+    } else {
+      data = students.map((student: StudentPreview) => {
+        return {
+          'Account ID': student.account_id ?? '',
+          'Student ID': student.student_id,
+          'Full Name': student.student_name
+        };
+      });
+    }
     writeExcelFile(data, `students - ${classDetail.name}.xlsx`);
   };
 
