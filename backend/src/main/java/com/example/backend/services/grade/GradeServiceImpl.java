@@ -69,7 +69,7 @@ public class GradeServiceImpl implements IGradeService{
 
     @Override
     public List<StudentGradesDTO> getGradeBoard(String classroomId) {
-        List<GradeComposition> gradeCompositions = gradeCompositionRepository.findByClassroomId(classroomId);
+        List<GradeComposition> gradeCompositions = gradeCompositionRepository.findByClassroomIdOrderByWeightAsc(classroomId);
         List<StudentsClassroomRequestDTO> studentsClassroomRequestDTOs = classroomService.getStudentsOfClassroom(classroomId);
         List<String> StudentIds = new ArrayList<>();
         for(StudentsClassroomRequestDTO studentsClassroomRequestDTO : studentsClassroomRequestDTOs) {
