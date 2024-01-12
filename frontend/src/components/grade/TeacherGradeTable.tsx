@@ -4,16 +4,28 @@ import classApi from '@/api/classApi';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import GradeForm from './GradeForm';
-import { GradeComposition, StudentPreview } from '@/type';
+import { DefaultGrade, GradeComposition, StudentPreview } from '@/type';
 import useStudentList from '@/hooks/useStudentList';
 import Loading from '../loading/Loading';
+import useGradeBoard from '@/hooks/useGradeBoard';
+import { FaEdit } from 'react-icons/fa';
+import { Button } from '../ui/button';
+import ChangeGradeForm from './ChangeGradeForm';
+import GradeAction from './GradeAction';
 
 const TeacherGradeTable = () => {
   const [items, setItems] = useState<GradeComposition[]>([]);
   const { id } = useParams();
-  const [onOpenChange, setonOpenChange] = useState(false);
-  const [compositionName, setCompositionName] = useState('');
-  const { studentList, isLoading } = useStudentList();
+  const [openForm, setOpenForm] = useState(false);
+  const [defaultGradeInfor, setDefaultGradeInfor] = useState<DefaultGrade>({
+    defaultGrade: 0,
+    compositionName: '',
+    studentId: '',
+    compositionId: ''
+  });
+
+  const { gradeBoard, isLoading } = useGradeBoard();
+  console.log(gradeBoard);
 
   useEffect(() => {
     const fetchStructure = async () => {
@@ -29,15 +41,16 @@ const TeacherGradeTable = () => {
     fetchStructure();
   }, []);
 
-  function handleReview(compositionName: string) {
-    setonOpenChange(true);
-    setCompositionName(compositionName);
-  }
+  // function handleReview(compositionName: string) {
+  //   setonOpenChange(true);
+  //   setCompositionName(compositionName);
+  // }
 
   if (isLoading) return <Loading />;
 
   return (
     <div>
+      <GradeAction gradeBoard={gradeBoard} gradeComposition={items} />
       <Table className='container w-3/4'>
         <TableCaption>Teacher Grade</TableCaption>
         <TableHeader>
@@ -53,16 +66,37 @@ const TeacherGradeTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {studentList.map((student: StudentPreview) => (
+          {gradeBoard.map((student: any) => (
             <TableRow key={String(student.student_id)}>
               <TableCell className='text-left'>{student.student_id}</TableCell>
-              <TableCell className='text-right'>60 </TableCell>
-              <TableCell className='text-right'>70</TableCell>
+              {student.grades.map((grade: any) => (
+                <TableCell className=' text-right'>
+                  <div className='flex items-center justify-end gap-1'>
+                    <span>{grade.value}/100</span>
+
+                    <Button
+                      variant={'ghost'}
+                      onClick={() => {
+                        setDefaultGradeInfor({
+                          defaultGrade: grade.value,
+                          compositionName: grade.grade_composition.name,
+                          studentId: grade.student_id,
+                          compositionId: grade.grade_composition.id
+                        });
+                        setOpenForm(true);
+                      }}
+                    >
+                      <FaEdit />
+                    </Button>
+                  </div>
+                </TableCell>
+              ))}
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <GradeForm compisitionName={compositionName} open={onOpenChange} onOpenChange={setonOpenChange} />
+      {/* <GradeForm compisitionName={compositionName} open={onOpenChange} onOpenChange={setonOpenChange} /> */}
+      <ChangeGradeForm open={openForm} onOpenChange={setOpenForm} defaultGradeInfor={defaultGradeInfor} />
     </div>
   );
 };

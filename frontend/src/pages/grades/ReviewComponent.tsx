@@ -1,3 +1,4 @@
+import { GradeReview } from '@/type';
 import React, { useState } from 'react';
 import { LuSendHorizonal } from 'react-icons/lu';
 type Props = {

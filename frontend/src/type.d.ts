@@ -99,3 +99,22 @@ type StudentPreview = {
   account_id: String | null;
   classroom_id: String;
 };
+
+type DefaultGrade = {
+  defaultGrade: number;
+  compositionName: string;
+  studentId: string;
+  compositionId: string;
+};
+
+type GradeBoard = {
+  id: string | null;
+  value: number;
+  grade_composition: GradeComposition;
+  student_id: string | null;
+};
+
+type StudentGrades = {
+  grades: Grade[];
+  student_id: string | null;
+};

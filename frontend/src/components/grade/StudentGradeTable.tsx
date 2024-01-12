@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { MdOutlineRateReview } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import GradeForm from './GradeForm';
+import { GradeComposition } from '@/type';
 
 const StudentGradeTable = () => {
   const [items, setItems] = useState<GradeComposition[]>([]);
