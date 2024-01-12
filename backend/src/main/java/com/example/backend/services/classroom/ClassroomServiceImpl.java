@@ -295,6 +295,15 @@ public class ClassroomServiceImpl implements IClassroomService {
             );
 
         }
+        result.sort((o1, o2) -> {
+            if(o1.getStudentId() == null) {
+                return -1;
+            }
+            if(o2.getStudentId() == null) {
+                return 1;
+            }
+            return o1.getStudentId().compareTo(o2.getStudentId());
+        });
 
 
 

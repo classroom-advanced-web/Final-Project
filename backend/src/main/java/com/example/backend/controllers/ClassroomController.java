@@ -92,6 +92,15 @@ public class ClassroomController {
                 response.add(classroomService.mapStudentIdToAccount(dto.getStudentId(), dto.getAccountId(), dto.getStudentName(), dto.getClassroomId()));
            }
         }
+        response.sort((o1, o2) -> {
+            if(o1.getStudentId() == null) {
+                return -1;
+            }
+            if(o2.getStudentId() == null) {
+                return 1;
+            }
+            return o1.getStudentId().compareTo(o2.getStudentId());
+        });
 
 
         return ResponseEntity.ok(
