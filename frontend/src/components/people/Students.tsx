@@ -5,6 +5,7 @@ import StudentRow from './StudentRow';
 import { ROLE } from '@/constance/constance';
 import { useClassroom } from '@/hooks/useClassroom';
 import Loading from '../loading/Loading';
+import { ClassMember } from '@/type';
 
 type Props = {
   students: ClassMember[];
