@@ -18,7 +18,10 @@ import java.util.Date;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "non_users_in_classroom")
+@Table(name = "non_users_in_classroom", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"class_id", "student_id"})
+})
+
 @Where(clause = "revoked = false")
 public class NonUser {
 
@@ -29,7 +32,7 @@ public class NonUser {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "student_id", nullable = false, unique = true)
+    @Column(name = "student_id", nullable = false)
     private String studentId;
 
     @ManyToOne

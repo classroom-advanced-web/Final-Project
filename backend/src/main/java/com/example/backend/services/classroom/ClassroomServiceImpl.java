@@ -354,7 +354,7 @@ public class ClassroomServiceImpl implements IClassroomService {
         if(!classUser.getRole().getName().equals(RoleEnum.Teacher.name()) && !classUser.getRole().getName().equals(RoleEnum.Owner.name())) {
             throw new AccessDeniedException("User is not teacher or owner of this class");
         }
-        NonUser existedNonUser = nonUserRepository.findByStudentId(studentId).orElse(null);
+        NonUser existedNonUser = nonUserRepository.findByStudentIdAndClassroomId(studentId, classroomId).orElse(null);
         Map<String, Object> response = new HashMap<>();
         if(existedNonUser == null) {
             NonUser nonUser = NonUser.builder()

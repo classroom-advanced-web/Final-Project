@@ -9,5 +9,5 @@ import java.util.Optional;
 public interface NonUserRepository extends JpaRepository<NonUser, String> {
     List<NonUser> findByClassroomId(String classroomId);
 
-    Optional<NonUser> findByStudentId(String studentId);
+    Optional<NonUser> findByStudentIdAndClassroomId(String studentId, String classroomId);
 }
