@@ -81,7 +81,6 @@ const Notifications = () => {
           }
         };
         const newNotifications = [map, ...notifications];
-        console.log(newNotifications);
         setNotifications(newNotifications);
       });
     }

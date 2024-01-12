@@ -102,14 +102,19 @@ const GradeAction = ({ gradeBoard, gradeComposition }: Props) => {
         ...compositionName
       });
     } else {
+      let compositionName: any = {};
       for (let i = 0; i < gradeBoard.length; i++) {
+        compositionName = {};
         for (let j = 0; j < gradeBoard[i].grades.length; j++) {
-          data.push({
-            'Student ID': gradeBoard[i].student_id,
-            [gradeBoard[i].grades[j].composition_name]: gradeBoard[i].grades[j].value
-          });
+          console.log(gradeBoard[i].grades);
+          compositionName[gradeBoard[i].grades[j].grade_composition.name] = gradeBoard[i].grades[j].value;
         }
+        data.push({
+          'Student ID': gradeBoard[i].student_id,
+          ...compositionName
+        });
       }
+      console.log({ compositionName });
     }
     writeExcelFile(data, `students - ${classDetail.name}.xlsx`);
   };

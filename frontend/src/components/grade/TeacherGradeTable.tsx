@@ -25,7 +25,6 @@ const TeacherGradeTable = () => {
   });
 
   const { gradeBoard, isLoading } = useGradeBoard();
-  console.log(gradeBoard);
 
   useEffect(() => {
     const fetchStructure = async () => {
