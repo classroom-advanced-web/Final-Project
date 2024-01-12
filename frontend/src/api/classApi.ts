@@ -144,7 +144,7 @@ class ClassApi {
     return res.data;
   };
 
-  MapStudentId = async (data: StudentPreview[]) => {
+  mapStudentId = async (data: StudentPreview[]) => {
     const res = await instance.post(`/classrooms/student-id/mapping`, data);
     return res.data;
   };

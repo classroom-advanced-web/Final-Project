@@ -27,11 +27,20 @@ const StudentListAction = ({ students, setStudents }: Props) => {
     (async () => {
       if (!file) return;
       const f = await file.arrayBuffer();
-      const wb = read(f); // parse the array buffer
-      const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
-      const data = utils.sheet_to_json(ws); // generate HTML
+      const wb = read(f);
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const data = utils.sheet_to_json(ws);
 
-      const processedData = data.map((item: any) => {
+      const invalidIndexes: number[] = [];
+      const processedData = data.map((item: any, index) => {
+        if (students.find((student) => student.student_id === item['Student ID'])) {
+          invalidIndexes.push(index + 2);
+        }
+
+        if (!item['Student ID']) {
+          invalidIndexes.push(index + 2);
+        }
+
         return {
           student_id: item['Student ID'],
           account_id: item['Account ID'] == '' ? null : item['Account ID'],
@@ -40,11 +49,21 @@ const StudentListAction = ({ students, setStudents }: Props) => {
         };
       });
 
+      if (invalidIndexes.length > 0) {
+        const index = invalidIndexes.join(', ');
+        toast({
+          variant: 'destructive',
+          title: `Invalid data at row ${index}`
+        });
+        return;
+      }
+
       try {
-        const res: StudentPreview[] = await classApi.MapStudentId(processedData);
+        const res: StudentPreview[] = await classApi.mapStudentId(processedData);
 
         if (res) {
-          setStudents(res);
+          const newData = [...res, ...students];
+          setStudents(newData);
         }
       } catch (error: any) {
         if (error?.response) {
@@ -89,10 +108,8 @@ const StudentListAction = ({ students, setStudents }: Props) => {
 
   const handleImportExcel = () => {
     inputRef.current?.click();
-    // if (inputRef.current?.files?.length === 0) return;
   };
 
-  // console.log(file);
   return (
     <section className='flex items-center gap-2'>
       <Button variant={'outline'} className='flex items-center gap-3' onClick={handleExportExcel}>
