@@ -270,28 +270,28 @@ public class ClassroomServiceImpl implements IClassroomService {
             throw new AccessDeniedException("User is not teacher or owner of this class");
         }
 
-        List<UsersOfClassroomDTO> usersOfClassroomDTOS = getUsersOfClassroomDTOs(classroomId, RoleEnum.Student);
-        nonUserRepository.findByClassroomId(classroomId)
-                .forEach(
-                        nonUser -> {
-                            usersOfClassroomDTOS.add(
-                                    UsersOfClassroomDTO.builder()
-                                            .userName(nonUser.getName())
-                                            .role(roleMapper.toDTO(roleRepository.findByName(RoleEnum.Student.name()).orElseThrow(
-                                                    () -> new NotFoundException("Role not found")
-                                            )))
-                                            .user(UserDTO.builder()
-                                                    .studentId(nonUser.getStudentId())
-                                                    .build()
-                                            )
-                                            .build()
-                            );
-                        }
-                )
+        List<UsersOfClassroomDTO> usersOfClassroomDTOs = new ArrayList<>(getUsersOfClassroomDTOs(classroomId, RoleEnum.Student));
+        List<NonUser> nonUsers = nonUserRepository.findByClassroomId(classroomId);
+        for(NonUser nonUser: nonUsers) {
+            usersOfClassroomDTOs.add(
+                    UsersOfClassroomDTO.builder()
+                            .userName(nonUser.getName())
+                            .role(roleMapper.toDTO(roleRepository.findByName(RoleEnum.Student.name()).orElseThrow(
+                                    () -> new NotFoundException("Role not found")
+                            )))
+                            .user(UserDTO.builder()
+                                    .studentId(nonUser.getStudentId())
+                                    .build()
+                            )
+                            .build()
+            );
 
-        ;
+        }
 
-        return usersOfClassroomDTOS;
+
+
+
+        return usersOfClassroomDTOs;
     }
 
     @Override
