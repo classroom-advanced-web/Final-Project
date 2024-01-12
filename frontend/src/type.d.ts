@@ -106,3 +106,15 @@ type DefaultGrade = {
   studentId: string;
   compositionId: string;
 };
+
+type GradeBoard = {
+  id: string | null;
+  value: number;
+  grade_composition: GradeComposition;
+  student_id: string | null;
+};
+
+type StudentGrades = {
+  grades: Grade[];
+  student_id: string | null;
+};

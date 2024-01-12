@@ -11,6 +11,7 @@ import useGradeBoard from '@/hooks/useGradeBoard';
 import { FaEdit } from 'react-icons/fa';
 import { Button } from '../ui/button';
 import ChangeGradeForm from './ChangeGradeForm';
+import GradeAction from './GradeAction';
 
 const TeacherGradeTable = () => {
   const [items, setItems] = useState<GradeComposition[]>([]);
@@ -49,6 +50,7 @@ const TeacherGradeTable = () => {
 
   return (
     <div>
+      <GradeAction gradeBoard={gradeBoard} gradeComposition={items} />
       <Table className='container w-3/4'>
         <TableCaption>Teacher Grade</TableCaption>
         <TableHeader>
