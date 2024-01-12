@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -81,19 +81,21 @@ public class ClassroomController {
     }
 
     @PostMapping("/student-id/mapping")
-    public ResponseEntity<Map> mapStudentIdToAccount(@RequestBody Map<String, String> body) throws AccessDeniedException {
-        String accountId = body.get("account_id");
-        String studentId = body.get("student_id");
-        String studentName = body.get("student_name");
-        String classroomId = body.get("classroom_id");
-        if(accountId == null) {
-            return ResponseEntity.ok(
-                    classroomService.saveNonUserToClassroom(studentId, studentName, classroomId)
-            );
+    public ResponseEntity<List> mapStudentIdToAccount(@RequestBody List<StudentsClassroomRequestDTO> body) throws AccessDeniedException {
+       List<StudentsClassroomRequestDTO> response = new ArrayList<>();
+        for(StudentsClassroomRequestDTO dto : body) {
+           if(dto.getAccountId() == null) {
+
+                       response.add(classroomService.saveNonUserToClassroom(dto.getStudentId(), dto.getStudentName(), dto.getClassroomId()));
+
+           } else {
+                response.add(classroomService.mapStudentIdToAccount(dto.getStudentId(), dto.getAccountId(), dto.getStudentName(), dto.getClassroomId()));
+           }
         }
 
+
         return ResponseEntity.ok(
-                classroomService.mapStudentIdToAccount(studentId, accountId, studentName, classroomId)
+                response
         );
     }
 

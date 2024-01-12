@@ -143,24 +143,15 @@ class ClassApi {
     return res.data;
   };
 
-  MapStudentId = async ({
-    student_id,
-    account_id,
-    student_name,
-    classroom_id
-  }: {
-    student_id: string;
-    account_id: string | null;
-    student_name: string;
-    classroom_id: string;
-  }) => {
-    account_id = account_id === '' ? null : account_id;
-    const res = await instance.post(`/classrooms/student-id/mapping`, {
-      student_id,
-      account_id,
-      student_name,
-      classroom_id
-    });
+  MapStudentId = async (
+    data: {
+      student_id: string;
+      account_id: string | null;
+      student_name: string;
+      classroom_id: string;
+    }[]
+  ) => {
+    const res = await instance.post(`/classrooms/student-id/mapping`, data);
     return res.data;
   };
 }

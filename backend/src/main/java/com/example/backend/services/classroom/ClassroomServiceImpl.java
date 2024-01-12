@@ -295,7 +295,7 @@ public class ClassroomServiceImpl implements IClassroomService {
     }
 
     @Override
-    public Map<String, Object> mapStudentIdToAccount(String studentId, String accountId, String studentName, String classroomId) throws AccessDeniedException {
+    public StudentsClassroomRequestDTO mapStudentIdToAccount(String studentId, String accountId, String studentName, String classroomId) throws AccessDeniedException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classroomId)
                 .orElseThrow(
@@ -318,16 +318,17 @@ public class ClassroomServiceImpl implements IClassroomService {
             classUserRepository.save(classStudent);
             userRepository.save(student);
         }
-        Map<String, Object> response = new HashMap<>();
-        response.put("student_id", student.getStudentId());
-        response.put("student_name", classStudent.getUserName());
-        response.put("account_id", student.getId());
 
-        return response;
+        return StudentsClassroomRequestDTO.builder()
+                .studentId(student.getStudentId())
+                .studentName(classStudent.getUserName())
+                .accountId(student.getId())
+                .classroomId(classUser.getClassroom().getId())
+                .build();
     }
 
     @Override
-    public Map<String, Object> saveNonUserToClassroom(String studentId, String studentName, String classroomId) throws AccessDeniedException {
+    public StudentsClassroomRequestDTO saveNonUserToClassroom(String studentId, String studentName, String classroomId) throws AccessDeniedException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classroomId)
                 .orElseThrow(
@@ -353,7 +354,12 @@ public class ClassroomServiceImpl implements IClassroomService {
             response.put("student_name", existedNonUser.getName());
         }
         response.put("account_id", null);
-        return response;
+        return StudentsClassroomRequestDTO.builder()
+                .studentName(response.get("student_name").toString())
+                .studentId(response.get("student_id").toString())
+                .accountId(null)
+                .classroomId(classUser.getClassroom().getId())
+                .build();
 
     }
 

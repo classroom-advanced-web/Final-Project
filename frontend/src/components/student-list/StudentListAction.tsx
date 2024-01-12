@@ -51,19 +51,34 @@ const StudentListAction = ({ students }: Props) => {
       const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
       const data = utils.sheet_to_json(ws); // generate HTML
 
-      Promise.all(
-        data.map(async (item: any) => {
-          const res = await classApi.MapStudentId({
-            student_id: item['Student ID'],
-            classroom_id: classDetail.id,
-            account_id: item['Account ID'],
-            student_name: item['Full Name']
-          });
-          if (res) {
-            console.log(res);
-          }
-        })
-      );
+      const processedData = data.map((item: any) => {
+        return {
+          student_id: item['Student ID'],
+          account_id: item['Account ID'] == '' ? null : item['Account ID'],
+          student_name: item['Full Name'],
+          classroom_id: classDetail.id
+        };
+      });
+
+      const res = await classApi.MapStudentId(processedData);
+
+      if (res) {
+        console.log(res);
+      }
+
+      // Promise.all(
+      //   data.map(async (item: any) => {
+      //     const res = await classApi.MapStudentId({
+      //       student_id: item['Student ID'],
+      //       classroom_id: classDetail.id,
+      //       account_id: item['Account ID'],
+      //       student_name: item['Full Name']
+      //     });
+      //     if (res) {
+      //       console.log(res);
+      //     }
+      //   })
+      // );
     })();
   }, [file?.name]);
 
