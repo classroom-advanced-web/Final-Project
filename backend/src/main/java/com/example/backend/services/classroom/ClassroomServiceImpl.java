@@ -328,13 +328,18 @@ public class ClassroomServiceImpl implements IClassroomService {
                 .orElseThrow(
                         () -> new NotFoundException("Student is not in this class")
                 );
-
+        NonUser nonUser = nonUserRepository.findByStudentIdAndClassroomId(studentId, classroomId).orElse(null);
+        if(nonUser != null) {
+            nonUser.setRevoked(true);
+            nonUserRepository.save(nonUser);
+        }
+        classStudent.setUserName(studentName.trim());
+        classUserRepository.save(classStudent);
         if(student.getStudentId() == null) {
             student.setStudentId(studentId);
-            classStudent.setUserName(studentName.trim());
-            classUserRepository.save(classStudent);
             userRepository.save(student);
         }
+
 
         return StudentsClassroomRequestDTO.builder()
                 .studentId(student.getStudentId())
