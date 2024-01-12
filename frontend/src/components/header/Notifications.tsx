@@ -7,6 +7,7 @@ import Loading from '../loading/Loading';
 import UserAvatar from '../UserAvatar';
 import notificationApi from '@/api/notificationApi';
 import { useNavigate } from 'react-router-dom';
+import { Classroom, NotificationContent, User } from '@/type';
 
 // const SERVER_URL = import.meta.env.VITE_SERVER_HOST as string;
 // let Sock = new SockJS(`${SERVER_URL}/notifications`);

@@ -23,7 +23,7 @@ public interface IClassroomService {
 
     Map<String, Object> joinClassroomByInvitationUrl(JoinClassByEmailRequestDTO body);
 
-    List<UsersOfClassroomDTO> getStudentsOfClassroom(String classroomId) throws AccessDeniedException;
+    List<StudentsClassroomRequestDTO> getStudentsOfClassroom(String classroomId) throws AccessDeniedException;
 
     StudentsClassroomRequestDTO mapStudentIdToAccount(String studentId, String accountId, String studentName, String classroomId) throws AccessDeniedException;
 

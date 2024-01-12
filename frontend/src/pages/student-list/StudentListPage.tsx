@@ -3,6 +3,7 @@ import Loading from '@/components/loading/Loading';
 import StudentListAction from '@/components/student-list/StudentListAction';
 import StudentListTable from '@/components/student-list/StudentListTable';
 import { ROLE } from '@/constance/constance';
+import { StudentPreview } from '@/type';
 import { ChangeEvent, useState } from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
@@ -19,7 +20,7 @@ const StudentListPage = () => {
 
   if (!data) return null;
 
-  const students = data.filter((user: StudentPreview) => STUDENT.includes(user.role.code));
+  const students = data;
 
   return (
     <main className='flex flex-col justify-center gap-5 p-8 lg:mx-20'>

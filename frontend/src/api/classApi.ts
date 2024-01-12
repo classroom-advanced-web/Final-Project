@@ -1,5 +1,6 @@
 import { DEFAULT_THUMB } from '@/constance/constance';
 import instance from './axiosConfig';
+import { ClassMember, StudentPreview } from '@/type';
 
 type CompositionSort = {
   id: string;
@@ -143,14 +144,7 @@ class ClassApi {
     return res.data;
   };
 
-  MapStudentId = async (
-    data: {
-      student_id: string;
-      account_id: string | null;
-      student_name: string;
-      classroom_id: string;
-    }[]
-  ) => {
+  MapStudentId = async (data: StudentPreview[]) => {
     const res = await instance.post(`/classrooms/student-id/mapping`, data);
     return res.data;
   };

@@ -1,3 +1,4 @@
+import { classroom } from '@/assets/classroom.svg';
 type User = {
   id: string;
   email: string;
@@ -86,8 +87,15 @@ type CommentOnGradeReview = {
   created_at: Date;
 };
 
+// type StudentPreview = {
+//   user_name: String;
+//   user: User;
+//   role: Role;
+// };
+
 type StudentPreview = {
-  user_name: String;
-  user: User;
-  role: Role;
+  student_name: String;
+  student_id: String;
+  account_id: String | null;
+  classroom_id: String;
 };

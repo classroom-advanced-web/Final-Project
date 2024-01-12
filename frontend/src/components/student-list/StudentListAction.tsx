@@ -9,6 +9,7 @@ import { Button } from '../ui/button';
 import { read, utils } from 'xlsx';
 import { promise } from 'zod';
 import classApi from '@/api/classApi';
+import { StudentPreview } from '@/type';
 
 type Props = {
   students: StudentPreview[];
@@ -30,9 +31,9 @@ const StudentListAction = ({ students }: Props) => {
   const handleExportExcel = () => {
     const data = students.map((student: StudentPreview) => {
       return {
-        'Account ID': student.user.id,
-        'Student ID': student.user.student_id ?? '',
-        'Full Name': student.user_name
+        'Account ID': student.account_id,
+        'Student ID': student.student_id,
+        'Full Name': student.student_name
       };
     });
     writeExcelFile(data, `students - ${classDetail.name}.xlsx`);

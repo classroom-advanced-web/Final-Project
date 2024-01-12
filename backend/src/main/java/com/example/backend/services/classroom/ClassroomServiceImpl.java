@@ -260,7 +260,7 @@ public class ClassroomServiceImpl implements IClassroomService {
     }
 
     @Override
-    public List<UsersOfClassroomDTO> getStudentsOfClassroom(String classroomId) throws AccessDeniedException {
+    public List<StudentsClassroomRequestDTO> getStudentsOfClassroom(String classroomId) throws AccessDeniedException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classroomId)
                 .orElseThrow(
@@ -269,20 +269,28 @@ public class ClassroomServiceImpl implements IClassroomService {
         if(!classUser.getRole().getName().equals(RoleEnum.Teacher.name()) && !classUser.getRole().getName().equals(RoleEnum.Owner.name())) {
             throw new AccessDeniedException("User is not teacher or owner of this class");
         }
-
-        List<UsersOfClassroomDTO> usersOfClassroomDTOs = new ArrayList<>(getUsersOfClassroomDTOs(classroomId, RoleEnum.Student));
+        List<StudentsClassroomRequestDTO> result = new ArrayList<>();
+        getUsersOfClassroomDTOs(classroomId, RoleEnum.Student)
+                .forEach(
+                        usersOfClassroomDTO -> {
+                            result.add(
+                                    StudentsClassroomRequestDTO.builder()
+                                            .studentId(usersOfClassroomDTO.getUser().getStudentId())
+                                            .studentName(usersOfClassroomDTO.getUserName())
+                                            .accountId(usersOfClassroomDTO.getUser().getId())
+                                            .classroomId(classroomId)
+                                            .build()
+                            );
+                        }
+                );
         List<NonUser> nonUsers = nonUserRepository.findByClassroomId(classroomId);
         for(NonUser nonUser: nonUsers) {
-            usersOfClassroomDTOs.add(
-                    UsersOfClassroomDTO.builder()
-                            .userName(nonUser.getName())
-                            .role(roleMapper.toDTO(roleRepository.findByName(RoleEnum.Student.name()).orElseThrow(
-                                    () -> new NotFoundException("Role not found")
-                            )))
-                            .user(UserDTO.builder()
-                                    .studentId(nonUser.getStudentId())
-                                    .build()
-                            )
+            result.add(
+                    StudentsClassroomRequestDTO.builder()
+                            .studentId(nonUser.getStudentId())
+                            .studentName(nonUser.getName())
+                            .accountId(null)
+                            .classroomId(classroomId)
                             .build()
             );
 
@@ -291,7 +299,7 @@ public class ClassroomServiceImpl implements IClassroomService {
 
 
 
-        return usersOfClassroomDTOs;
+        return result;
     }
 
     @Override
