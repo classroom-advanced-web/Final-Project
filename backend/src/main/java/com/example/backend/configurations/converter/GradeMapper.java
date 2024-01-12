@@ -3,7 +3,9 @@ package com.example.backend.configurations.converter;
 import com.example.backend.dtos.GradeCompositionDTO;
 import com.example.backend.dtos.GradeDTO;
 import com.example.backend.entities.Grade;
+import org.springframework.context.annotation.Configuration;
 
+@Configuration
 public class GradeMapper implements IMapper<Grade, GradeDTO>{
     @Override
     public Grade toEntity(GradeDTO obj) {

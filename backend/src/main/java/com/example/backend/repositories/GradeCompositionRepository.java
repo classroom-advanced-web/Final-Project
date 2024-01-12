@@ -18,4 +18,6 @@ public interface GradeCompositionRepository extends JpaRepository<GradeCompositi
     Optional<Integer> findMaxWeightByClassroomId(String classroomId);
 
     List<GradeComposition> findByClassroomIdOrderByWeightAsc(String classroomId);
+
+    List<GradeComposition> findByClassroomId(String classroomId);
 }

@@ -3,19 +3,15 @@ package com.example.backend.dtos;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
+
+import java.util.List;
 
 @Builder
-@Getter
 @Data
-public class GradeDTO {
-
-    String id;
-    Double value;
-
-    @JsonProperty("grade_composition")
-    GradeCompositionDTO gradeComposition;
+public class StudentGradesDTO {
 
     @JsonProperty("student_id")
     String studentId;
+    List<GradeDTO> grades;
+
 }

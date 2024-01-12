@@ -10,7 +10,10 @@ public class AppConstant {
 
     public static final String GRADE_COMPOSITION_PATH = "/grade-composition/**";
 
+    public static final String GRADE_PATH = "/grades/**";
+
     public static final String NOTIFICATION_PATH = "/notifications/**";
+
 
     public static final int OTP_DIGITS = 6;
     public static final int OTP_PERIOD = 5 * 60; // Time period in seconds

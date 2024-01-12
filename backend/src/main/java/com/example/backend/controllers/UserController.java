@@ -13,7 +13,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
-@PreAuthorize("isAuthenticated()")
 public class UserController {
 
     private final IUserService userService;
