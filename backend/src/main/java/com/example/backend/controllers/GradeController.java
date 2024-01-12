@@ -1,12 +1,14 @@
 package com.example.backend.controllers;
 
 import com.example.backend.dtos.GradeDTO;
+import com.example.backend.dtos.StudentGradesDTO;
 import com.example.backend.services.grade.IGradeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/grades")
@@ -24,4 +26,8 @@ public class GradeController {
         return ResponseEntity.ok(gradeService.getGradeBoard(classroomId));
     }
 
+    @PostMapping("/board/file-update")
+    public ResponseEntity<Map> updateGradeBoard(@RequestBody List<StudentGradesDTO> studentGradesDTOs) {
+        return ResponseEntity.ok(gradeService.mapGradeFromList(studentGradesDTOs));
+    }
 }

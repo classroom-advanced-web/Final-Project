@@ -19,10 +19,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -69,6 +70,14 @@ public class GradeServiceImpl implements IGradeService{
 
     @Override
     public List<StudentGradesDTO> getGradeBoard(String classroomId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classroomId)
+                .orElseThrow(
+                        () -> new NotFoundException("Class user not found")
+                );
+        if (!classUser.getRole().getName().equals(RoleEnum.Teacher.name()) && !classUser.getRole().getName().equals(RoleEnum.Owner.name())) {
+            throw new AccessDeniedException("You are not allowed to create grade");
+        }
         List<GradeComposition> gradeCompositions = gradeCompositionRepository.findByClassroomIdOrderByWeightAsc(classroomId);
         List<StudentsClassroomRequestDTO> studentsClassroomRequestDTOs = classroomService.getStudentsOfClassroom(classroomId);
         List<String> StudentIds = new ArrayList<>();
@@ -101,5 +110,22 @@ public class GradeServiceImpl implements IGradeService{
             result.add(studentGradesDTO);
         }
         return result;
+    }
+
+    @Override
+    @Transactional
+    public Map<String, Object> mapGradeFromList(List<StudentGradesDTO> studentGradesDTOs) {
+
+        for(StudentGradesDTO studentGradesDTO : studentGradesDTOs) {
+            GradeDTO gradeDTO = GradeDTO.builder()
+                    .studentId(studentGradesDTO.getStudentId())
+                    .build();
+            for(GradeDTO grade : studentGradesDTO.getGrades()) {
+                gradeDTO.setGradeComposition(grade.getGradeComposition());
+                gradeDTO.setValue(grade.getValue());
+                createGradeForAStudent(gradeDTO);
+            }
+        }
+        return Map.of("message", "success");
     }
 }
