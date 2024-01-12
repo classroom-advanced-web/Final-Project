@@ -1,6 +1,5 @@
 package com.example.backend.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,28 +19,31 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "grades")
+@Table(name = "comments")
 @Where(clause = "revoked = false")
-public class Grade {
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "grade_id")
+    @Column(name = "comment_id")
     private String id;
 
-    @Column(name = "grade_value", nullable = false)
-    private Double value;
-
-    @Column
-    private String studentId;
+    private String content;
 
     @ManyToOne
-    @JoinColumn(name = "grade_composition_id", nullable = false)
-    private GradeComposition gradeComposition;
+    @JoinColumn(name = "grade_id", nullable = false)
+    private Grade grade;
 
-    @OneToMany(mappedBy = "grade")
-    @JsonIgnore
-    private List<Comment> comments;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "reply_to_id", referencedColumnName = "comment_id")
+    private Comment replyTo;
+
+    @OneToMany(mappedBy = "replyTo")
+    private List<Comment> replies;
 
     @Column(name = "revoked")
     private boolean revoked;

@@ -27,6 +27,7 @@ public class NonUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "non_user_id")
     private String id;
 
     @Column(name = "name", nullable = false)

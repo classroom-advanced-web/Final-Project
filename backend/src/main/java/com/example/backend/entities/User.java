@@ -36,37 +36,40 @@ public class User implements UserDetails {
     private String id;
 
     @Column(name = "email", nullable = false, unique = true)
-     private String email;
+    private String email;
 
     @Column(name = "password")
-     private String password;
+    private String password;
 
-     @Column(name = "first_name")
-     private String firstName;
+    @Column(name = "first_name")
+    private String firstName;
 
-     @Column(name = "last_name")
-     private String lastName;
+    @Column(name = "last_name")
+    private String lastName;
 
-     @Column(name = "gender", nullable = false)
-     private String gender;
+    @Column(name = "gender", nullable = false)
+    private String gender;
 
-     @Column(name = "date_of_birth")
-     private Date DOB;
+    @Column(name = "date_of_birth")
+    private Date DOB;
 
+    @Column(name = "is_activated")
+    private boolean isActivated;
 
-     @Column(name = "is_activated")
-     private boolean isActivated;
+    @Column(name = "student_id", unique = true)
+    private String studentId;
 
-     @Column(name = "student_id", unique = true)
-        private String studentId;
+    @OneToMany(mappedBy = "receiver")
+    @JsonIgnore
+    private List<ReceivedNotification> receivedNotifications;
 
-     @OneToMany(mappedBy = "receiver")
-        @JsonIgnore
-        private List<ReceivedNotification> receivedNotifications;
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<ClassUser> classUsers;
 
-     @OneToMany(mappedBy = "user")
-     @JsonIgnore
-     private List<ClassUser> classUsers;
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Grade> grades;
 
     private boolean revoked;
 
@@ -77,9 +80,6 @@ public class User implements UserDetails {
     @Column(name = "updated_date")
     @LastModifiedDate
     private Date updatedDate;
-
-
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
