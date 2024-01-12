@@ -18,7 +18,7 @@ const StudentListTable = ({ students }: Props) => {
       </TableHeader>
       <TableBody>
         {students.map((student) => (
-          <TableRow key={student.student_id}>
+          <TableRow key={String(student.student_id)}>
             <TableCell className='text-left'>{student.account_id}</TableCell>
             <TableCell className='text-left'>{student.student_id}</TableCell>
             <TableCell className='text-left'>{student.student_name}</TableCell>

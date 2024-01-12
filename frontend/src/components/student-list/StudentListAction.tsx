@@ -7,18 +7,61 @@ import { MdOutlineDriveFolderUpload } from 'react-icons/md';
 import { RiFolderDownloadLine } from 'react-icons/ri';
 import { Button } from '../ui/button';
 import { read, utils } from 'xlsx';
-import { promise } from 'zod';
 import classApi from '@/api/classApi';
 import { StudentPreview } from '@/type';
+import { useQueryClient } from 'react-query';
+import { useParams } from 'react-router-dom';
+import { useToast } from '../ui/use-toast';
 
 type Props = {
   students: StudentPreview[];
+  setStudents: (students: StudentPreview[]) => void;
 };
 
-const StudentListAction = ({ students }: Props) => {
+const StudentListAction = ({ students, setStudents }: Props) => {
   const { classDetail, isLoading } = useClassroom();
   const [file, setFile] = useState<File | undefined>(undefined);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { id } = useParams<{ id: string }>() ?? '0';
+  const queryClient = useQueryClient();
+
+  const { toast } = useToast();
+
+  useEffect(() => {
+    (async () => {
+      if (!file) return;
+      const f = await file.arrayBuffer();
+      const wb = read(f); // parse the array buffer
+      const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
+      const data = utils.sheet_to_json(ws); // generate HTML
+
+      const processedData = data.map((item: any) => {
+        return {
+          student_id: item['Student ID'],
+          account_id: item['Account ID'] == '' ? null : item['Account ID'],
+          student_name: item['Full Name'],
+          classroom_id: classDetail.id
+        };
+      });
+
+      try {
+        const res: StudentPreview[] = await classApi.MapStudentId(processedData);
+
+        if (res) {
+          setStudents(res);
+        }
+      } catch (error: any) {
+        if (error?.response) {
+          toast({
+            variant: 'destructive',
+            title: error.response.data.message
+          });
+        }
+        console.error(error);
+      }
+    })();
+  }, [file?.name]);
+
   if (isLoading) return <Loading />;
   if (!classDetail) return null;
 
@@ -43,45 +86,6 @@ const StudentListAction = ({ students }: Props) => {
     inputRef.current?.click();
     // if (inputRef.current?.files?.length === 0) return;
   };
-
-  useEffect(() => {
-    (async () => {
-      if (!file) return;
-      const f = await file.arrayBuffer();
-      const wb = read(f); // parse the array buffer
-      const ws = wb.Sheets[wb.SheetNames[0]]; // get the first worksheet
-      const data = utils.sheet_to_json(ws); // generate HTML
-
-      const processedData = data.map((item: any) => {
-        return {
-          student_id: item['Student ID'],
-          account_id: item['Account ID'] == '' ? null : item['Account ID'],
-          student_name: item['Full Name'],
-          classroom_id: classDetail.id
-        };
-      });
-
-      const res = await classApi.MapStudentId(processedData);
-
-      if (res) {
-        console.log(res);
-      }
-
-      // Promise.all(
-      //   data.map(async (item: any) => {
-      //     const res = await classApi.MapStudentId({
-      //       student_id: item['Student ID'],
-      //       classroom_id: classDetail.id,
-      //       account_id: item['Account ID'],
-      //       student_name: item['Full Name']
-      //     });
-      //     if (res) {
-      //       console.log(res);
-      //     }
-      //   })
-      // );
-    })();
-  }, [file?.name]);
 
   // console.log(file);
   return (
