@@ -99,3 +99,10 @@ type StudentPreview = {
   account_id: String | null;
   classroom_id: String;
 };
+
+type DefaultGrade = {
+  defaultGrade: number;
+  compositionName: string;
+  studentId: string;
+  compositionId: string;
+};

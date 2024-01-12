@@ -148,6 +148,11 @@ class ClassApi {
     const res = await instance.post(`/classrooms/student-id/mapping`, data);
     return res.data;
   };
+
+  getGradeBoard = async (classroomId: string) => {
+    const res = await instance.get(`/grades/board/${classroomId}`);
+    return res.data;
+  };
 }
 
 const classApi = new ClassApi();

@@ -70,7 +70,7 @@ const StudentListAction = ({ students, setStudents }: Props) => {
         if (error?.response) {
           toast({
             variant: 'destructive',
-            title: error.response.data.message
+            title: error.response.data.error
           });
         }
         console.error(error);

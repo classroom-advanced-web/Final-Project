@@ -107,3 +107,11 @@ export const gradesStructureSchema = z.object({
     .gte(1, 'Please enter a positive number')
     .lte(100, 'Please enter a number less than 100')
 });
+
+export const changeGradeSchema = z.object({
+  grade: z.coerce
+    .number()
+    .int()
+    .gte(0, 'Please enter a positive number')
+    .lte(100, 'Please enter a number less than 100')
+});
