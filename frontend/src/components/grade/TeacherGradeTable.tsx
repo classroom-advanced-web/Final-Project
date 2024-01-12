@@ -2,18 +2,18 @@ import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, Tabl
 
 import classApi from '@/api/classApi';
 import { useEffect, useState } from 'react';
-import { MdOutlineRateReview } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import GradeForm from './GradeForm';
+import { GradeComposition, StudentPreview } from '@/type';
+import useStudentList from '@/hooks/useStudentList';
+import Loading from '../loading/Loading';
 
 const TeacherGradeTable = () => {
   const [items, setItems] = useState<GradeComposition[]>([]);
   const { id } = useParams();
   const [onOpenChange, setonOpenChange] = useState(false);
-  const [compisitionName, setCompisitionName] = useState('');
-
-  //sample data
-  var studentList = ['Student 1', 'Student 2'];
+  const [compositionName, setCompositionName] = useState('');
+  const { studentList, isLoading } = useStudentList();
 
   useEffect(() => {
     const fetchStructure = async () => {
@@ -29,10 +29,12 @@ const TeacherGradeTable = () => {
     fetchStructure();
   }, []);
 
-  function handleReview(compisitionName: string) {
+  function handleReview(compositionName: string) {
     setonOpenChange(true);
-    setCompisitionName(compisitionName);
+    setCompositionName(compositionName);
   }
+
+  if (isLoading) return <Loading />;
 
   return (
     <div>
@@ -41,24 +43,26 @@ const TeacherGradeTable = () => {
         <TableHeader>
           <TableRow>
             {/* <TableHead className='w-[270px]'></TableHead> */}
-            <TableHead className='w-[132px] text-left'>Student name</TableHead>
+            <TableHead className='w-[132px] text-left'>Student ID</TableHead>
 
             {items.map((item) => (
-              <TableHead className='w-[132px] text-right'>{item.name}</TableHead>
+              <TableHead key={String(item.id)} className='w-[132px] text-right'>
+                {item.name}
+              </TableHead>
             ))}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {studentList.map((student) => (
-            <TableRow>
-              <TableCell className='text-left'>{student}</TableCell>
+          {studentList.map((student: StudentPreview) => (
+            <TableRow key={String(student.student_id)}>
+              <TableCell className='text-left'>{student.student_id}</TableCell>
               <TableCell className='text-right'>60 </TableCell>
               <TableCell className='text-right'>70</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <GradeForm compisitionName={compisitionName} open={onOpenChange} onOpenChange={setonOpenChange} />
+      <GradeForm compisitionName={compositionName} open={onOpenChange} onOpenChange={setonOpenChange} />
     </div>
   );
 };

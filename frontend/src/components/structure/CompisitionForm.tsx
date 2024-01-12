@@ -11,7 +11,7 @@ import { Button } from '../ui/button';
 import { toast } from '../ui/use-toast';
 import { useAuth } from '@/hooks/useAuth';
 import Loading from '../loading/Loading';
-// import { stompClient } from '../header/Notifications';
+import { stompClient } from '../header/Notifications';
 
 type Props = {
   setItems: any;
@@ -34,16 +34,18 @@ const CompositionForm = ({ setItems, items, closeForm }: Props) => {
           title: 'Create Grade Structure successfully'
         });
         setItems([...items, res]);
-        // stompClient.send(
-        //   '/app/notifications',
-        //   {},
-        //   JSON.stringify({
-        //     sender_id: user?.id,
-        //     classroom_id: classroomId,
-        //     title: 'New Grade Structure',
-        //     content: 'New Grade Structure has been created'
-        //   })
-        // );
+
+        stompClient &&
+          stompClient.send(
+            '/app/notifications',
+            {},
+            JSON.stringify({
+              sender_id: user?.id,
+              classroom_id: classroomId,
+              title: 'New Grade Structure',
+              content: 'New Grade Structure has been created'
+            })
+          );
         closeForm();
       }
     } catch (error) {

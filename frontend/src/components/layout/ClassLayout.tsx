@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { createContext } from 'react';
 import ClassNav from '../class/ClassNav';
+import { Classroom } from '@/type';
 
 type Props = {
   children: React.ReactNode;
@@ -25,7 +26,6 @@ const ClassLayout = ({ children, page }: Props) => {
 
   const updateClassDetail = (data: Classroom) => {
     console.log(`data::::${JSON.stringify(data)}`);
-    
   };
 
   const value = {
