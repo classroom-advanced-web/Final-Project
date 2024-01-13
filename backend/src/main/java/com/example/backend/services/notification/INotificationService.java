@@ -16,4 +16,7 @@ public interface INotificationService {
     Map<String, String> notifyToAllUserInClassroom(NotificationDTO notificationDTO);
 
     List<NotificationResponseDTO> getNotifications();
+
+    String setAllNotificationsAsRead();
+
 }

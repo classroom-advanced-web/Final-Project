@@ -128,4 +128,18 @@ public class NotificationServiceImpl implements INotificationService {
                 })
                 .toList();
     }
+
+    @Override
+    public String setAllNotificationsAsRead() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<Notification> notifications = receivedNotificationRepository.findAllByReceiverId(user.getId())
+                .stream()
+                .map(ReceivedNotification::getNotification)
+                .toList();
+        notifications.forEach(notification -> {
+           notification.setRead(true);
+              notificationRepository.save(notification);
+        });
+        return "Success";
+    }
 }
