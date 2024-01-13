@@ -34,4 +34,12 @@ public interface IUserService {
     Map<String, String> verifyEmail(String email);
 
     List<ClassroomsOfUserDTO> getClassrooms();
+
+    List<UserDTO> getAllUsers();
+
+    String changeRevokeStatusOfUser(String userId, Boolean status);
+
+    String changeRevokeStatusOfClassroom(String classroomId, Boolean status);
+
+
 }

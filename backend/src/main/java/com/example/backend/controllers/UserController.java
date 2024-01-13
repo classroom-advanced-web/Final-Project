@@ -33,4 +33,19 @@ public class UserController {
         return ResponseEntity.ok(userService.getClassrooms());
     }
 
+    @GetMapping("admin/users")
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
+    }
+
+    @PutMapping("admin/users/{userId}")
+    public ResponseEntity<String> changeRevokeStatusOfUser(@PathVariable String userId, @RequestParam Boolean status) {
+        return ResponseEntity.ok(userService.changeRevokeStatusOfUser(userId, status));
+    }
+
+    @PutMapping("admin/classrooms/{classroomId}")
+    public ResponseEntity<String> changeRevokeStatusOfClassroom(@PathVariable String classroomId, @RequestParam Boolean status) {
+        return ResponseEntity.ok(userService.changeRevokeStatusOfClassroom(classroomId, status));
+    }
+
 }

@@ -31,6 +31,7 @@ public class ClassroomMapper implements IMapper<Classroom, ClassroomDTO> {
                 .room(obj.getRoom())
                 .section(obj.getSection())
                 .imageUrl(obj.getImageUrl())
+                .isRevoked(obj.isRevoked())
                 .build();
     }
 }

@@ -29,6 +29,8 @@ public class UserMapper implements IMapper<User, UserDTO> {
                 .gender(GenderEnum.valueOf(obj.getGender()))
                 .DOB(obj.getDOB())
                 .isActivated(obj.isActivated())
+                .isAdmin(obj.isAdmin())
+                .isRevoked(obj.isRevoked())
                 .studentId(obj.getStudentId())
                 .build();
     }
