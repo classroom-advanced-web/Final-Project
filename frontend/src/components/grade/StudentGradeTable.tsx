@@ -1,11 +1,11 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 
 import classApi from '@/api/classApi';
+import { GradeBoard, GradeComposition, StudentGrades } from '@/type';
 import { useEffect, useState } from 'react';
 import { MdOutlineRateReview } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import GradeForm from './GradeForm';
-import { GradeBoard, GradeComposition, StudentGrades } from '@/type';
 
 const StudentGradeTable = () => {
   const [items, setItems] = useState<GradeComposition[]>([]);

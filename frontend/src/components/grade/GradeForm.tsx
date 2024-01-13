@@ -9,6 +9,7 @@ import * as z from 'zod';
 import { Button } from '../ui/button';
 import { GradeBoard } from '@/type';
 import gradeApi from '@/api/gradeApi';
+import { useNavigate, useParams } from 'react-router-dom';
 
 type Props = {
   gradeBoard: GradeBoard | undefined;
@@ -24,12 +25,22 @@ function GradeForm({ open, onOpenChange, compisitionName, gradeBoard }: Props) {
       explanationMessage: ''
     }
   });
+  const navigate = useNavigate();
+
+  const classId = useParams<{ id: string | undefined }>().id;
+
+  const handleShowRequest = (gradeId: string) => {
+    navigate(`/grades-review/${classId}/${gradeId}`);
+  };
 
   const handleSubmit = async (data: z.infer<typeof requestReviewSchema>) => {
-    console.log(data.expectationGrade);
-    console.log(data.explanationMessage);
+    onOpenChange(false);
 
-    const res = await gradeApi.requestReview(data.explanationMessage, gradeBoard?.id!);
+    const res = await gradeApi.requestReview(
+      'Expected score: ' + data.expectationGrade + '\n' + 'Explanation: ' + data.explanationMessage,
+
+      gradeBoard?.id!
+    );
     console.log(res);
   };
 
@@ -85,8 +96,8 @@ function GradeForm({ open, onOpenChange, compisitionName, gradeBoard }: Props) {
               )}
             />
 
-            <Button type='button' variant='ghost' onClick={() => onOpenChange(false)}>
-              Close
+            <Button type='button' variant='ghost' onClick={() => handleShowRequest(gradeBoard?.id ?? '')}>
+              Show Request
             </Button>
             <Button type='submit' disabled={form.formState.isLoading}>
               Send

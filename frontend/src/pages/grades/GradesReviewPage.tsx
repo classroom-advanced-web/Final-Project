@@ -1,14 +1,10 @@
 import { GradeReview } from '@/type';
 import './ReviewComponent';
 import ReviewComponent from './ReviewComponent';
-import { useParams } from 'react-router-dom';
 
 //gọi api lấy composition name, current score, expected score, explanation
 
 function GradesReviewPage() {
-  const { id, gradeReviewId } = useParams<{ id: string; gradeReviewId: string }>();
-
-  console.log(id, gradeReviewId);
   const gradeReviews: GradeReview[] = [
     {
       created_at: new Date('2024-01-10'),
