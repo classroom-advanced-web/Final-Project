@@ -94,4 +94,13 @@ public class CommentServiceImpl implements ICommentService{
 
     }
 
+    @Override
+    public List<CommentDTO> loadReplyComment(String commentId) {
+        List<Comment> comments = commentRepository.findByReplyToId(commentId);
+
+            return comments.stream()
+                    .map(comment -> commentMapper.toDTO(comment))
+                    .toList();
+    }
+
 }
