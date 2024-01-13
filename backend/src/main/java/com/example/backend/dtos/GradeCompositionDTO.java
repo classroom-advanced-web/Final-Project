@@ -14,6 +14,8 @@ public class GradeCompositionDTO {
     String name;
     Double scale;
     Integer weight;
+    @JsonProperty("is_final")
+    Boolean isFinal;
 
     @JsonProperty("classroom_id")
     String classroomId;

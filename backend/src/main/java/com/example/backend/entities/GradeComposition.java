@@ -38,6 +38,9 @@ public class GradeComposition {
     @Column(name = "grade_composition_weight", nullable = false)
     private int weight;
 
+    @Column(name = "grade_composition_is_final", nullable = false)
+    private boolean isFinal;
+
     @ManyToOne
     @JoinColumn(name = "class_id", nullable = false)
     private Classroom classroom;

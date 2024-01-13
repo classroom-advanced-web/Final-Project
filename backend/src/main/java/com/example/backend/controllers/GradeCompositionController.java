@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/grade-composition")
@@ -50,6 +51,15 @@ public class GradeCompositionController {
     public ResponseEntity<SortGradeCompositionDTO> sortGradeCompositions(@RequestBody SortGradeCompositionDTO sortGradeCompositionDTO) {
         return ResponseEntity.ok(
                 gradeCompositionService.sortGradeCompositions(sortGradeCompositionDTO)
+        );
+    }
+
+    @PutMapping("/final-status/{id}")
+    public ResponseEntity<GradeCompositionDTO> changeFinalStatus(@PathVariable("id") String id,
+                                                 @RequestParam("is_final") Boolean isFinal) {
+
+        return ResponseEntity.ok(
+                gradeCompositionService.changeFinalStatus(id, isFinal)
         );
     }
 }
