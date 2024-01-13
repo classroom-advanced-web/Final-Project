@@ -385,6 +385,32 @@ public class ClassroomServiceImpl implements IClassroomService {
 
     }
 
+    @Override
+    public List<StudentsClassroomRequestDTO> processStudentId(List<StudentsClassroomRequestDTO> body) {
+        List<StudentsClassroomRequestDTO> response = new ArrayList<>();
+        List<String> duplicatedStudentIds = new ArrayList<>();
+
+        for(StudentsClassroomRequestDTO dto : body) {
+
+            if(dto.getAccountId() == null) {
+                response.add(saveNonUserToClassroom(dto.getStudentId(), dto.getStudentName(), dto.getClassroomId()));
+            } else {
+
+                response.add(mapStudentIdToAccount(dto.getStudentId(), dto.getAccountId(), dto.getStudentName(), dto.getClassroomId()));
+            }
+        }
+        response.sort((o1, o2) -> {
+            if(o1.getStudentId() == null) {
+                return -1;
+            }
+            if(o2.getStudentId() == null) {
+                return 1;
+            }
+            return o1.getStudentId().compareTo(o2.getStudentId());
+        });
+        return response;
+    }
+
     private List<UsersOfClassroomDTO> getUsersOfClassroomDTOs(String classroomId, @Nullable RoleEnum roleEnum) {
         if(roleEnum == null) {
             return classUserRepository.findByClassroomId(classroomId).stream().map(

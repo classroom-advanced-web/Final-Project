@@ -82,29 +82,8 @@ public class ClassroomController {
 
     @PostMapping("/student-id/mapping")
     public ResponseEntity<List> mapStudentIdToAccount(@RequestBody List<StudentsClassroomRequestDTO> body) throws AccessDeniedException {
-       List<StudentsClassroomRequestDTO> response = new ArrayList<>();
-        for(StudentsClassroomRequestDTO dto : body) {
-           if(dto.getAccountId() == null) {
-
-                       response.add(classroomService.saveNonUserToClassroom(dto.getStudentId(), dto.getStudentName(), dto.getClassroomId()));
-
-           } else {
-                response.add(classroomService.mapStudentIdToAccount(dto.getStudentId(), dto.getAccountId(), dto.getStudentName(), dto.getClassroomId()));
-           }
-        }
-        response.sort((o1, o2) -> {
-            if(o1.getStudentId() == null) {
-                return -1;
-            }
-            if(o2.getStudentId() == null) {
-                return 1;
-            }
-            return o1.getStudentId().compareTo(o2.getStudentId());
-        });
-
-
         return ResponseEntity.ok(
-                response
+                classroomService.processStudentId(body)
         );
     }
 
