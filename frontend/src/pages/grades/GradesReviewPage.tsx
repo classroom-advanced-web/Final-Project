@@ -1,10 +1,14 @@
 import { GradeReview } from '@/type';
 import './ReviewComponent';
 import ReviewComponent from './ReviewComponent';
+import { useParams } from 'react-router-dom';
 
 //gọi api lấy composition name, current score, expected score, explanation
 
 function GradesReviewPage() {
+  const { id, gradeReviewId } = useParams<{ id: string; gradeReviewId: string }>();
+
+  console.log(id, gradeReviewId);
   const gradeReviews: GradeReview[] = [
     {
       created_at: new Date('2024-01-10'),
@@ -14,25 +18,8 @@ function GradesReviewPage() {
       expectedScore: 70,
       explanation: 'You got 60 points out of 70 points',
       compositionName: 'Homework 1'
-    },
-    {
-      created_at: new Date('December 17, 1995 03:24:00'),
-      student_id: 'student_id_02',
-      id: '2',
-      currentScore: 60,
-      expectedScore: 70,
-      explanation: 'You got 60 points out of 70 points',
-      compositionName: 'Homework 2'
-    },
-    {
-      created_at: new Date('December 17, 1995 03:24:00'),
-      student_id: 'student_id_03',
-      id: '3',
-      currentScore: 60,
-      expectedScore: 70,
-      explanation: 'You got 60 points out of 70 points',
-      compositionName: 'Homework 3'
     }
+
     //example/ get from api
   ];
   return (

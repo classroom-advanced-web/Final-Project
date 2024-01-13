@@ -7,7 +7,7 @@ import { Classroom } from '@/type';
 
 type Props = {
   children: React.ReactNode;
-  page: 'stream' | 'people' | 'grades' | 'structure' | 'grades-review' | 'student-list';
+  page: 'stream' | 'people' | 'grades' | 'structure' | 'student-list';
 };
 
 type ContextType = {
