@@ -28,7 +28,7 @@ CREATE TABLE users (
     revoked BOOLEAN NOT NULL DEFAULT 0,
     created_date TIMESTAMP DEFAULT NOW(),
     updated_date TIMESTAMP DEFAULT NOW(),
-    CHECK(gender IN ('MALE', 'FEMALE', 'UNKNOW'))
+    CHECK(gender IN ('MALE', 'FEMALE', 'UNKNOWN'))
 );
 
 DROP TABLE IF EXISTS classrooms;
