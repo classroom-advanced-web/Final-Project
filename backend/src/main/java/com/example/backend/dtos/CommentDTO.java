@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Date;
+
 @Builder
 @Data
 public class CommentDTO {
@@ -17,5 +19,8 @@ public class CommentDTO {
 
     UserDTO user;
     GradeDTO grade;
+
+    @JsonProperty("created_at")
+    Date createdAt;
 
 }
