@@ -51,6 +51,11 @@ class GradeApi {
     });
     return res.data;
   }
+
+  async acceptGrade(reviewId: string, status: boolean, classroomId: string) {
+    const res = await instance.put(`/comments/status/${reviewId}?status=${status}&classroom_id=${classroomId}`);
+    return res.data;
+  }
 }
 
 const gradeApi = new GradeApi();
