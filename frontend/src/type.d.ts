@@ -41,6 +41,7 @@ type Classroom = {
   room?: string;
   image_url?: string;
   role?: Role;
+  is_revoked?: boolean;
 };
 
 type Role = {
@@ -121,4 +122,9 @@ type GradeBoard = {
 type StudentGrades = {
   grades: Grade[];
   student_id: string | null;
+};
+
+type ClassroomAdmin = {
+  role?: Role;
+  classroom?: Classroom;
 };
