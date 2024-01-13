@@ -20,4 +20,6 @@ public interface ClassUserRepository extends JpaRepository<ClassUser, String> {
     List<ClassUser> findAllByClassroomId(String classroomId);
 
   List<ClassUser> findByClassroomIdAndRoleName(String classroomId, String roleName);
+
+    List<ClassUser> findByUserIdAndClassroomRevoked(String id, boolean revoked);
 }

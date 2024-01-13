@@ -1,4 +1,4 @@
-import { CaretSortIcon, ChevronDownIcon, DotsHorizontalIcon } from '@radix-ui/react-icons';
+import { CaretSortIcon, ChevronDownIcon } from '@radix-ui/react-icons';
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -12,22 +12,23 @@ import {
   useReactTable
 } from '@tanstack/react-table';
 
+import Loading from '@/components/loading/Loading';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import useAdminClassroom from '@/hooks/useAdminClassroom';
+import { Classroom } from '@/type';
 import { useState } from 'react';
-import { ClassroomAdmin } from '@/type';
+import { useQueryClient } from 'react-query';
+import adminApi from '@/api/adminApi';
 
-export const columns: ColumnDef<ClassroomAdmin>[] = [
+export const columns: ColumnDef<Classroom>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => {
@@ -41,88 +42,114 @@ export const columns: ColumnDef<ClassroomAdmin>[] = [
     cell: ({ row }) => <div className='capitalize'>{row.getValue('id')}</div>
   },
   {
-    accessorKey: 'firstName',
+    accessorKey: 'name',
     header: ({ column }) => {
       return (
         <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          First Name
+          Name
           <CaretSortIcon className='ml-2 h-4 w-4' />
         </Button>
       );
     },
-    cell: ({ row }) => <div className='capitalize'>{row.getValue('firstName')}</div>
+    cell: ({ row }) => <div className='capitalize'>{row.getValue('name')}</div>
   },
   {
-    accessorKey: 'lastName',
+    accessorKey: 'Section',
     header: ({ column }) => {
       return (
         <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Last Name
+          Section
           <CaretSortIcon className='ml-2 h-4 w-4' />
         </Button>
       );
     },
-    cell: ({ row }) => <div className='capitalize'>{row.getValue('lastName')}</div>
+    cell: ({ row }) => <div className='capitalize'>{row.getValue('section')}</div>
   },
   {
-    accessorKey: 'email',
+    accessorKey: 'description',
     header: ({ column }) => {
       return (
         <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
-          Email
+          Description
           <CaretSortIcon className='ml-2 h-4 w-4' />
         </Button>
       );
     },
-    cell: ({ row }) => <div className='lowercase'>{row.getValue('email')}</div>
+    cell: ({ row }) => <div>{row.getValue('description')}</div>
   },
   {
-    accessorKey: 'dob',
-    header: 'Date of Birth',
+    accessorKey: 'subject',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Subject
+          <CaretSortIcon className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div>{row.getValue('subject')}</div>
+  },
+  {
+    accessorKey: 'code',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Code
+          <CaretSortIcon className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div>{row.getValue('code')}</div>
+  },
+  {
+    accessorKey: 'room',
+    header: ({ column }) => {
+      return (
+        <Button variant='ghost' onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}>
+          Room
+          <CaretSortIcon className='ml-2 h-4 w-4' />
+        </Button>
+      );
+    },
+    cell: ({ row }) => <div>{row.getValue('room')}</div>
+  },
+  {
+    accessorKey: 'is_revoked',
+    header: '',
     cell: ({ row }) => {
-      const dob = row.getValue('dob') as Date;
-      const formattedDob = dob.toLocaleDateString('en-GB');
-      // format it to dd/mm/yyyy
+      const queryClient = useQueryClient();
 
-      return <div className='capitalize'>{formattedDob}</div>;
-    }
-  },
-  {
-    accessorKey: 'gender',
-    header: 'Gender',
-    cell: ({ row }) => <div className='capitalize'>{row.getValue('gender')}</div>
-  },
-  {
-    accessorKey: 'activated',
-    header: 'Activated',
-    cell: ({ row }) => (
-      <div className='capitalize'>{row.getValue('activated') ? `Activated 🟢` : `Not activated 🔴`}</div>
-    )
-  },
-  {
-    id: 'actions',
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original;
+      const handleChangeActive = async (id: string, status: boolean) => {
+        try {
+          const res = await adminApi.inactivateClassroom(id, status);
 
+          if (res) {
+            queryClient.invalidateQueries('adminClassroom');
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
       return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant='ghost' className='h-8 w-8 p-0'>
-              <span className='sr-only'>Open menu</span>
-              <DotsHorizontalIcon className='h-4 w-4' />
+        <div>
+          {row.getValue('is_revoked') ? (
+            <Button
+              variant='outline'
+              className='min-w-[120px]'
+              onClick={() => handleChangeActive(row.getValue('id'), false)}
+            >
+              Active
             </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => navigator.clipboard.writeText(payment.id)}>
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+          ) : (
+            <Button
+              variant='destructive'
+              className='min-w-[120px]'
+              onClick={() => handleChangeActive(row.getValue('id'), true)}
+            >
+              Inactive
+            </Button>
+          )}
+        </div>
       );
     }
   }
@@ -134,8 +161,10 @@ const AdminClassroom = () => {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
+  const { classrooms, isLoading } = useAdminClassroom();
+
   const table = useReactTable({
-    data,
+    data: classrooms ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -152,6 +181,14 @@ const AdminClassroom = () => {
       rowSelection
     }
   });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (!classrooms) {
+    return null;
+  }
 
   return (
     <div className='w-full'>

@@ -351,7 +351,7 @@ public class UserServiceImpl implements IUserService {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
 
-        List<ClassUser> classUsers = classUserRepository.findByUserId(user.getId());
+        List<ClassUser> classUsers = classUserRepository.findByUserIdAndClassroomRevoked(user.getId(), false);
         if(classUsers == null) {
             return new ArrayList<>();
         }
