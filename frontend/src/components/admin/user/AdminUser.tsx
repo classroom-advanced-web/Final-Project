@@ -23,6 +23,8 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useState } from 'react';
 import { User } from '@/type';
+import useAdminUser from '@/hooks/useAdminUser';
+import Loading from '@/components/loading/Loading';
 
 const data: User[] = [
   {
@@ -111,10 +113,10 @@ export const columns: ColumnDef<User>[] = [
     header: 'Date of Birth',
     cell: ({ row }) => {
       const dob = row.getValue('dob') as Date;
-      const formattedDob = dob.toLocaleDateString('en-GB');
-      // format it to dd/mm/yyyy
+      if (!dob) return null;
+      const formatDob = new Date(dob).toLocaleDateString('en-GB');
 
-      return <div className='capitalize'>{formattedDob}</div>;
+      return <div className='capitalize'>{formatDob}</div>;
     }
   },
   {
@@ -154,8 +156,10 @@ const AdminUser = () => {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
+  const { users, isLoading } = useAdminUser();
+  console.log({ users });
   const table = useReactTable({
-    data,
+    data: users ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -172,6 +176,14 @@ const AdminUser = () => {
       rowSelection
     }
   });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (!users) {
+    return null;
+  }
 
   return (
     <div className='w-full'>
