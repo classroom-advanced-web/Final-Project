@@ -11,6 +11,7 @@ import { read, utils } from 'xlsx';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 import gradeApi from '@/api/gradeApi';
+import { useQueryClient } from 'react-query';
 
 type Props = {
   gradeComposition: GradeComposition[];
@@ -23,6 +24,7 @@ const GradeAction = ({ gradeBoard, gradeComposition }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     (async () => {
@@ -68,7 +70,7 @@ const GradeAction = ({ gradeBoard, gradeComposition }: Props) => {
           toast({
             title: 'Import successfully'
           });
-          console.log(res);
+          queryClient.invalidateQueries(['gradeBoard', gradeComposition[0].classroom_id]);
         }
       } catch (error: any) {
         if (error?.response) {
