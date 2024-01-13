@@ -42,6 +42,7 @@ const CompositionForm = ({ setItems, items, closeForm }: Props) => {
             JSON.stringify({
               sender_id: user?.id,
               classroom_id: classroomId,
+              // receiver_id: '5f28c680-7e31-4a9d-86c6-567f02962078',
               title: 'New Grade Structure',
               content: 'New Grade Structure has been created'
             })
