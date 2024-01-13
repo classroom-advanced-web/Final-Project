@@ -30,6 +30,9 @@ public class Comment {
 
     private String content;
 
+    @Column(name = "is_shut_down")
+    private boolean isShutDown;
+
     @ManyToOne
     @JoinColumn(name = "grade_id", nullable = false)
     private Grade grade;

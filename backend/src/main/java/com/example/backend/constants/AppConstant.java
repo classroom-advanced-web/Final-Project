@@ -14,6 +14,8 @@ public class AppConstant {
 
     public static final String NOTIFICATION_PATH = "/notifications/**";
 
+    public static final String COMMENT_PATH = "/comments/**";
+
 
     public static final int OTP_DIGITS = 6;
     public static final int OTP_PERIOD = 5 * 60; // Time period in seconds
