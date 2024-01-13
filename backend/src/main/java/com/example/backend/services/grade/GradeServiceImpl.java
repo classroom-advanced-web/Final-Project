@@ -159,9 +159,11 @@ public class GradeServiceImpl implements IGradeService{
                     .studentId(studentGradesDTO.getStudentId())
                     .build();
             for(GradeDTO grade : studentGradesDTO.getGrades()) {
-                gradeDTO.setGradeComposition(grade.getGradeComposition());
-                gradeDTO.setValue(grade.getValue());
-                createGradeForAStudent(gradeDTO);
+                if(grade.getValue() != null) {
+                    gradeDTO.setGradeComposition(grade.getGradeComposition());
+                    gradeDTO.setValue(grade.getValue());
+                    createGradeForAStudent(gradeDTO);
+                }
             }
         }
         return Map.of("message", "success");

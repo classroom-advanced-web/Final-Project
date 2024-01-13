@@ -125,6 +125,17 @@ public class GradeCompositionServiceImpl implements IGradeCompositionService{
                 .build();
     }
 
+    @Override
+    public GradeCompositionDTO changeFinalStatus(String id, Boolean isFinal) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        GradeComposition gradeComposition = gradeCompositionRepository.findById(id).orElseThrow(
+                () -> new NotFoundException("Grade composition not found")
+        );
+        preAuthorize(user, gradeComposition.getClassroom());
+        gradeComposition.setFinal(isFinal);
+        return gradeCompositionMapper.toDTO(gradeCompositionRepository.save(gradeComposition));
+    }
+
     private void preAuthorize(User user, Classroom classroom) {
         ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classroom.getId()).orElseThrow(
                 () -> new NotFoundException("User is not in classroom")
