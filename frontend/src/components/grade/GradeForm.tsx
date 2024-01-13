@@ -7,20 +7,42 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
 import { Button } from '../ui/button';
+import { GradeBoard } from '@/type';
+import gradeApi from '@/api/gradeApi';
+import { useNavigate, useParams } from 'react-router-dom';
 
 type Props = {
+  gradeBoard: GradeBoard | undefined;
   compisitionName: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
 
-function GradeForm({ open, onOpenChange, compisitionName }: Props) {
+function GradeForm({ open, onOpenChange, compisitionName, gradeBoard }: Props) {
   const form = useForm<z.infer<typeof requestReviewSchema>>({
     resolver: zodResolver(requestReviewSchema),
     defaultValues: {
       explanationMessage: ''
     }
   });
+  const navigate = useNavigate();
+
+  const classId = useParams<{ id: string | undefined }>().id;
+
+  const handleShowRequest = (gradeId: string) => {
+    navigate(`/grades-review/${classId}/${gradeId}`);
+  };
+
+  const handleSubmit = async (data: z.infer<typeof requestReviewSchema>) => {
+    onOpenChange(false);
+
+    const res = await gradeApi.requestReview(
+      'Expected score: ' + data.expectationGrade + '\n' + 'Explanation: ' + data.explanationMessage,
+
+      gradeBoard?.id!
+    );
+    console.log(res);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -31,7 +53,7 @@ function GradeForm({ open, onOpenChange, compisitionName }: Props) {
         {/* content */}
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(() => {})} className='space-y-8'>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className='space-y-8'>
             <FormField
               control={form.control}
               name='expectationGrade'
@@ -74,8 +96,8 @@ function GradeForm({ open, onOpenChange, compisitionName }: Props) {
               )}
             />
 
-            <Button type='button' variant='ghost' onClick={() => {}}>
-              Close
+            <Button type='button' variant='ghost' onClick={() => handleShowRequest(gradeBoard?.id ?? '')}>
+              Show Request
             </Button>
             <Button type='submit' disabled={form.formState.isLoading}>
               Send

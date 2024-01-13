@@ -121,7 +121,7 @@ type GradeBoard = {
 };
 
 type StudentGrades = {
-  grades: Grade[];
+  grades: GradeBoard[];
   student_id: string | null;
 };
 
