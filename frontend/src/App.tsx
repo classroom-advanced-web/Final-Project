@@ -9,6 +9,7 @@ import PrivateRoute from './components/private-route/PrivateRoute';
 import NotFoundPage from './pages/not-found/NotFoundPage';
 import InvitePage from './pages/invite/InvitePage';
 import ClassLayout from './components/layout/ClassLayout';
+import AdminClassroom from './components/admin/classroom/AdminClassroom';
 
 const HomePage = lazy(() => import('./pages/home/HomePage'));
 const SignUpPage = lazy(() => import('./pages/sign-up/SignUpPage'));
@@ -57,7 +58,7 @@ function App() {
             element={
               <PrivateRoute>
                 <AdminLayout>
-                  <div>classroom</div>
+                  <AdminClassroom/>
                 </AdminLayout>
               </PrivateRoute>
             }
