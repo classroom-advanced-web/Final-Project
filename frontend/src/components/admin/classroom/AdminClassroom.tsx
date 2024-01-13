@@ -26,6 +26,7 @@ import useAdminClassroom from '@/hooks/useAdminClassroom';
 import { Classroom } from '@/type';
 import { useState } from 'react';
 import { useQueryClient } from 'react-query';
+import adminApi from '@/api/adminApi';
 
 export const columns: ColumnDef<Classroom>[] = [
   {
@@ -118,8 +119,13 @@ export const columns: ColumnDef<Classroom>[] = [
     cell: ({ row }) => {
       const queryClient = useQueryClient();
 
-      const handleChangeBan = async (id: string, status: boolean) => {
+      const handleChangeActive = async (id: string, status: boolean) => {
         try {
+          const res = await adminApi.inactivateClassroom(id, status);
+
+          if (res) {
+            queryClient.invalidateQueries('adminClassroom');
+          }
         } catch (error) {
           console.error(error);
         }
@@ -130,7 +136,7 @@ export const columns: ColumnDef<Classroom>[] = [
             <Button
               variant='outline'
               className='min-w-[120px]'
-              onClick={() => handleChangeBan(row.getValue('id'), false)}
+              onClick={() => handleChangeActive(row.getValue('id'), false)}
             >
               Active
             </Button>
@@ -138,7 +144,7 @@ export const columns: ColumnDef<Classroom>[] = [
             <Button
               variant='destructive'
               className='min-w-[120px]'
-              onClick={() => handleChangeBan(row.getValue('id'), true)}
+              onClick={() => handleChangeActive(row.getValue('id'), true)}
             >
               Inactive
             </Button>
