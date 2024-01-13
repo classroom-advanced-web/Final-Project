@@ -34,7 +34,12 @@ class GradeApi {
     return res.data;
   }
 
-  async replyComment(content: string, grade_id: string, reply_to: string) {
+  async getReply(comment_id: string | undefined) {
+    const res = await instance.get(`/comments/reply/${comment_id}`);
+    return res.data;
+  }
+
+  async replyComment(content: string, grade_id: string | undefined, reply_to: string) {
     const res = await instance.post('/comments', {
       content: content,
       grade: {
