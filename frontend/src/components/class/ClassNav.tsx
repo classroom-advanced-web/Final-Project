@@ -7,7 +7,7 @@ import Loading from '../loading/Loading';
 import { ROLE } from '@/constance/constance';
 
 type Props = {
-  page: 'stream' | 'people' | 'grades' | 'structure' | 'grades-review' | 'student-list';
+  page: 'stream' | 'people' | 'grades' | 'structure' | 'student-list';
 };
 
 const ClassNav = ({ page }: Props) => {
@@ -47,12 +47,7 @@ const ClassNav = ({ page }: Props) => {
             <Button variant='ghost'>Grades</Button>
           </Link>
         </li>
-        <li className={cn('px-4 py-1', page === 'grades-review' && 'border-b-[2px] border-b-blue-700 text-blue-700')}>
-          <Link to={`/grades-review/${id}`}>
-            {' '}
-            <Button variant='ghost'>Grades Review</Button>
-          </Link>
-        </li>
+
         {role?.code !== ROLE.STUDENT && (
           <li className={cn('px-4 py-1', page === 'student-list' && 'border-b-[2px] border-b-blue-700 text-blue-700')}>
             <Link to={`/student-list/${id}`}>

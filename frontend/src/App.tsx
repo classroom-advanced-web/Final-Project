@@ -110,7 +110,7 @@ function App() {
             path='/grades-review/:id'
             element={
               <PrivateRoute>
-                <ClassLayout page='grades-review'>
+                <ClassLayout page='grades'>
                   <GradesReviewPage />
                 </ClassLayout>
               </PrivateRoute>
@@ -126,6 +126,18 @@ function App() {
               </PrivateRoute>
             }
           />
+
+          <Route
+            path='/grades-review/:id/:gradeReviewId'
+            element={
+              <PrivateRoute>
+                <ClassLayout page='grades'>
+                  <GradesReviewPage />
+                </ClassLayout>
+              </PrivateRoute>
+            }
+          />
+
           <Route path='/login' element={<LoginPage />} />
           <Route path='/sign-up' element={<SignUpPage />} />
           <Route path='/landing' element={<LandingPage />} />
