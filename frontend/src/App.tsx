@@ -23,6 +23,7 @@ const ClassPage = lazy(() => import('./pages/class/ClassPage'));
 const StructurePage = lazy(() => import('./pages/structure/StructurePage'));
 const PeoplePage = lazy(() => import('./pages/people/PeoplePage'));
 const StudentListPage = lazy(() => import('./pages/student-list/StudentListPage'));
+const RequestReviewsPage = lazy(() => import('./pages/request-reviews/RequestReviewPage'));
 const GradesPage = lazy(() => import('./pages/grades/GradesPage'));
 const InviteLinkPage = lazy(() => import('./pages/invite-link/InviteLinkPage'));
 const GradesReviewPage = lazy(() => import('./pages/grades/GradesReviewPage'));
@@ -58,7 +59,7 @@ function App() {
             element={
               <PrivateRoute>
                 <AdminLayout>
-                  <AdminClassroom/>
+                  <AdminClassroom />
                 </AdminLayout>
               </PrivateRoute>
             }
@@ -123,6 +124,17 @@ function App() {
               <PrivateRoute>
                 <ClassLayout page='student-list'>
                   <StudentListPage />
+                </ClassLayout>
+              </PrivateRoute>
+            }
+          />
+
+          <Route
+            path='/request-reviews/:id'
+            element={
+              <PrivateRoute>
+                <ClassLayout page='request-reviews'>
+                  <RequestReviewsPage />
                 </ClassLayout>
               </PrivateRoute>
             }
