@@ -2,14 +2,14 @@ import classApi from '@/api/classApi';
 import Loading from '@/components/loading/Loading';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { ROLE } from '@/constance/constance';
+import { useAuth } from '@/hooks/useAuth';
+import { Classroom, Role } from '@/type';
 import { FaArrowTrendUp } from 'react-icons/fa6';
 import { HiDotsVertical } from 'react-icons/hi';
 import { LuUserSquare2 } from 'react-icons/lu';
 import { useQuery } from 'react-query';
 import { Navigate, useNavigate } from 'react-router-dom';
 import './home.css';
-import { useAuth } from '@/hooks/useAuth';
 
 type getClassApi = {
   classroom: Classroom;
@@ -21,7 +21,7 @@ const HomePage = () => {
   const { user } = useAuth();
 
   const navigate = useNavigate();
-  const navigateToClass = (classId: number) => {
+  const navigateToClass = (classId: String) => {
     navigate(`/class/${classId}`);
   };
 

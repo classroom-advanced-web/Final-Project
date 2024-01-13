@@ -5,6 +5,7 @@ import GradeStructureForm from '@/components/structure/GradeStructureForm';
 import GradeStructureTable from '@/components/structure/GradeStructureTable';
 import { ROLE } from '@/constance/constance';
 import { useClassroom } from '@/hooks/useClassroom';
+import { GradeComposition } from '@/type';
 import { useEffect, useState } from 'react';
 import { TiEdit } from 'react-icons/ti';
 import { useParams } from 'react-router-dom';

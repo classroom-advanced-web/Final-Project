@@ -1,6 +1,6 @@
 import { DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/useAuth';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import SockJS from 'sockjs-client';
 import { Client, over } from 'stompjs';
 import Loading from '../loading/Loading';

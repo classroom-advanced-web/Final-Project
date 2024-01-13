@@ -11,6 +11,7 @@ import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useQueryClient } from 'react-query';
 import { useState } from 'react';
+import { Classroom } from '@/type';
 
 type Props = {
   classroom: Classroom;

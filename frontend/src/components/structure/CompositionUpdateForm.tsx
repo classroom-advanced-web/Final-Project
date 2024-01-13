@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import * as z from 'zod';
 import { Button } from '../ui/button';
 import { toast } from '../ui/use-toast';
+import { GradeComposition } from '@/type';
 
 type Props = {
   setItems: any;

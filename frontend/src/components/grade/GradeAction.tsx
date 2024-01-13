@@ -2,17 +2,15 @@ import { useClassroom } from '@/hooks/useClassroom';
 import { writeExcelFile } from '@/lib/utils';
 import Loading from '../loading/Loading';
 
-import classApi from '@/api/classApi';
-import { GradeBoard, GradeComposition, StudentGrades, StudentPreview } from '@/type';
+import gradeApi from '@/api/gradeApi';
+import { GradeComposition, StudentGrades } from '@/type';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { MdOutlineDriveFolderUpload } from 'react-icons/md';
 import { RiFolderDownloadLine } from 'react-icons/ri';
+import { useQueryClient } from 'react-query';
 import { read, utils } from 'xlsx';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
-import gradeApi from '@/api/gradeApi';
-import { useQueryClient } from 'react-query';
-import { ErrorResponse } from 'react-router-dom';
 
 type Props = {
   gradeComposition: GradeComposition[];
