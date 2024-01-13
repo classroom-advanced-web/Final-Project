@@ -100,7 +100,7 @@ class ClassApi {
 
   joinClassEmail = async (invitationId: string) => {
     const res = await instance.post(`/classrooms/join/email`, {
-      invitation_id: +invitationId
+      invitation_id: invitationId
     });
     return res.data;
   };
