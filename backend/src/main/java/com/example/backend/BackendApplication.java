@@ -1,7 +1,10 @@
 package com.example.backend;
 
 import com.example.backend.constants.GenderEnum;
+import com.example.backend.constants.RoleEnum;
+import com.example.backend.entities.Role;
 import com.example.backend.entities.User;
+import com.example.backend.repositories.RoleRepository;
 import com.example.backend.repositories.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -20,11 +23,33 @@ public class BackendApplication {
     @Bean
     CommandLineRunner run(
             UserRepository userRepository,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            RoleRepository roleRepository
 
     ) {
         return args -> {
             try {
+
+
+                roleRepository.save(Role.builder()
+                        .name(RoleEnum.Owner.name())
+                        .code(1L)
+                        .build()
+                );
+
+                roleRepository.save(Role.builder()
+                        .name(RoleEnum.Teacher.name())
+                        .code(2L)
+                        .build()
+                );
+
+                roleRepository.save(Role.builder()
+                        .name(RoleEnum.Student.name())
+                        .code(3L)
+                        .build()
+                );
+
+
                 userRepository.save(
                         User.builder()
                                 .firstName("Toan")
