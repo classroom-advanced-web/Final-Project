@@ -35,5 +35,9 @@ public class UserDTO {
 
     @JsonProperty("student_id")
     private String studentId;
+    @JsonProperty("is_revoked")
+    private Boolean isRevoked;
+    @JsonProperty("is_admin")
+    private Boolean isAdmin;
 
 }

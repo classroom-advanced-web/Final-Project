@@ -27,4 +27,7 @@ public class ClassroomDTO {
     @JsonProperty("role")
     RoleDTO role;
 
+    @JsonProperty("is_revoked")
+    Boolean isRevoked;
+
 }

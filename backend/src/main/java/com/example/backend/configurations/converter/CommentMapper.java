@@ -26,6 +26,7 @@ public class CommentMapper implements IMapper<Comment, CommentDTO>{
                 .replyTo(obj.getReplyTo() == null ? null : toDTO(obj.getReplyTo()))
                 .user(userMapper.toDTO(obj.getUser()))
                 .grade(gradeMapper.toDTO(obj.getGrade()))
+                .createdAt(obj.getCreatedDate())
                 .build();
     }
 }

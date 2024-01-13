@@ -14,5 +14,7 @@ public interface ICommentService {
 
     List<CommentDTO> loadComment(String gradeId, String classroomId);
 
+    List<CommentDTO> loadReplyComment(String commentId);
+
 
 }
