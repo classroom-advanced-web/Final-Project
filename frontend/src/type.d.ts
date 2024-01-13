@@ -57,6 +57,7 @@ type GradeComposition = {
   scale: number;
   weight?: number;
   classroom_id?: string;
+  is_final?: boolean;
 };
 
 type NotificationContent = {
