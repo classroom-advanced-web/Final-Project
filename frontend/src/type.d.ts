@@ -96,10 +96,10 @@ type CommentOnGradeReview = {
 // };
 
 type StudentPreview = {
-  student_name: String;
-  student_id: String;
-  account_id: String | null;
-  classroom_id: String;
+  student_name: string;
+  student_id: string;
+  account_id: string | null;
+  classroom_id: string;
 };
 
 type DefaultGrade = {

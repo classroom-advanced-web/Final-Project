@@ -10,17 +10,17 @@ import { RiFolderDownloadLine } from 'react-icons/ri';
 import { read, utils } from 'xlsx';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
+import { useQueryClient } from 'react-query';
 
 type Props = {
   students: StudentPreview[];
-  setStudents: (students: StudentPreview[]) => void;
 };
 
-const StudentListAction = ({ students, setStudents }: Props) => {
+const StudentListAction = ({ students }: Props) => {
   const { classDetail, isLoading } = useClassroom();
   const [file, setFile] = useState<File | undefined>(undefined);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const queryClient = useQueryClient();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const StudentListAction = ({ students, setStudents }: Props) => {
 
         return {
           student_id: item['Student ID'],
-          account_id: item['Account ID'] == '' ? null : item['Account ID'],
+          account_id: item['Account ID'] === '' ? null : item['Account ID'],
           student_name: item['Full Name'],
           classroom_id: classDetail.id
         };
@@ -58,13 +58,7 @@ const StudentListAction = ({ students, setStudents }: Props) => {
         const res: StudentPreview[] = await classApi.mapStudentId(processedData);
 
         if (res) {
-          const newData = [...students];
-          res.reverse();
-          res.forEach((student) => {
-            if (newData.find((item) => item.student_id === student.student_id)) return;
-            newData.unshift(student);
-          });
-          setStudents(newData);
+          queryClient.invalidateQueries(['studentList', classDetail.id]);
         }
       } catch (error: any) {
         if (error?.response) {
