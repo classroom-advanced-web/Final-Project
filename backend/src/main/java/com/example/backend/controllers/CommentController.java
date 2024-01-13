@@ -21,10 +21,10 @@ public class CommentController {
         );
     }
 
-    @GetMapping()
-    public ResponseEntity<List> loadComment(@RequestParam("grade_id") String gradeId) {
+    @GetMapping("/classroom/{classroom_id}")
+    public ResponseEntity<List> loadComment(@RequestParam(name = "grade_id", required = false) String gradeId, @PathVariable("classroom_id") String classroomId) {
         return ResponseEntity.ok(
-                commentService.loadComment(gradeId)
+                commentService.loadComment(gradeId, classroomId)
         );
     }
 

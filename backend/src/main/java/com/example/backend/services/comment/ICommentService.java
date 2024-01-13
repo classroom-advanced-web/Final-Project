@@ -10,9 +10,9 @@ public interface ICommentService {
 
     List<CommentDTO> loadCommentForStudent(String userId, String gradeId);
 
-    List<CommentDTO> loadCommentForTeacher(String gradeId);
+    List<CommentDTO> loadCommentForTeacher(String userId, String classroomId);
 
-    List<CommentDTO> loadComment(String gradeId);
+    List<CommentDTO> loadComment(String gradeId, String classroomId);
 
 
 }

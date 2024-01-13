@@ -50,5 +50,12 @@ public class NotificationController {
         );
     }
 
+    @GetMapping("/status/all")
+    public ResponseEntity<Map> setAllNotificationsAsRead() {
+        return ResponseEntity.ok(
+                Map.of("message", notificationService.setAllNotificationsAsRead())
+        );
+    }
+
 
 }
