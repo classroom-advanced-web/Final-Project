@@ -60,10 +60,10 @@ const CompisitionUpdateForm = ({ setItems, items, closeForm, oldItem }: Props) =
             name='compositionName'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Grade name:</FormLabel>
+                <FormLabel>Composition name:</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder='Class name (required)'
+                    placeholder='Composition name (required)'
                     {...field}
                     className={cn(
                       form.formState.errors.compositionName && 'border-red-400 focus-visible:ring-red-400',
@@ -84,7 +84,7 @@ const CompisitionUpdateForm = ({ setItems, items, closeForm, oldItem }: Props) =
                 <FormLabel>Scale</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder='Class name (required)'
+                    placeholder='Scale (required)'
                     {...field}
                     className={cn(form.formState.errors.scale && 'border-red-400 focus-visible:ring-red-400', 'pr-8')}
                   />

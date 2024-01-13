@@ -29,6 +29,7 @@ type ProfileFields = {
   lastName: string;
   birthday: Date;
   gender: string;
+  studentId: string;
 };
 
 type Classroom = {

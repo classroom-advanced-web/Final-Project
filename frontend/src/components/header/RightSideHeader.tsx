@@ -1,5 +1,5 @@
 import { useAuth } from '@/hooks/useAuth';
-import { LogOut, User } from 'lucide-react';
+import { Lock, LogOut, User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import UserAvatar from '../UserAvatar';
 import Loading from '../loading/Loading';
@@ -48,6 +48,16 @@ const RightSideHeader = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent className='w-fit px-4 py-5 lg:min-w-[240px]'>
           <ul className='flex flex-col justify-evenly gap-5'>
+            {user.is_admin && (
+              <li className=''>
+                <Link to='/admin/user' className='w-full'>
+                  <Button variant='link' size={'lg'} className='grid w-full grid-cols-2 gap-4'>
+                    <Lock size={20} className='ml-8' />
+                    <span className='mr-auto'>Admin</span>
+                  </Button>
+                </Link>
+              </li>
+            )}
             <li className=''>
               <Link to='/profile' className='w-full'>
                 <Button variant='link' size={'lg'} className='grid w-full grid-cols-2 gap-4'>

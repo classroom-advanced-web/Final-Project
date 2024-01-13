@@ -37,6 +37,10 @@ const HomePage = () => {
 
   if (!data) return;
 
+  if (user?.is_admin) {
+    return <Navigate to='/admin/user' replace />;
+  }
+
   const classes = data;
   return (
     <main className='container h-[1200px]'>

@@ -43,7 +43,8 @@ export const ProfileSchema = z.object({
       console.log(date.getFullYear());
       return date < now && date.getFullYear() > 1900;
     }, 'Please enter a valid birthday'),
-  gender: z.string().min(1, 'Please enter your gender').trim()
+  gender: z.string().min(1, 'Please enter your gender').trim(),
+  studentId: z.string().min(1, 'Please enter your student ID').trim()
 });
 
 export const resetPasswordSchema = z

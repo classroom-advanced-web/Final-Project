@@ -2,14 +2,14 @@ import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 
 import './App.css';
+import AdminClassroom from './components/admin/classroom/AdminClassroom';
 import Header from './components/header/Header';
+import ClassLayout from './components/layout/ClassLayout';
 import LoadingOverlay from './components/loading/LoadingOverlay';
 import LoadingPage from './components/loading/LoadingPage';
 import PrivateRoute from './components/private-route/PrivateRoute';
-import NotFoundPage from './pages/not-found/NotFoundPage';
 import InvitePage from './pages/invite/InvitePage';
-import ClassLayout from './components/layout/ClassLayout';
-import AdminClassroom from './components/admin/classroom/AdminClassroom';
+import NotFoundPage from './pages/not-found/NotFoundPage';
 
 const HomePage = lazy(() => import('./pages/home/HomePage'));
 const SignUpPage = lazy(() => import('./pages/sign-up/SignUpPage'));

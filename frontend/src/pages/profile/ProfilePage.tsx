@@ -84,6 +84,12 @@ const ProfilePage = () => {
                   <p>{user.gender.charAt(0).toUpperCase() + user.gender.slice(1).toLowerCase()}</p>
                 </div>
               </div>
+              <div className='mt-5 grid grid-cols-2 gap-4'>
+                <div>
+                  <h4 className='mb-2 text-lg font-semibold'>Student ID:</h4>
+                  <p>{user.student_id}</p>
+                </div>
+              </div>
 
               <div className='mt-8'>
                 <button className='rounded-md bg-blue-500 px-4 py-2 text-white' onClick={setEditMode}>

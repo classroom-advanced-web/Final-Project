@@ -25,20 +25,22 @@ const ProfileForm = ({ setIsEditMode, user }: Props) => {
       firstName: user.firstName,
       lastName: user.lastName,
       birthday: formatDate(user.dob),
-      gender: user.gender
+      gender: user.gender,
+      studentId: user.student_id ?? ''
     }
   });
 
   const onSubmit = async (data: z.infer<typeof ProfileSchema>) => {
     setLoading(true);
     try {
-      const { birthday, firstName, gender, lastName } = data;
+      const { birthday, firstName, gender, lastName, studentId } = data;
       const res = await profileApi.updateProfile({
         id: user.id,
         birthday: new Date(birthday),
         firstName,
         gender,
-        lastName
+        lastName,
+        studentId
       });
       console.log(res);
 
@@ -148,6 +150,31 @@ const ProfileForm = ({ setIsEditMode, user }: Props) => {
                     <SelectItem value='FEMALE'>Female</SelectItem>
                   </SelectContent>
                 </Select>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <div className='grid grid-cols-2 gap-2'>
+          <FormField
+            control={form.control}
+            name='studentId'
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Student ID:</FormLabel>
+
+                <FormControl>
+                  <Input
+                    placeholder='Student ID'
+                    type='text'
+                    {...field}
+                    className={cn(
+                      form.formState.errors.studentId && 'border-red-400 focus-visible:ring-red-400',
+                      'pr-8'
+                    )}
+                  />
+                </FormControl>
 
                 <FormMessage />
               </FormItem>
