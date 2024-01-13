@@ -69,7 +69,7 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     @JsonIgnore
-    private List<Grade> grades;
+    private List<Comment> comments;
 
     private boolean revoked;
 
