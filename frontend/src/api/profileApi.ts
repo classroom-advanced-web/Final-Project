@@ -8,7 +8,8 @@ class ProfileApi {
       first_name: profile.firstName,
       last_name: profile.lastName,
       dob: profile.birthday,
-      gender: profile.gender
+      gender: profile.gender,
+      student_id: profile.studentId
     });
 
     return res.data;

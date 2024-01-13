@@ -27,6 +27,8 @@ import { Classroom } from '@/type';
 import { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import adminApi from '@/api/adminApi';
+import { useAuth } from '@/hooks/useAuth';
+import { Navigate } from 'react-router-dom';
 
 export const columns: ColumnDef<Classroom>[] = [
   {
@@ -182,6 +184,12 @@ const AdminClassroom = () => {
     }
   });
 
+  const { user } = useAuth();
+
+  if (!user?.is_admin) {
+    return <Navigate to='/' />;
+  }
+
   if (isLoading) {
     return <Loading />;
   }
@@ -194,9 +202,9 @@ const AdminClassroom = () => {
     <div className='w-full'>
       <div className='flex items-center py-4'>
         <Input
-          placeholder='Filter emails...'
-          value={(table.getColumn('email')?.getFilterValue() as string) ?? ''}
-          onChange={(event) => table.getColumn('email')?.setFilterValue(event.target.value)}
+          placeholder='Filter class name...'
+          value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
+          onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
           className='max-w-sm'
         />
         <DropdownMenu>

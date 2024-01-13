@@ -42,7 +42,6 @@ const CompositionForm = ({ setItems, items, closeForm }: Props) => {
             JSON.stringify({
               sender_id: user?.id,
               classroom_id: classroomId,
-              // receiver_id: '5f28c680-7e31-4a9d-86c6-567f02962078',
               title: 'New Grade Structure',
               content: 'New Grade Structure has been created'
             })
@@ -81,10 +80,10 @@ const CompositionForm = ({ setItems, items, closeForm }: Props) => {
             name='compositionName'
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Grade name:</FormLabel>
+                <FormLabel>Composition name:</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder='Grade name (required)'
+                    placeholder='Composition name (required)'
                     {...field}
                     className={cn(
                       form.formState.errors.compositionName && 'border-red-400 focus-visible:ring-red-400',
@@ -105,7 +104,7 @@ const CompositionForm = ({ setItems, items, closeForm }: Props) => {
                 <FormLabel>Scale</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder='Class name (required)'
+                    placeholder='Scale (required)'
                     {...field}
                     className={cn(form.formState.errors.scale && 'border-red-400 focus-visible:ring-red-400', 'pr-8')}
                   />
