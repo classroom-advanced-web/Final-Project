@@ -21,4 +21,6 @@ public class NotificationDTO {
     String senderId;
     @JsonProperty("created_at")
     Date createdAt;
+    @JsonProperty("receiver_id")
+    String receiverId;
 }
