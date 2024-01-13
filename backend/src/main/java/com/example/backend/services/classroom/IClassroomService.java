@@ -29,4 +29,6 @@ public interface IClassroomService {
 
     StudentsClassroomRequestDTO saveNonUserToClassroom(String studentId, String studentName, String classroomId) throws AccessDeniedException;
 
+    List<StudentsClassroomRequestDTO> processStudentId(List<StudentsClassroomRequestDTO> body);
+
 }
