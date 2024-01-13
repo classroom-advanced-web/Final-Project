@@ -35,4 +35,11 @@ public class CommentController {
         );
     }
 
+    @PutMapping("/status/{comment_id}")
+    public ResponseEntity<CommentDTO> changeShutDownStatus(@PathVariable("comment_id") String commentId, @RequestParam("status") Boolean status, @RequestParam("classroom_id") String classroomId) {
+        return ResponseEntity.ok(
+                commentService.changeShutDownStatus(commentId, status, classroomId)
+        );
+    }
+
 }

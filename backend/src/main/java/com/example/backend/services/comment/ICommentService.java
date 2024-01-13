@@ -16,5 +16,9 @@ public interface ICommentService {
 
     List<CommentDTO> loadReplyComment(String commentId);
 
+    CommentDTO changeShutDownStatus(String commentId, Boolean status, String classroomId);
+
+
+
 
 }

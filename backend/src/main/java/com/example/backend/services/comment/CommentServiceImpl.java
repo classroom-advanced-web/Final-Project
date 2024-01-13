@@ -10,6 +10,7 @@ import com.example.backend.repositories.CommentRepository;
 import com.example.backend.repositories.GradeCompositionRepository;
 import com.example.backend.repositories.GradeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -102,6 +103,23 @@ public class CommentServiceImpl implements ICommentService{
             return comments.stream()
                     .map(comment -> commentMapper.toDTO(comment))
                     .toList();
+    }
+
+    @Override
+    public CommentDTO changeShutDownStatus(String commentId, Boolean status, String classroomId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classroomId)
+                .orElseThrow(
+                        () -> new NotFoundException("User is not in this class")
+                );
+        if(classUser.getRole().getName().equals(RoleEnum.Teacher.name()) || classUser.getRole().getName().equals(RoleEnum.Owner.name())){
+            Comment comment = commentRepository.findById(commentId).orElseThrow(
+                    () -> new NotFoundException("Comment not found")
+            );
+            comment.setShutDown(status);
+            return commentMapper.toDTO(commentRepository.save(comment));
+        }
+        throw new AccessDeniedException("Role is invalid");
     }
 
 }

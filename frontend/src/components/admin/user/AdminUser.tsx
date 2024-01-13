@@ -27,6 +27,8 @@ import useAdminUser from '@/hooks/useAdminUser';
 import Loading from '@/components/loading/Loading';
 import adminApi from '@/api/adminApi';
 import { useQueryClient } from 'react-query';
+import { useAuth } from '@/hooks/useAuth';
+import { Navigate } from 'react-router-dom';
 
 export const columns: ColumnDef<User>[] = [
   {
@@ -168,6 +170,12 @@ const AdminUser = () => {
       rowSelection
     }
   });
+
+  const { user } = useAuth();
+
+  if (!user?.is_admin) {
+    return <Navigate to='/' />;
+  }
 
   if (isLoading) {
     return <Loading />;
