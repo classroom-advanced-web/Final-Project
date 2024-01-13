@@ -16,6 +16,17 @@ class GradeApi {
     const res = await instance.post('/grades/board/file-update', JSON.stringify(grades));
     return res.data;
   }
+
+  async requestReview(content: string, grade_id: string) {
+    const res = await instance.post('/comments', {
+      content: content,
+      grade: {
+        id: grade_id
+      },
+      reply_to: null
+    });
+    return res.data;
+  }
 }
 
 const gradeApi = new GradeApi();
