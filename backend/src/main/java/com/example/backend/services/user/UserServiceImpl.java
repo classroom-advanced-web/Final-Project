@@ -390,7 +390,7 @@ public class UserServiceImpl implements IUserService {
         if(!user.isAdmin()) {
             throw new AccessDeniedException("You are not admin");
         }
-        User foundUser = userRepository.findById(userId).orElseThrow(
+        User foundUser = userRepository.findByIdForAdmin(userId).orElseThrow(
                 () -> new NotFoundException("User not found")
         );
         foundUser.setRevoked(status);
@@ -404,7 +404,7 @@ public class UserServiceImpl implements IUserService {
         if(!user.isAdmin()) {
             throw new AccessDeniedException("You are not admin");
         }
-        Classroom classroom = classroomRepository.findById(classroomId).orElseThrow(
+        Classroom classroom = classroomRepository.findByIdForAdmin(classroomId).orElseThrow(
                 () -> new NotFoundException("Classroom not found")
         );
         classroom.setRevoked(status);

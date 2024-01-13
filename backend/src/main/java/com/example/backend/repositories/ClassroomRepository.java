@@ -16,4 +16,9 @@ public interface ClassroomRepository extends JpaRepository<Classroom, String> {
                 nativeQuery = true
         )
         List<Classroom> findAllByAdmin();
+
+        @Query(value = "SELECT * FROM classrooms c WHERE c.class_id = ?1 ",
+                nativeQuery = true
+        )
+        Optional<Classroom> findByIdForAdmin(String classroomId);
 }

@@ -17,4 +17,9 @@ public interface UserRepository extends JpaRepository<User, String> {
             nativeQuery = true
     )
     List<User> findByIdNotAdmin(List<String> userIds);
+
+    @Query(value = "SELECT * FROM users u WHERE u.user_id = ?1 ",
+            nativeQuery = true
+    )
+    Optional<User> findByIdForAdmin(String userId);
 }
