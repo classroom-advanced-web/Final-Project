@@ -23,6 +23,10 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useState } from 'react';
 import { User } from '@/type';
+import useAdminUser from '@/hooks/useAdminUser';
+import Loading from '@/components/loading/Loading';
+import adminApi from '@/api/adminApi';
+import { useQueryClient } from 'react-query';
 
 const data: User[] = [
   {
@@ -111,10 +115,10 @@ export const columns: ColumnDef<User>[] = [
     header: 'Date of Birth',
     cell: ({ row }) => {
       const dob = row.getValue('dob') as Date;
-      const formattedDob = dob.toLocaleDateString('en-GB');
-      // format it to dd/mm/yyyy
+      if (!dob) return null;
+      const formatDob = new Date(dob).toLocaleDateString('en-GB');
 
-      return <div className='capitalize'>{formattedDob}</div>;
+      return <div className='capitalize'>{formatDob}</div>;
     }
   },
   {
@@ -130,21 +134,44 @@ export const columns: ColumnDef<User>[] = [
     )
   },
   {
-    accessorKey: 'banned',
+    accessorKey: 'is_revoked',
     header: '',
-    cell: ({ row }) => (
-      <div>
-        {row.getValue('banned') ? (
-          <Button variant='destructive' className='min-w-[120px]'>
-            Ban Account
-          </Button>
-        ) : (
-          <Button variant='outline' className='min-w-[120px]'>
-            Unbanned
-          </Button>
-        )}
-      </div>
-    )
+    cell: ({ row }) => {
+      const queryClient = useQueryClient();
+
+      const handleChangeBan = async (id: string, status: boolean) => {
+        try {
+          const res = await adminApi.banUser(id, status);
+
+          if (res) {
+            queryClient.invalidateQueries('users');
+          }
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      return (
+        <div>
+          {row.getValue('is_revoked') ? (
+            <Button
+              variant='outline'
+              className='min-w-[120px]'
+              onClick={() => handleChangeBan(row.getValue('id'), false)}
+            >
+              Unbanned
+            </Button>
+          ) : (
+            <Button
+              variant='destructive'
+              className='min-w-[120px]'
+              onClick={() => handleChangeBan(row.getValue('id'), true)}
+            >
+              Ban Account
+            </Button>
+          )}
+        </div>
+      );
+    }
   }
 ];
 
@@ -154,8 +181,10 @@ const AdminUser = () => {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = useState({});
 
+  const { users, isLoading } = useAdminUser();
+
   const table = useReactTable({
-    data,
+    data: users ?? [],
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -172,6 +201,14 @@ const AdminUser = () => {
       rowSelection
     }
   });
+
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (!users) {
+    return null;
+  }
 
   return (
     <div className='w-full'>

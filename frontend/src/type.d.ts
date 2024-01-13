@@ -10,6 +10,8 @@ type User = {
   gender: 'MALE' | 'FEMALE';
   banned?: boolean;
   student_id?: string;
+  is_revoked?: boolean;
+  is_admin?: boolean;
 };
 
 type RegisterDTO = {
