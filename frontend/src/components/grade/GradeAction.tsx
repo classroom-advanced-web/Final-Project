@@ -10,7 +10,8 @@ import { RiFolderDownloadLine } from 'react-icons/ri';
 import { read, utils } from 'xlsx';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
-import useGradeBoard from '@/hooks/useGradeBoard';
+import gradeApi from '@/api/gradeApi';
+import { useQueryClient } from 'react-query';
 
 type Props = {
   gradeComposition: GradeComposition[];
@@ -23,61 +24,65 @@ const GradeAction = ({ gradeBoard, gradeComposition }: Props) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  //   useEffect(() => {
-  //     (async () => {
-  //       if (!file) return;
-  //       const f = await file.arrayBuffer();
-  //       const wb = read(f);
-  //       const ws = wb.Sheets[wb.SheetNames[0]];
-  //       const data = utils.sheet_to_json(ws);
+  useEffect(() => {
+    (async () => {
+      if (!file) return;
+      const f = await file.arrayBuffer();
+      const wb = read(f);
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const data = utils.sheet_to_json(ws);
 
-  //       const invalidIndexes: number[] = [];
-  //       const processedData = data.map((item: any, index) => {
-  //         if (!item['Student ID']) {
-  //           invalidIndexes.push(index + 2);
-  //         }
+      const invalidIndexes: number[] = [];
+      const processedData = data.map((item: any, index) => {
+        if (!item['Student ID']) {
+          invalidIndexes.push(index + 2);
+        }
 
-  //         return {
-  //           student_id: item['Student ID'],
-  //           account_id: item['Account ID'] == '' ? null : item['Account ID'],
-  //           student_name: item['Full Name'],
-  //           classroom_id: classDetail.id
-  //         };
-  //       });
+        let grades = gradeComposition.map((composition) => {
+          return {
+            grade_composition: {
+              id: composition.id
+            },
+            value: item[composition.name] === '' ? null : item[composition.name]
+          };
+        });
 
-  //       if (invalidIndexes.length > 0) {
-  //         const index = invalidIndexes.join(', ');
-  //         toast({
-  //           variant: 'destructive',
-  //           title: `Invalid data at row ${index}`
-  //         });
-  //         return;
-  //       }
+        return {
+          student_id: item['Student ID'],
+          grades
+        };
+      });
 
-  //       try {
-  //         const res: StudentPreview[] = await classApi.mapStudentId(processedData);
+      if (invalidIndexes.length > 0) {
+        const index = invalidIndexes.join(', ');
+        toast({
+          variant: 'destructive',
+          title: `Invalid data at row ${index}`
+        });
+        return;
+      }
 
-  //         if (res) {
-  //           const newData = [...students];
-  //           res.reverse();
-  //           res.forEach((student) => {
-  //             if (newData.find((item) => item.student_id === student.student_id)) return;
-  //             newData.unshift(student);
-  //           });
-  //           setStudents(newData);
-  //         }
-  //       } catch (error: any) {
-  //         if (error?.response) {
-  //           toast({
-  //             variant: 'destructive',
-  //             title: error.response.data.error
-  //           });
-  //         }
-  //         console.error(error);
-  //       }
-  //     })();
-  //   }, [file?.name]);
+      try {
+        const res = await gradeApi.importGrades(processedData);
+        if (res) {
+          toast({
+            title: 'Import successfully'
+          });
+          queryClient.invalidateQueries(['gradeBoard', gradeComposition[0].classroom_id]);
+        }
+      } catch (error: any) {
+        if (error?.response) {
+          toast({
+            variant: 'destructive',
+            title: error.response.data.error
+          });
+        }
+        console.error(error);
+      }
+    })();
+  }, [file?.name]);
 
   if (isLoading) return <Loading />;
   if (!classDetail) return null;
@@ -95,7 +100,6 @@ const GradeAction = ({ gradeBoard, gradeComposition }: Props) => {
       let compositionName: any = {};
       gradeComposition.forEach((composition) => {
         compositionName[composition.name] = '';
-        console.log({ compositionName });
       });
       data.push({
         'Student ID': '',
@@ -106,17 +110,17 @@ const GradeAction = ({ gradeBoard, gradeComposition }: Props) => {
       for (let i = 0; i < gradeBoard.length; i++) {
         compositionName = {};
         for (let j = 0; j < gradeBoard[i].grades.length; j++) {
-          console.log(gradeBoard[i].grades);
-          compositionName[gradeBoard[i].grades[j].grade_composition.name] = gradeBoard[i].grades[j].value;
+          compositionName[gradeBoard[i].grades[j].grade_composition.name] = gradeBoard[i].grades[j].id
+            ? gradeBoard[i].grades[j].value
+            : '';
         }
         data.push({
           'Student ID': gradeBoard[i].student_id,
           ...compositionName
         });
       }
-      console.log({ compositionName });
     }
-    writeExcelFile(data, `students - ${classDetail.name}.xlsx`);
+    writeExcelFile(data, `grades - ${classDetail.name}.xlsx`);
   };
 
   const handleImportExcel = () => {
@@ -124,7 +128,7 @@ const GradeAction = ({ gradeBoard, gradeComposition }: Props) => {
   };
 
   return (
-    <section className='flex items-center gap-2'>
+    <section className='container flex items-center justify-end gap-2 py-3'>
       <Button variant={'outline'} className='flex items-center gap-3' onClick={handleExportExcel}>
         <span className='text-xl'>
           <RiFolderDownloadLine />
