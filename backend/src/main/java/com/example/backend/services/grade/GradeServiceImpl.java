@@ -120,7 +120,7 @@ public class GradeServiceImpl implements IGradeService{
             Grade grade = gradeRepository.findByStudentIdAndGradeCompositionId(user.getStudentId(), gradeComposition.getId())
                     .orElse(null);
 
-            if(grade != null) {
+            if(grade != null && gradeComposition.isFinal()) {
                 gradeDTOs.add(gradeMapper.toDTO(grade));
             } else {
                 gradeDTOs.add(GradeDTO.builder()
