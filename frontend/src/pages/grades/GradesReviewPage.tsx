@@ -1,5 +1,4 @@
 import { GradeReview } from '@/type';
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/table';
 import './ReviewComponent';
 import ReviewComponent from './ReviewComponent';
 import { useParams } from 'react-router-dom';

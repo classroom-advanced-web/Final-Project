@@ -5,6 +5,7 @@ import { MdPersonAddAlt } from 'react-icons/md';
 import InviteModal from './InviteModal';
 import TeacherRow from './TeacherRow';
 import Loading from '../loading/Loading';
+import { ClassMember } from '@/type';
 
 type Props = {
   teachers: ClassMember[];

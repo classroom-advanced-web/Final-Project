@@ -9,6 +9,7 @@ import { arrayMove } from 'react-sortable-hoc';
 import SortableTable from '../sortable/SortableTable';
 import CompositionForm from './CompisitionForm';
 import CompisitionUpdateForm from './CompositionUpdateForm';
+import { GradeComposition } from '@/type';
 
 type Props = {
   open: boolean;

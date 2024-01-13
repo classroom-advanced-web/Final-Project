@@ -1,3 +1,4 @@
+import { RegisterDTO } from '@/type';
 import instance from './axiosConfig';
 
 class AuthApi {

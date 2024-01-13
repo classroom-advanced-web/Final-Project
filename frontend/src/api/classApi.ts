@@ -139,6 +139,11 @@ class ClassApi {
     return res.data;
   };
 
+  finalizeComposition = async (compositionId: String, status: boolean) => {
+    const res = await instance.put(`/grade-composition/final-status/${compositionId}?is_final=${status}`, {});
+    return res.data;
+  };
+
   getStudentList = async (classroomId: string) => {
     const res = await instance.get(`/classrooms/students/${classroomId}`);
     return res.data;

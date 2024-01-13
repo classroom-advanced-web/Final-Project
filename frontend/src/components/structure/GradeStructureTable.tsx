@@ -1,4 +1,5 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { GradeComposition } from '@/type';
 
 type Props = {
   gradeCompositions: GradeComposition[];

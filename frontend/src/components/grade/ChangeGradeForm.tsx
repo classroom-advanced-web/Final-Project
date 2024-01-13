@@ -1,4 +1,3 @@
-import classApi from '@/api/classApi';
 import gradeApi from '@/api/gradeApi';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -8,11 +7,10 @@ import { cn } from '@/lib/utils';
 import { changeGradeSchema } from '@/schema/formSchema';
 import { DefaultGrade } from '@/type';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { DialogDescription } from '@radix-ui/react-dialog';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQueryClient } from 'react-query';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import * as z from 'zod';
 
 type Props = {

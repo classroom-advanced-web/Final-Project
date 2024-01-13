@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import authApi from '@/api/authApi';
+import { RegisterDTO, User } from '@/type';
 import { createContext, useState } from 'react';
 
 type AuthContext = {
