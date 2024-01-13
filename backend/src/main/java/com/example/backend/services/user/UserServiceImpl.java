@@ -8,6 +8,7 @@ import com.example.backend.constants.AppConstant;
 import com.example.backend.constants.GenderEnum;
 import com.example.backend.dtos.*;
 import com.example.backend.entities.ClassUser;
+import com.example.backend.entities.Classroom;
 import com.example.backend.entities.OTP;
 import com.example.backend.entities.User;
 import com.example.backend.exceptions.AuthenticationErrorException;
@@ -26,6 +27,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -185,6 +187,8 @@ public class UserServiceImpl implements IUserService {
             ignoreProperties.add("id");
             ignoreProperties.add("email");
             ignoreProperties.add("isActivated");
+            ignoreProperties.add("isAdmin");
+            ignoreProperties.add("isRevoked");
             BeanUtils.copyProperties(userDTO, existingUser, ignoreProperties.toArray(new String[0]));
             existingUser.setGender(userDTO.getGender() == null ? "UNKNOWN" : userDTO.getGender().name());
 
@@ -365,6 +369,46 @@ public class UserServiceImpl implements IUserService {
                 })
                 .collect(Collectors.toList());
 
+    }
+
+    @Override
+    public List<UserDTO> getAllUsers() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!user.isAdmin()) {
+            throw new AccessDeniedException("You are not admin");
+        }
+        return userRepository.findByIdNotIn(List.of(user.getId())).stream()
+                .map(userIMapper::toDTO)
+                .collect(Collectors.toList());
+
+    }
+
+    @Override
+    public String changeRevokeStatusOfUser(String userId, Boolean status) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!user.isAdmin()) {
+            throw new AccessDeniedException("You are not admin");
+        }
+        User foundUser = userRepository.findById(userId).orElseThrow(
+                () -> new NotFoundException("User not found")
+        );
+        foundUser.setRevoked(status);
+        userRepository.save(foundUser);
+        return "Success";
+    }
+
+    @Override
+    public String changeRevokeStatusOfClassroom(String classroomId, Boolean status) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!user.isAdmin()) {
+            throw new AccessDeniedException("You are not admin");
+        }
+        Classroom classroom = classroomRepository.findById(classroomId).orElseThrow(
+                () -> new NotFoundException("Classroom not found")
+        );
+        classroom.setRevoked(status);
+        classroomRepository.save(classroom);
+        return "Success";
     }
 
     // Helper method to get null property names from an object

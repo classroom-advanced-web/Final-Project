@@ -59,6 +59,10 @@ public class User implements UserDetails {
     @Column(name = "student_id", unique = true)
     private String studentId;
 
+    @Column(name = "is_admin")
+    private boolean isAdmin;
+
+
     @OneToMany(mappedBy = "receiver")
     @JsonIgnore
     private List<ReceivedNotification> receivedNotifications;
