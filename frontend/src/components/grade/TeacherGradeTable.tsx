@@ -12,6 +12,7 @@ import ChangeGradeForm from './ChangeGradeForm';
 import GradeAction from './GradeAction';
 import { FaCheckSquare } from 'react-icons/fa';
 import { ImCheckboxUnchecked } from 'react-icons/im';
+import { useToast } from '../ui/use-toast';
 
 const TeacherGradeTable = () => {
   const [items, setItems] = useState<GradeComposition[]>([]);
@@ -26,6 +27,7 @@ const TeacherGradeTable = () => {
   });
 
   const { gradeBoard, isLoading } = useGradeBoard();
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchStructure = async () => {
@@ -45,10 +47,21 @@ const TeacherGradeTable = () => {
     fetchStructure();
   }, []);
 
-  const handleCheck = (index: number) => {
+  const handleCheck = async (compositionId: String, index: number) => {
     const newCheckList: boolean[] = [...checkList];
     newCheckList[index] = !newCheckList[index];
     setCheckList(newCheckList);
+    try {
+      await classApi.finalizeComposition(compositionId, newCheckList[index]);
+    } catch (error: any) {
+      if (error?.response) {
+        toast({
+          title: error.response.data.error,
+          variant: 'destructive'
+        });
+      }
+      setCheckList(checkList);
+    }
   };
 
   if (isLoading) return <Loading />;
@@ -67,7 +80,10 @@ const TeacherGradeTable = () => {
               <TableHead key={String(item.id)} className=' text-tight w-[132px]'>
                 <div className='flex items-center justify-end gap-2'>
                   <span>{item.name}</span>
-                  <span className='cursor-pointer transition-all hover:opacity-60' onClick={() => handleCheck(index)}>
+                  <span
+                    className='cursor-pointer transition-all hover:opacity-60'
+                    onClick={() => handleCheck(item.id, index)}
+                  >
                     {checkList[index] ? <FaCheckSquare /> : <ImCheckboxUnchecked />}
                   </span>
                 </div>

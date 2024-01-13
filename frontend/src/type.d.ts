@@ -1,4 +1,5 @@
 import { classroom } from '@/assets/classroom.svg';
+
 type User = {
   id: string;
   email: string;
