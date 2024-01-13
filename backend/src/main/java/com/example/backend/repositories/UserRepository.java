@@ -13,11 +13,13 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByEmail(String email);
 
 
-    @Query("""
-SELECT u
-FROM User u
-WHERE u.id NOT IN :userIds
-"""
+    @Query(value = "SELECT * FROM users u WHERE u.user_id NOT IN ?1 ",
+            nativeQuery = true
     )
     List<User> findByIdNotAdmin(List<String> userIds);
+
+    @Query(value = "SELECT * FROM users u WHERE u.user_id = ?1 ",
+            nativeQuery = true
+    )
+    Optional<User> findByIdForAdmin(String userId);
 }

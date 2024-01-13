@@ -10,6 +10,8 @@ type User = {
   gender: 'MALE' | 'FEMALE';
   banned?: boolean;
   student_id?: string;
+  is_revoked?: boolean;
+  is_admin?: boolean;
 };
 
 type RegisterDTO = {
@@ -39,6 +41,7 @@ type Classroom = {
   room?: string;
   image_url?: string;
   role?: Role;
+  is_revoked?: boolean;
 };
 
 type Role = {
@@ -119,4 +122,9 @@ type GradeBoard = {
 type StudentGrades = {
   grades: GradeBoard[];
   student_id: string | null;
+};
+
+type ClassroomAdmin = {
+  role?: Role;
+  classroom?: Classroom;
 };

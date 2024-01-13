@@ -25,39 +25,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useState } from 'react';
-import { User } from '@/type';
+import { ClassroomAdmin } from '@/type';
 
-const data: User[] = [
-  {
-    id: '1',
-    email: 'tranminhtoan1280@gmail.com',
-    dob: new Date(),
-    firstName: 'Toan',
-    lastName: 'Tran',
-    activated: false,
-    gender: 'MALE'
-  },
-  {
-    id: '2',
-    email: 'tranminhtoan1280@gmail.com',
-    dob: new Date(),
-    firstName: 'Toan2',
-    lastName: 'Tran',
-    activated: false,
-    gender: 'MALE'
-  },
-  {
-    id: '3',
-    email: 'tranminhtoan1280@gmail.com',
-    dob: new Date(),
-    firstName: 'Toan3',
-    lastName: 'Tran',
-    activated: true,
-    gender: 'MALE'
-  }
-];
-
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<ClassroomAdmin>[] = [
   {
     accessorKey: 'id',
     header: ({ column }) => {

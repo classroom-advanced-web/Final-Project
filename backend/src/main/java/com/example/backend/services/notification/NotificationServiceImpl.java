@@ -23,7 +23,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,12 +73,16 @@ public class NotificationServiceImpl implements INotificationService {
                 .build();
 
         NotificationDTO newNotification = notificationMapper.toDTO(notificationRepository.save(notification));
-        notifyToAllUserInClassroom(newNotification);
+        if(notificationDTO.getReceiverId() == null) {
+            notifyToAllUserInClassroom(newNotification);
+        } else {
+            notifyToUser(notificationDTO.getReceiverId(), newNotification);
+        }
         return newNotification;
     }
 
     @Override
-    public Map<String, String> notifyToAllUserInClassroom(NotificationDTO notificationDTO) {
+    public void notifyToAllUserInClassroom(NotificationDTO notificationDTO) {
         List<ClassUser> receivers = classUserRepository.findAllByClassroomId(notificationDTO.getClassroomId());
         receivers.forEach(receiver -> {
 
@@ -101,7 +104,29 @@ public class NotificationServiceImpl implements INotificationService {
         });
         Map<String, String> response = new HashMap<>();
         response.put("message", "OK");
-        return response;
+    }
+
+    @Override
+    public void notifyToUser(String userId, NotificationDTO notificationDTO) {
+        Notification notification = notificationRepository.findById(notificationDTO.getId()).get();
+        UserDTO sender = userMapper.toDTO(notification.getSender().getUser());
+        ClassroomDTO classroom = classroomMapper.toDTO(notification.getSender().getClassroom());
+        ClassUser receiver = classUserRepository.findByUserIdAndClassroomId(userId, notificationDTO.getClassroomId())
+                .orElseThrow(
+                        () -> new AccessDeniedException("User is not in this classroom")
+                );
+        NotificationResponseDTO notificationResponseDTO = NotificationResponseDTO.builder()
+                .notification(notificationDTO)
+                .sender(sender)
+                .classroom(classroom)
+                .build();
+
+        simpMessagingTemplate.convertAndSendToUser(receiver.getUser().getId(),"/receiver", notificationResponseDTO);
+        ReceivedNotification receivedNotification = ReceivedNotification.builder()
+                .receiver(userRepository.findById(receiver.getUser().getId()).get())
+                .notification(notification)
+                .build();
+        receivedNotificationRepository.save(receivedNotification);
     }
 
     @Override
