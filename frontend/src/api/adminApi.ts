@@ -13,7 +13,12 @@ class AdminApi {
   }
 
   async getAllClassrooms(): Promise<Classroom[]> {
-    const res = await instance.get('/users/classrooms');
+    const res = await instance.get('/users/admin/classrooms');
+    return res.data;
+  }
+
+  async inactivateClassroom(id: string, status: boolean): Promise<Classroom> {
+    const res = await instance.put(`/users/admin/classrooms/${id}?status=${status}`);
     return res.data;
   }
 }

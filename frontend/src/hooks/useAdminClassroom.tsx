@@ -1,21 +1,9 @@
 import adminApi from '@/api/adminApi';
 import { useQuery } from 'react-query';
 
-const useAdminUser = () => {
-  const { data: users, isLoading } = useQuery('users', async () => {
-    const res = await adminApi.getAllUsers();
+const useAdminClassroom = () => {
+  const { data: classrooms, isLoading } = useQuery('adminClassroom', () => adminApi.getAllClassrooms());
 
-    if (res) {
-      return res.map((user: any) => {
-        return {
-          ...user,
-          firstName: user.first_name,
-          lastName: user.last_name
-        };
-      });
-    }
-  });
-
-  return { users, isLoading };
+  return { classrooms, isLoading };
 };
-export default useAdminUser;
+export default useAdminClassroom;
