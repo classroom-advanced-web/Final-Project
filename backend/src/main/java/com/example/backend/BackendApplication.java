@@ -1,14 +1,8 @@
 package com.example.backend;
 
 import com.example.backend.constants.GenderEnum;
-import com.example.backend.constants.RoleEnum;
-import com.example.backend.dtos.InvitationEmailDTO;
-import com.example.backend.entities.Role;
 import com.example.backend.entities.User;
-import com.example.backend.services.otp.OTPServiceImpl;
-import com.example.backend.repositories.RoleRepository;
 import com.example.backend.repositories.UserRepository;
-import com.example.backend.services.email.EmailServiceImpl;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,78 +18,66 @@ public class BackendApplication {
     }
 
     @Bean
-    CommandLineRunner run(RoleRepository roleRepository,
-                          UserRepository userRepository,
-                          PasswordEncoder passwordEncoder,
-                          EmailServiceImpl emailService,
-                          OTPServiceImpl otpServiceImpl
-                          ) {
+    CommandLineRunner run(
+            UserRepository userRepository,
+            PasswordEncoder passwordEncoder
+
+    ) {
         return args -> {
+            try {
+                userRepository.save(
+                        User.builder()
+                                .firstName("Toan")
+                                .lastName("Tran")
+                                .email("toan@example.com")
+                                .password(passwordEncoder.encode("12345"))
+                                .gender(GenderEnum.MALE.name())
+                                .isActivated(true)
+                                .build()
+                );
 
-//            emailService.sendInvitationHtmlMessage(
-//                    "zduytruongz@gmail.com",
-//                    "Invitation to join class",
-//                    InvitationEmailDTO.builder()
-//                            .url("http://localhost:3000/join-class/123456")
-//                            .role(RoleEnum.Teacher.name())
-//                            .className("Math")
-//                            .senderName("Toan Tran")
-//                            .senderEmail("tranminhtoan@gmail.com")
-//                            .build()
-//            );
+                userRepository.save(
+                        User.builder()
+                                .firstName("Truong")
+                                .lastName("Vo")
+                                .email("truong@example.com")
+                                .password(passwordEncoder.encode("12345"))
+                                .gender(GenderEnum.MALE.name())
+                                .isActivated(true)
+                                .build()
+                );
 
-            roleRepository.save(Role.builder()
-                    .name(RoleEnum.Owner.name())
-                            .code(1L)
-                    .build()
-            );
+                userRepository.save(
+                        User.builder()
+                                .firstName("Thang")
+                                .lastName("Le")
+                                .email("thang@example.com")
+                                .password(passwordEncoder.encode("12345"))
+                                .gender(GenderEnum.MALE.name())
+                                .isActivated(true)
+                                .build()
+                );
 
-            roleRepository.save(Role.builder()
-                    .name(RoleEnum.Teacher.name())
-                            .code(2L)
-                    .build()
-            );
+                userRepository.save(
+                        User.builder()
+                                .firstName("Admin")
+                                .lastName("")
+                                .email("admin@example.com")
+                                .password(passwordEncoder.encode("12345"))
+                                .gender(GenderEnum.MALE.name())
+                                .isAdmin(true)
+                                .isActivated(true)
+                                .build()
+                );
 
-            roleRepository.save(Role.builder()
-                    .name(RoleEnum.Student.name())
-                            .code(3L)
-                    .build()
-            );
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
 
-            userRepository.save(
-                    User.builder()
-                            .firstName("Toan")
-                            .lastName("Tran")
-                            .email("toan@example.com")
-                            .password(passwordEncoder.encode("12345"))
-                            .gender(GenderEnum.MALE.name())
-                            .build()
-            );
-
-            userRepository.save(
-                    User.builder()
-                            .firstName("Truong")
-                            .lastName("Vo")
-                            .email("truong@example.com")
-                            .password(passwordEncoder.encode("12345"))
-                            .gender(GenderEnum.MALE.name())
-                            .build()
-            );
-
-            userRepository.save(
-                    User.builder()
-                            .firstName("Thang")
-                            .lastName("Le")
-                            .email("thang@example.com")
-                            .password(passwordEncoder.encode("12345"))
-                            .gender(GenderEnum.MALE.name())
-                            .build()
-            );
 
         };
 
     }
-
 
 
 }
