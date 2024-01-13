@@ -6,6 +6,12 @@ class NotificationApi {
 
     return res.data.notifications;
   }
+
+  async markAsRead() {
+    const res = await instance.get(`/notifications/status/all`);
+
+    return res.data.notification;
+  }
 }
 
 const notificationApi = new NotificationApi();

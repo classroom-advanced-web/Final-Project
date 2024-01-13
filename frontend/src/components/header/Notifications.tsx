@@ -15,6 +15,7 @@ import UserAvatar from '../UserAvatar';
 import Loading from '../loading/Loading';
 import { IoMdNotificationsOutline } from 'react-icons/io';
 import { timeAgo } from '@/lib/utils';
+import { Button } from '../ui/button';
 
 type NotificationInfo = {
   sender: User;
@@ -38,6 +39,7 @@ export let stompClient: Client | null = null;
 const Notifications = () => {
   const { user, loading } = useAuth();
   const [notifications, setNotifications] = useState<NotificationInfo[]>([]);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const SERVER_URL = import.meta.env.VITE_SERVER_HOST as string;
@@ -107,42 +109,62 @@ const Notifications = () => {
 
   const hasNewNotification = notifications.some((notification) => notification.notification.is_read === false);
 
+  const handleMarkAllAsRead = async () => {
+    // setOpen(true);
+    try {
+      // const res = await notificationApi.markAsRead();
+      // if (res) {
+      //   const newNotification = res.map((notification: any) => {
+      //     return mapData(notification);
+      //   });
+      //   setNotifications(newNotification);
+      // }
+      console.log('test');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger className='right-6 focus-within:outline-none'>
+    <>
+      <Button variant='ghost' onClick={handleMarkAllAsRead}>
         <span className='relative text-xl'>
           {hasNewNotification && (
             <span className='absolute right-[-2px] top-[-4px] h-2 w-2 rounded-full bg-blue-500'></span>
           )}
           <IoMdNotificationsOutline />
         </span>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className='relative max-h-[720px] w-full overflow-y-auto md:min-w-[480px]'>
-        <div className='border-b-[1px] px-1 py-3'>
-          <h2>Notifications</h2>
-        </div>
-        {notifications.length > 0 &&
-          notifications.map((notification) => (
-            <DropdownMenuItem
-              className='py-6'
-              onClick={() => handleGoToNotificationLocation(notification.classroom.id, notification.notification.title)}
-            >
-              <div className='flex items-center gap-3'>
-                <UserAvatar keyword={notification.sender.firstName[0]} />
-                <div className='flex flex-col gap-1'>
-                  <h3 className='font-semibold'>
-                    {`${notification.sender.firstName} ${notification.sender.lastName}`}:{' '}
-                    {notification.notification.title}
-                  </h3>
+      </Button>
+      <DropdownMenu open={open} onOpenChange={setOpen}>
+        <DropdownMenuContent className='relative max-h-[720px] w-full overflow-y-auto md:min-w-[480px]'>
+          <div className='border-b-[1px] px-1 py-3'>
+            <h2>Notifications</h2>
+          </div>
+          {notifications.length > 0 &&
+            notifications.map((notification) => (
+              <DropdownMenuItem
+                className='py-6'
+                onClick={() =>
+                  handleGoToNotificationLocation(notification.classroom.id, notification.notification.title)
+                }
+              >
+                <div className='flex items-center gap-3'>
+                  <UserAvatar keyword={notification.sender.firstName[0]} />
+                  <div className='flex flex-col gap-1'>
+                    <h3 className='font-semibold'>
+                      {`${notification.sender.firstName} ${notification.sender.lastName}`}:{' '}
+                      {notification.notification.title}
+                    </h3>
 
-                  <p className='text-xs text-gray-500'>{notification.classroom.name}</p>
-                  <p className='text-xs text-gray-500'>{timeAgo(notification.notification.created_at)}</p>
+                    <p className='text-xs text-gray-500'>{notification.classroom.name}</p>
+                    <p className='text-xs text-gray-500'>{timeAgo(notification.notification.created_at)}</p>
+                  </div>
                 </div>
-              </div>
-            </DropdownMenuItem>
-          ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+              </DropdownMenuItem>
+            ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 };
 export default Notifications;

@@ -158,7 +158,7 @@ export const columns: ColumnDef<User>[] = [
   }
 ];
 
-const AdminUser = () => {
+const AdminClassroom = () => {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
@@ -270,4 +270,4 @@ const AdminUser = () => {
   );
 };
 
-export default AdminUser;
+export default AdminClassroom;
