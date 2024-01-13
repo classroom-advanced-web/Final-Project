@@ -10,6 +10,10 @@ public interface IGradeService {
 
     GradeDTO createGradeForAStudent(GradeDTO gradeDTO);
 
+    List<StudentGradesDTO> getGradeBoardForTeacher(String classroomId);
+
+    List<StudentGradesDTO> getGradeBoardForStudent(String classroomId);
+
     List<StudentGradesDTO> getGradeBoard(String classroomId);
 
     Map<String, Object> mapGradeFromList(List<StudentGradesDTO> studentGradesDTOs);

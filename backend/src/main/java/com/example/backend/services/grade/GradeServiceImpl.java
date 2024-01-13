@@ -69,15 +69,7 @@ public class GradeServiceImpl implements IGradeService{
     }
 
     @Override
-    public List<StudentGradesDTO> getGradeBoard(String classroomId) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classroomId)
-                .orElseThrow(
-                        () -> new NotFoundException("Class user not found")
-                );
-        if (!classUser.getRole().getName().equals(RoleEnum.Teacher.name()) && !classUser.getRole().getName().equals(RoleEnum.Owner.name())) {
-            throw new AccessDeniedException("You are not allowed to create grade");
-        }
+    public List<StudentGradesDTO> getGradeBoardForTeacher(String classroomId) {
         List<GradeComposition> gradeCompositions = gradeCompositionRepository.findByClassroomIdOrderByWeightAsc(classroomId);
         List<StudentsClassroomRequestDTO> studentsClassroomRequestDTOs = classroomService.getStudentsOfClassroom(classroomId);
         List<String> StudentIds = new ArrayList<>();
@@ -110,6 +102,52 @@ public class GradeServiceImpl implements IGradeService{
             result.add(studentGradesDTO);
         }
         return result;
+    }
+
+    @Override
+    public List<StudentGradesDTO> getGradeBoardForStudent(String classroomId) {
+        List<StudentGradesDTO> result = new ArrayList<>();
+        List<GradeComposition> gradeCompositions = gradeCompositionRepository.findByClassroomIdOrderByWeightAsc(classroomId);
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(user.getStudentId() == null) {
+            throw new NotFoundException("Student id not found");
+        }
+        List<GradeDTO> gradeDTOs = new ArrayList<>();
+        StudentGradesDTO studentGradesDTO = StudentGradesDTO.builder()
+                .studentId(user.getStudentId())
+                .build();
+        for(GradeComposition gradeComposition : gradeCompositions) {
+            Grade grade = gradeRepository.findByStudentIdAndGradeCompositionId(user.getStudentId(), gradeComposition.getId())
+                    .orElse(null);
+
+            if(grade != null) {
+                gradeDTOs.add(gradeMapper.toDTO(grade));
+            } else {
+                gradeDTOs.add(GradeDTO.builder()
+                        .value(0.0)
+                        .gradeComposition(gradeCompositionMapper.toDTO(gradeComposition))
+                        .studentId(user.getStudentId())
+                        .build());
+            }
+        }
+        studentGradesDTO.setGrades(gradeDTOs);
+        result.add(studentGradesDTO);
+        return result;
+    }
+
+    @Override
+    public List<StudentGradesDTO> getGradeBoard(String classroomId) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classroomId)
+                .orElseThrow(
+                        () -> new NotFoundException("User is not in this classroom")
+                );
+        if (classUser.getRole().getName().equals(RoleEnum.Teacher.name()) || classUser.getRole().getName().equals(RoleEnum.Owner.name())) {
+            return getGradeBoardForTeacher(classroomId);
+        } else if (classUser.getRole().getName().equals(RoleEnum.Student.name())) {
+            return getGradeBoardForStudent(classroomId);
+        }
+        throw new AccessDeniedException("Role is invalid");
     }
 
     @Override
