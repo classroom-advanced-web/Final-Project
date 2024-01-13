@@ -1,17 +1,20 @@
-import { DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import notificationApi from '@/api/notificationApi';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu';
 import { useAuth } from '@/hooks/useAuth';
+import { Classroom, NotificationContent, User } from '@/type';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { Client, over } from 'stompjs';
-import Loading from '../loading/Loading';
 import UserAvatar from '../UserAvatar';
-import notificationApi from '@/api/notificationApi';
-import { useNavigate } from 'react-router-dom';
-import { Classroom, NotificationContent, User } from '@/type';
-
-// const SERVER_URL = import.meta.env.VITE_SERVER_HOST as string;
-// let Sock = new SockJS(`${SERVER_URL}/notifications`);
-// export const stompClient = over(Sock);
+import Loading from '../loading/Loading';
+import { IoMdNotificationsOutline } from 'react-icons/io';
+import { timeAgo } from '@/lib/utils';
 
 type NotificationInfo = {
   sender: User;
@@ -101,32 +104,45 @@ const Notifications = () => {
   if (!user) {
     return null;
   }
-  return (
-    <DropdownMenuContent className='max-h-[720px] w-full overflow-y-auto md:min-w-[480px]'>
-      <div className='border-b-[1px] px-1 py-3'>
-        <h2>Notifications</h2>
-      </div>
-      {notifications.length > 0 &&
-        notifications.map((notification) => (
-          <DropdownMenuItem
-            className='py-6'
-            onClick={() => handleGoToNotificationLocation(notification.classroom.id, notification.notification.title)}
-          >
-            <div className='flex items-center gap-3'>
-              <UserAvatar keyword={notification.sender.firstName[0]} />
-              <div className='flex flex-col gap-1'>
-                <h3 className='font-semibold'>
-                  {`${notification.sender.firstName} ${notification.sender.lastName}`}:{' '}
-                  {notification.notification.title}
-                </h3>
 
-                <p className='text-xs text-gray-500'>{notification.classroom.name}</p>
-                {/* <p className='text-xs text-gray-500'>{notification.notification.created_at.toISOString()}</p> */}
+  const hasNewNotification = notifications.some((notification) => notification.notification.is_read === false);
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger className='right-6 focus-within:outline-none'>
+        <span className='relative text-xl'>
+          {hasNewNotification && (
+            <span className='absolute right-[-2px] top-[-4px] h-2 w-2 rounded-full bg-blue-500'></span>
+          )}
+          <IoMdNotificationsOutline />
+        </span>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className='relative max-h-[720px] w-full overflow-y-auto md:min-w-[480px]'>
+        <div className='border-b-[1px] px-1 py-3'>
+          <h2>Notifications</h2>
+        </div>
+        {notifications.length > 0 &&
+          notifications.map((notification) => (
+            <DropdownMenuItem
+              className='py-6'
+              onClick={() => handleGoToNotificationLocation(notification.classroom.id, notification.notification.title)}
+            >
+              <div className='flex items-center gap-3'>
+                <UserAvatar keyword={notification.sender.firstName[0]} />
+                <div className='flex flex-col gap-1'>
+                  <h3 className='font-semibold'>
+                    {`${notification.sender.firstName} ${notification.sender.lastName}`}:{' '}
+                    {notification.notification.title}
+                  </h3>
+
+                  <p className='text-xs text-gray-500'>{notification.classroom.name}</p>
+                  <p className='text-xs text-gray-500'>{timeAgo(notification.notification.created_at)}</p>
+                </div>
               </div>
-            </div>
-          </DropdownMenuItem>
-        ))}
-    </DropdownMenuContent>
+            </DropdownMenuItem>
+          ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 export default Notifications;
