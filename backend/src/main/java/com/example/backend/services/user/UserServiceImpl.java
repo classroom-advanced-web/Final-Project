@@ -377,7 +377,8 @@ public class UserServiceImpl implements IUserService {
         if(!user.isAdmin()) {
             throw new AccessDeniedException("You are not admin");
         }
-        return userRepository.findByIdNotIn(List.of(user.getId())).stream()
+
+        return userRepository.findByIdNotAdmin(List.of(user.getId())).stream()
                 .map(userIMapper::toDTO)
                 .collect(Collectors.toList());
 
@@ -409,6 +410,17 @@ public class UserServiceImpl implements IUserService {
         classroom.setRevoked(status);
         classroomRepository.save(classroom);
         return "Success";
+    }
+
+    @Override
+    public List<ClassroomDTO> getAllClassrooms() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if(!user.isAdmin()) {
+            throw new AccessDeniedException("You are not admin");
+        }
+        return classroomRepository.findAll().stream()
+                .map(classRoomMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     // Helper method to get null property names from an object

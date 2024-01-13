@@ -41,5 +41,7 @@ public interface IUserService {
 
     String changeRevokeStatusOfClassroom(String classroomId, Boolean status);
 
+    List<ClassroomDTO> getAllClassrooms();
+
 
 }

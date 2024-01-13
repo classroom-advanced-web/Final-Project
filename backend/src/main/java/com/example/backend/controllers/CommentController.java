@@ -28,4 +28,11 @@ public class CommentController {
         );
     }
 
+    @GetMapping("/reply/{comment_id}")
+    public ResponseEntity<List> loadReplyComment(@PathVariable("comment_id") String commentId) {
+        return ResponseEntity.ok(
+                commentService.loadReplyComment(commentId)
+        );
+    }
+
 }

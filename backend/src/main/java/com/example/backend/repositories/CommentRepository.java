@@ -15,4 +15,6 @@ public interface CommentRepository extends JpaRepository<Comment, String> {
     List<Comment> findByUserIdAndReplyToId(String userId, String replyToId);
 
     List<Comment> findByGradeIdAndReplyToId(String userId, String replyToId);
+
+    List<Comment> findByReplyToId(String commentId);
 }
