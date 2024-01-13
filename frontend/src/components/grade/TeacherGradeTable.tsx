@@ -1,14 +1,12 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 
 import classApi from '@/api/classApi';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import GradeForm from './GradeForm';
-import { DefaultGrade, GradeComposition, StudentPreview } from '@/type';
-import useStudentList from '@/hooks/useStudentList';
-import Loading from '../loading/Loading';
 import useGradeBoard from '@/hooks/useGradeBoard';
+import { DefaultGrade, GradeComposition } from '@/type';
+import { useEffect, useState } from 'react';
 import { FaEdit } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
+import Loading from '../loading/Loading';
 import { Button } from '../ui/button';
 import ChangeGradeForm from './ChangeGradeForm';
 import GradeAction from './GradeAction';
@@ -40,11 +38,6 @@ const TeacherGradeTable = () => {
     fetchStructure();
   }, []);
 
-  // function handleReview(compositionName: string) {
-  //   setonOpenChange(true);
-  //   setCompositionName(compositionName);
-  // }
-
   if (isLoading) return <Loading />;
 
   return (
@@ -68,10 +61,10 @@ const TeacherGradeTable = () => {
           {gradeBoard.map((student: any) => (
             <TableRow key={String(student.student_id)}>
               <TableCell className='text-left'>{student.student_id}</TableCell>
-              {student.grades.map((grade: any) => (
-                <TableCell className=' text-right'>
+              {student.grades.map((grade: any, index: number) => (
+                <TableCell className=' text-right' key={String(index)}>
                   <div className='flex items-center justify-end gap-1'>
-                    <span>{grade.value}/100</span>
+                    <span>{!grade.id ? 'N/A' : `${grade.value}/100`}</span>
 
                     <Button
                       variant={'ghost'}

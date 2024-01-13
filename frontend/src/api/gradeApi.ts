@@ -11,6 +11,11 @@ class GradeApi {
     });
     return res.data;
   }
+
+  async importGrades(grades: any) {
+    const res = await instance.post('/grades/board/file-update', JSON.stringify(grades));
+    return res.data;
+  }
 }
 
 const gradeApi = new GradeApi();
