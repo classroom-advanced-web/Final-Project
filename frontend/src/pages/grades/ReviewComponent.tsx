@@ -106,7 +106,7 @@ const ReviewComponent = ({ gradeReview }: Props) => {
             {/* Render comments here */}
             <div className='flex flex-row justify-start'>
               <div className='mr-2 h-8 w-8 rounded-full'>
-                <UserAvatar keyword={reply?.user?.last_name[0]} />
+                <UserAvatar keyword={reply?.user?.first_name[0]} />
               </div>
 
               <div className='flex flex-col'>
