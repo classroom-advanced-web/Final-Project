@@ -418,7 +418,7 @@ public class UserServiceImpl implements IUserService {
         if(!user.isAdmin()) {
             throw new AccessDeniedException("You are not admin");
         }
-        return classroomRepository.findAll().stream()
+        return classroomRepository.findAllByAdmin().stream()
                 .map(classRoomMapper::toDTO)
                 .collect(Collectors.toList());
     }
