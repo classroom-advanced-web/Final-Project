@@ -12,6 +12,7 @@ import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 import gradeApi from '@/api/gradeApi';
 import { useQueryClient } from 'react-query';
+import { ErrorResponse } from 'react-router-dom';
 
 type Props = {
   gradeComposition: GradeComposition[];

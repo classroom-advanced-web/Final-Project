@@ -1,4 +1,5 @@
 import { classroom } from '@/assets/classroom.svg';
+
 type User = {
   id: string;
   email: string;
@@ -57,6 +58,7 @@ type GradeComposition = {
   scale: number;
   weight?: number;
   classroom_id?: string;
+  is_final?: boolean;
 };
 
 type NotificationContent = {

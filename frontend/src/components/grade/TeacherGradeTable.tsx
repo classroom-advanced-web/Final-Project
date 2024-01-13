@@ -10,9 +10,13 @@ import Loading from '../loading/Loading';
 import { Button } from '../ui/button';
 import ChangeGradeForm from './ChangeGradeForm';
 import GradeAction from './GradeAction';
+import { FaCheckSquare } from 'react-icons/fa';
+import { ImCheckboxUnchecked } from 'react-icons/im';
+import { useToast } from '../ui/use-toast';
 
 const TeacherGradeTable = () => {
   const [items, setItems] = useState<GradeComposition[]>([]);
+  const [checkList, setCheckList] = useState<boolean[]>([]);
   const { id } = useParams();
   const [openForm, setOpenForm] = useState(false);
   const [defaultGradeInfor, setDefaultGradeInfor] = useState<DefaultGrade>({
@@ -23,6 +27,7 @@ const TeacherGradeTable = () => {
   });
 
   const { gradeBoard, isLoading } = useGradeBoard();
+  const { toast } = useToast();
 
   useEffect(() => {
     const fetchStructure = async () => {
@@ -30,6 +35,10 @@ const TeacherGradeTable = () => {
         const res = await classApi.getComposition(id!);
         if (res) {
           setItems(res);
+          const checkList = res.map((item: GradeComposition) => {
+            return item.is_final;
+          });
+          setCheckList(checkList);
         }
       } catch (error) {
         console.error(error);
@@ -37,6 +46,23 @@ const TeacherGradeTable = () => {
     };
     fetchStructure();
   }, []);
+
+  const handleCheck = async (compositionId: String, index: number) => {
+    const newCheckList: boolean[] = [...checkList];
+    newCheckList[index] = !newCheckList[index];
+    setCheckList(newCheckList);
+    try {
+      await classApi.finalizeComposition(compositionId, newCheckList[index]);
+    } catch (error: any) {
+      if (error?.response) {
+        toast({
+          title: error.response.data.error,
+          variant: 'destructive'
+        });
+      }
+      setCheckList(checkList);
+    }
+  };
 
   if (isLoading) return <Loading />;
 
@@ -50,9 +76,17 @@ const TeacherGradeTable = () => {
             {/* <TableHead className='w-[270px]'></TableHead> */}
             <TableHead className='w-[132px] text-left'>Student ID</TableHead>
 
-            {items.map((item) => (
-              <TableHead key={String(item.id)} className='w-[132px] text-right'>
-                {item.name}
+            {items.map((item, index) => (
+              <TableHead key={String(item.id)} className=' text-tight w-[132px]'>
+                <div className='flex items-center justify-end gap-2'>
+                  <span>{item.name}</span>
+                  <span
+                    className='cursor-pointer transition-all hover:opacity-60'
+                    onClick={() => handleCheck(item.id, index)}
+                  >
+                    {checkList[index] ? <FaCheckSquare /> : <ImCheckboxUnchecked />}
+                  </span>
+                </div>
               </TableHead>
             ))}
           </TableRow>
