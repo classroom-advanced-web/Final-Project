@@ -83,7 +83,7 @@ public class CommentServiceImpl implements ICommentService{
                         () -> new NotFoundException("User is not in this class")
                 );
         if(classUser.getRole().getName().equals(RoleEnum.Teacher.name()) || classUser.getRole().getName().equals(RoleEnum.Owner.name())){
-            return loadCommentForTeacher(gradeId, classroomId);
+            return loadCommentForTeacher(user.getId(), classroomId);
         }
         else if(classUser.getRole().getName().equals(RoleEnum.Student.name())){
             return loadCommentForStudent(user.getId(), gradeId);
