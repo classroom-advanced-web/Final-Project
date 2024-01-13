@@ -6,6 +6,8 @@ import { LuSendHorizonal } from 'react-icons/lu';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FaCheckSquare } from 'react-icons/fa';
 import { ImCheckboxUnchecked } from 'react-icons/im';
+import { useAuth } from '@/hooks/useAuth';
+import { stompClient } from '@/components/header/Notifications';
 
 type Props = {
   review: any;
@@ -19,7 +21,13 @@ const Replies = ({ review, replies, onSubmit }: Props) => {
   const { id } = useParams<{ id: string }>();
   console.log({ review });
   const navigate = useNavigate();
+
+  const { user } = useAuth();
   if (!id) {
+    return null;
+  }
+
+  if (!user) {
     return null;
   }
 
@@ -28,6 +36,18 @@ const Replies = ({ review, replies, onSubmit }: Props) => {
     try {
       const res = await gradeApi.acceptGrade(reviewId, status, id);
       if (res) {
+        stompClient &&
+          stompClient.send(
+            '/app/notifications',
+            {},
+            JSON.stringify({
+              sender_id: user?.id,
+              classroom_id: id,
+              receiver_id: review.user.id,
+              title: 'End Grade Review',
+              content: 'Your grade review has been ended'
+            })
+          );
         navigate(0);
       }
     } catch (error) {
