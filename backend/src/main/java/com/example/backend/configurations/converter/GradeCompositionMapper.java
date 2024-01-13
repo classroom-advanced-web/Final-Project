@@ -21,6 +21,7 @@ public class GradeCompositionMapper implements IMapper<GradeComposition, GradeCo
                 .name(obj.getName())
                 .scale(obj.getScale())
                 .weight(obj.getWeight())
+                .isFinal(obj.isFinal())
                 .classroomId(obj.getClassroom().getId())
                 .build();
 
