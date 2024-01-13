@@ -2,7 +2,6 @@ import gradeApi from '@/api/gradeApi';
 import UserAvatar from '@/components/UserAvatar';
 import { timeAgo } from '@/lib/utils';
 import { GradeReview } from '@/type';
-import { User } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { LuSendHorizonal } from 'react-icons/lu';
 import { useParams } from 'react-router-dom';
