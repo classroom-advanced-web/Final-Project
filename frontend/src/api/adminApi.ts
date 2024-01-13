@@ -1,4 +1,4 @@
-import { User } from '@/type';
+import { Classroom, User } from '@/type';
 import instance from './axiosConfig';
 
 class AdminApi {
@@ -9,6 +9,11 @@ class AdminApi {
 
   async banUser(id: string, status: boolean): Promise<User> {
     const res = await instance.put(`/users/admin/users/${id}?status=${status}`);
+    return res.data;
+  }
+
+  async getAllClassrooms(): Promise<Classroom[]> {
+    const res = await instance.get('/users/classrooms');
     return res.data;
   }
 }

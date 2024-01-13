@@ -28,39 +28,6 @@ import Loading from '@/components/loading/Loading';
 import adminApi from '@/api/adminApi';
 import { useQueryClient } from 'react-query';
 
-const data: User[] = [
-  {
-    id: '1',
-    email: 'tranminhtoan1280@gmail.com',
-    dob: new Date(),
-    firstName: 'Toan',
-    lastName: 'Tran',
-    activated: false,
-    gender: 'MALE',
-    banned: true
-  },
-  {
-    id: '2',
-    email: 'tranminhtoan1280@gmail.com',
-    dob: new Date(),
-    firstName: 'Toan2',
-    lastName: 'Tran',
-    activated: false,
-    gender: 'MALE',
-    banned: false
-  },
-  {
-    id: '3',
-    email: 'tranminhtoan1280@gmail.com',
-    dob: new Date(),
-    firstName: 'Toan3',
-    lastName: 'Tran',
-    activated: true,
-    gender: 'MALE',
-    banned: true
-  }
-];
-
 export const columns: ColumnDef<User>[] = [
   {
     accessorKey: 'id',
