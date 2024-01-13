@@ -111,7 +111,7 @@ public class NotificationServiceImpl implements INotificationService {
         Notification notification = notificationRepository.findById(notificationDTO.getId()).get();
         UserDTO sender = userMapper.toDTO(notification.getSender().getUser());
         ClassroomDTO classroom = classroomMapper.toDTO(notification.getSender().getClassroom());
-        ClassUser receiver = classUserRepository.findByUserIdAndClassroomId(userId, notificationDTO.getClassroomId())
+        ClassUser receiver = classUserRepository.findByUserIdAndClassroomId(userId, classroom.getId())
                 .orElseThrow(
                         () -> new AccessDeniedException("User is not in this classroom")
                 );
@@ -121,9 +121,9 @@ public class NotificationServiceImpl implements INotificationService {
                 .classroom(classroom)
                 .build();
 
-        simpMessagingTemplate.convertAndSendToUser(receiver.getUser().getId(),"/receiver", notificationResponseDTO);
+        simpMessagingTemplate.convertAndSendToUser(userId,"/receiver", notificationResponseDTO);
         ReceivedNotification receivedNotification = ReceivedNotification.builder()
-                .receiver(userRepository.findById(receiver.getUser().getId()).get())
+                .receiver(userRepository.findById(userId).get())
                 .notification(notification)
                 .build();
         receivedNotificationRepository.save(receivedNotification);
