@@ -46,16 +46,8 @@ const Notifications = () => {
 
   const onConnected = () => {
     if (user && stompClient) {
-      stompClient.subscribe(`/user/${user.id}/receiver`, (message: any) => {
-        const messageBody = JSON.parse(message.body);
-        const map = {
-          ...messageBody,
-          sender: {
-            ...messageBody.sender,
-            firstName: messageBody.sender.first_name,
-            lastName: messageBody.sender.last_name
-          }
-        };
+      stompClient.subscribe(`/user/${user.id}/receiver`, () => {
+        // const messageBody = JSON.parse(message.body);
         queryClient.invalidateQueries('notifications');
       });
     }

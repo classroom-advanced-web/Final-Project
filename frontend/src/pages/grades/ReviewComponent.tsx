@@ -30,6 +30,7 @@ const ReviewComponent = ({ gradeReview }: Props) => {
       const res = await gradeApi.replyComment(content, gradeReviewId, review[0]?.id);
       if (res) {
         console.log(res);
+        console.log(gradeReview);
         //setReplies(res);
         setReplies((prev) => [...prev, res]);
       }
