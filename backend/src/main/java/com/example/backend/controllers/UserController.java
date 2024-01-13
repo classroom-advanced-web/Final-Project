@@ -1,5 +1,6 @@
 package com.example.backend.controllers;
 
+import com.example.backend.dtos.ClassroomDTO;
 import com.example.backend.dtos.ClassroomsOfUserDTO;
 import com.example.backend.dtos.UserDTO;
 import com.example.backend.services.user.IUserService;
@@ -9,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -39,13 +41,18 @@ public class UserController {
     }
 
     @PutMapping("admin/users/{userId}")
-    public ResponseEntity<String> changeRevokeStatusOfUser(@PathVariable String userId, @RequestParam Boolean status) {
-        return ResponseEntity.ok(userService.changeRevokeStatusOfUser(userId, status));
+    public ResponseEntity<Map> changeRevokeStatusOfUser(@PathVariable String userId, @RequestParam Boolean status) {
+        return ResponseEntity.ok(Map.of("message", userService.changeRevokeStatusOfUser(userId, status)));
     }
 
     @PutMapping("admin/classrooms/{classroomId}")
-    public ResponseEntity<String> changeRevokeStatusOfClassroom(@PathVariable String classroomId, @RequestParam Boolean status) {
-        return ResponseEntity.ok(userService.changeRevokeStatusOfClassroom(classroomId, status));
+    public ResponseEntity<Map> changeRevokeStatusOfClassroom(@PathVariable String classroomId, @RequestParam Boolean status) {
+        return ResponseEntity.ok(Map.of("message", userService.changeRevokeStatusOfClassroom(classroomId, status)));
+    }
+
+    @GetMapping("admin/classrooms")
+    public ResponseEntity<List<ClassroomDTO>> getAllClassrooms() {
+        return ResponseEntity.ok(userService.getAllClassrooms());
     }
 
 }
