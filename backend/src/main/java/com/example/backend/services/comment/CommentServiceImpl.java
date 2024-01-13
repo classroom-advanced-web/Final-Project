@@ -75,9 +75,7 @@ public class CommentServiceImpl implements ICommentService{
     public List<CommentDTO> loadComment(String gradeId, String classroomId) {
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(user.getStudentId() == null){
-            throw new NotFoundException("User has not mapped student id");
-        }
+
         ClassUser classUser = classUserRepository.findByUserIdAndClassroomId(user.getId(), classroomId)
                 .orElseThrow(
                         () -> new NotFoundException("User is not in this class")
@@ -86,6 +84,9 @@ public class CommentServiceImpl implements ICommentService{
             return loadCommentForTeacher(user.getId(), classroomId);
         }
         else if(classUser.getRole().getName().equals(RoleEnum.Student.name())){
+            if(user.getStudentId() == null){
+                throw new NotFoundException("User has not mapped student id");
+            }
             return loadCommentForStudent(user.getId(), gradeId);
         }
 
