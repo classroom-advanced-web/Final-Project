@@ -32,7 +32,7 @@ public class Grade {
     @Column(name = "grade_value", nullable = false)
     private Double value;
 
-    @Column
+    @Column(name = "student_id", nullable = false)
     private String studentId;
 
     @ManyToOne
