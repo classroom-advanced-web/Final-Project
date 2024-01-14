@@ -28,20 +28,20 @@ const inviteLinkPage = () => {
         }
       } catch (error: any) {
         if (error.response) {
-          toast({
-            title: 'Join class failed',
-            description: error.response.data.error,
-            variant: 'destructive'
-          });
+          // toast({
+          //   title: 'Join class failed',
+          //   description: error.response.data.error,
+          //   variant: 'destructive'
+          // });
         }
         console.error(error);
       }
     };
 
-    if (user) {
+    if (user && invitationId) {
       joinClass(invitationId);
     }
-  }, []);
+  }, [invitationId]);
 
   if (!user) {
     localStorage.setItem('redirect-url', window.location.href);
