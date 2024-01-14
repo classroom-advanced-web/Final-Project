@@ -176,9 +176,14 @@ INSERT INTO roles (role_id, role_name, role_code) VALUES (UUID(), 'Teacher', 2);
 -- Inserting Student role
 INSERT INTO roles (role_id, role_name, role_code) VALUES (UUID(), 'Student', 3);
 
+-- Insert users
 
+INSERT INTO users(user_id, first_name, last_name, email, password, gender, is_activated) VALUES
+	(UUID(), 'Truong', 'Vo', 'truong@example.com', '$2a$12$gb3KSe.VS68CbDlhGOL/peh5K1BjIm8s8BklrQ3vmAaJ.Da7xpsAe', 'MALE', 1),
+    (UUID(),'Toan', 'Tran', 'toan@example.com', '$2a$12$gb3KSe.VS68CbDlhGOL/peh5K1BjIm8s8BklrQ3vmAaJ.Da7xpsAe', 'MALE', 1),
+	(UUID(),'Thang', 'Le', 'thang@example.com', '$2a$12$gb3KSe.VS68CbDlhGOL/peh5K1BjIm8s8BklrQ3vmAaJ.Da7xpsAe', 'MALE', 1);
 
-
+INSERT INTO users(user_id, first_name, last_name, email, password, gender, is_activated, is_admin) VALUES (UUID(),'admin', '', 'admin@example.com', '$2a$12$gb3KSe.VS68CbDlhGOL/peh5K1BjIm8s8BklrQ3vmAaJ.Da7xpsAe', 'MALE', 1, 1);
 
 
 
