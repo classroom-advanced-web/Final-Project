@@ -14,7 +14,7 @@ import { ImCheckboxUnchecked } from 'react-icons/im';
 const RequestReviewsPage = () => {
   const { id } = useParams<{ id: string; gradeReviewId: string }>();
 
-  const { reviews, isLoading } = useReview();
+  const { reviews, isLoading } = useReview('');
 
   const queryClient = useQueryClient();
 
