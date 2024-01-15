@@ -62,7 +62,7 @@ const RedeemOTP = () => {
           window.location.href = '/profile';
         }
       } else if (action === 'forgot-password') {
-        const res = await authApi.verifyOtp({ id, otp, token: accessToken, email: searchParams.get('email') ?? '' });
+        await authApi.verifyOtp({ id, otp, token: accessToken, email: searchParams.get('email') ?? '' });
 
         navigate(`/forgot-password/reset?email=${searchParams.get('email')}`, {
           state: { accessToken }
@@ -84,7 +84,7 @@ const RedeemOTP = () => {
     try {
       setLoading(true);
       const email: string = searchParams.get('email') ?? '';
-      const res = await authApi.requestOtp({ email });
+      await authApi.requestOtp({ email });
     } catch (error: any) {
       if (error.response?.data?.error) {
         setError(error.response.data.error);

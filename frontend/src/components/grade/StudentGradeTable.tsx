@@ -1,14 +1,13 @@
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '../ui/table';
 
 import classApi from '@/api/classApi';
-import { GradeBoard, GradeComposition, StudentGrades } from '@/type';
+import { GradeBoard, StudentGrades } from '@/type';
 import { useEffect, useState } from 'react';
 import { MdOutlineRateReview } from 'react-icons/md';
 import { useParams } from 'react-router-dom';
 import GradeForm from './GradeForm';
 
 const StudentGradeTable = () => {
-  const [items, setItems] = useState<GradeComposition[]>([]);
   const { id } = useParams();
   const [onOpenChange, setonOpenChange] = useState(false);
   const [compisitionName, setCompisitionName] = useState('');
@@ -16,17 +15,6 @@ const StudentGradeTable = () => {
   const [gradeBoard, setGradeBoard] = useState<GradeBoard>();
 
   useEffect(() => {
-    const fetchStructure = async () => {
-      try {
-        const res = await classApi.getComposition(id!);
-        if (res) {
-          setItems(res);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     const getStudentGradeBoard = async () => {
       try {
         const res = await classApi.getGradeBoard(id!);
@@ -39,8 +27,6 @@ const StudentGradeTable = () => {
       }
     };
     getStudentGradeBoard();
-
-    fetchStructure();
   }, []);
 
   function handleReview(item: GradeBoard) {
@@ -70,7 +56,7 @@ const StudentGradeTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {grade?.grades.map((item, index) => (
+          {grade?.grades.map((item) => (
             <TableRow key={item.id}>
               <TableCell className='text-left'>{item.grade_composition.name}</TableCell>
               <TableCell className='text-right'>{item.id == null ? 'NA' : item.value}</TableCell>

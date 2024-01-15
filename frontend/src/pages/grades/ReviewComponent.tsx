@@ -4,7 +4,6 @@ import Loading from '@/components/loading/Loading';
 import useReview from '@/hooks/useReview';
 import { timeAgo } from '@/lib/utils';
 
-import React from 'react';
 import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import Replies from '../request-reviews/Replies';
@@ -45,7 +44,7 @@ const ReviewComponent = () => {
               classroom_id: id,
               receiver_id: owner?.user.id,
               title: 'Your Student Replied',
-              content: 'Your Student has been replied to your comment'
+              content: reviewId
             })
           );
         queryClient.invalidateQueries(['reply', reviewId]);
@@ -70,7 +69,7 @@ const ReviewComponent = () => {
   }
 
   return (
-    <div className='relative my-3 rounded-lg border  border-gray-300 p-4'>
+    <div className=' relative my-3 rounded-lg border  border-gray-300 p-4'>
       <div className='absolute right-4 top-4 flex items-center justify-end gap-2'>
         {reviews[0].is_shut_down && 'This request has been ended'}
       </div>

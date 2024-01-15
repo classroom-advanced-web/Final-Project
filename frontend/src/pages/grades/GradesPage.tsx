@@ -3,10 +3,8 @@ import TeacherGradeTable from '@/components/grade/TeacherGradeTable';
 import Loading from '@/components/loading/Loading';
 import { ROLE } from '@/constance/constance';
 import { useClassroom } from '@/hooks/useClassroom';
-import { useParams } from 'react-router-dom';
 
 const GradesPage = () => {
-  const { id } = useParams();
   const { classDetail, isLoading } = useClassroom();
 
   if (isLoading) return <Loading />;

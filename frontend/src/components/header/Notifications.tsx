@@ -55,9 +55,32 @@ const Notifications = () => {
 
   const navigate = useNavigate();
 
-  const handleGoToNotificationLocation = (classroomId: String, notificationTitle: String) => {
-    if (notificationTitle === 'New Grade Structure') {
-      navigate(`/structure/${classroomId}`);
+  const handleGoToNotificationLocation = (classroomId: String, notificationTitle: String, content: string) => {
+    switch (notificationTitle) {
+      case 'New Grade Structure':
+        navigate(`/structure/${classroomId}`);
+        break;
+      case 'Updated Grade Structure':
+        navigate(`/structure/${classroomId}`);
+        break;
+      case 'Reply from teacher':
+        navigate(`/grades-review/${classroomId}/${content}`);
+        break;
+      case 'End Grade Request Review':
+        navigate(`/grades-review/${classroomId}/${content}`);
+        break;
+
+      case 'Request a review':
+        navigate(`/request-reviews/${classroomId}?id=${content}`);
+
+        break;
+
+      case 'Your Student Replied':
+        navigate(`/request-reviews/${classroomId}?id=${content}`);
+        break;
+
+      default:
+        break;
     }
   };
 
@@ -108,7 +131,12 @@ const Notifications = () => {
               <DropdownMenuItem
                 className='py-6'
                 onClick={() => {
-                  handleGoToNotificationLocation(notification.classroom.id, notification.notification.title);
+                  handleGoToNotificationLocation(
+                    notification.classroom.id,
+                    notification.notification.title,
+                    notification.notification.content
+                  );
+                  console.log({ notification });
                   handleMarkAllAsRead();
                 }}
               >

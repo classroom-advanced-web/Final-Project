@@ -34,7 +34,7 @@ const ProfileForm = ({ setIsEditMode, user }: Props) => {
     setLoading(true);
     try {
       const { birthday, firstName, gender, lastName, studentId } = data;
-      const res = await profileApi.updateProfile({
+      await profileApi.updateProfile({
         id: user.id,
         birthday: new Date(birthday),
         firstName,

@@ -4,10 +4,10 @@ import { timeAgo } from '@/lib/utils';
 
 import Loading from '@/components/loading/Loading';
 import useReview from '@/hooks/useReview';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import Replies from './Replies';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { FaCheckSquare } from 'react-icons/fa';
 import { ImCheckboxUnchecked } from 'react-icons/im';
 import { stompClient } from '@/components/header/Notifications';
@@ -21,6 +21,22 @@ const RequestReviewsPage = () => {
   const { reviews, isLoading } = useReview('');
 
   const queryClient = useQueryClient();
+
+  const [searchParams] = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get('id')) {
+      const id = searchParams.get('id')!;
+      const violation = document.getElementById(id);
+      if (!violation) return;
+      window.scrollTo({
+        top: violation!.offsetTop,
+        behavior: 'smooth'
+      });
+
+      console.log(violation);
+    }
+  }, [searchParams.get('id')]);
 
   if (isLoading) {
     return <Loading />;
@@ -42,7 +58,7 @@ const RequestReviewsPage = () => {
               classroom_id: id,
               receiver_id: receiverId,
               title: 'Reply from teacher',
-              content: 'Teacher replied to your request'
+              content: reviewId
             })
           );
       }
@@ -91,7 +107,7 @@ const RequestReviewsPage = () => {
     <div className='container relative w-3/4'>
       {reviews.map((review: any) => {
         return (
-          <div className='relative my-3 rounded-lg border border-gray-300  p-4 '>
+          <div id={review.id} className='relative my-3 rounded-lg border border-gray-300  p-4 '>
             <div className='absolute right-4 top-4 flex items-center justify-end gap-2'>
               <span>End this Review</span>
               <span

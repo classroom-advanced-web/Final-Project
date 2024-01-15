@@ -64,7 +64,7 @@ function GradeForm({ open, onOpenChange, compisitionName, gradeBoard }: Props) {
               classroom_id: classId,
               receiver_id: owner?.user.id,
               title: 'Request a review',
-              content: 'Student has requested a review'
+              content: gradeBoard?.id
             })
           );
       }
