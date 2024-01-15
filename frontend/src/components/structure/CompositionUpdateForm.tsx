@@ -10,6 +10,8 @@ import * as z from 'zod';
 import { Button } from '../ui/button';
 import { toast } from '../ui/use-toast';
 import { GradeComposition } from '@/type';
+import { stompClient } from '../header/Notifications';
+import { useAuth } from '@/hooks/useAuth';
 
 type Props = {
   setItems: any;
@@ -20,8 +22,12 @@ type Props = {
 
 const CompisitionUpdateForm = ({ setItems, items, closeForm, oldItem }: Props) => {
   const { id } = useParams();
+  const { user } = useAuth();
   const navigate = useNavigate();
+
   if (!id) navigate('/');
+
+  if (!user) return null;
 
   const onSubmit = async (data: z.infer<typeof gradesStructureSchema>) => {
     try {
@@ -35,6 +41,18 @@ const CompisitionUpdateForm = ({ setItems, items, closeForm, oldItem }: Props) =
         const index = newItems.findIndex((item) => item.id === oldItem.id);
         newItems[index] = res;
         setItems(newItems);
+
+        stompClient &&
+          stompClient.send(
+            '/app/notifications',
+            {},
+            JSON.stringify({
+              sender_id: user?.id,
+              classroom_id: id,
+              title: 'Update Grade Structure',
+              content: 'Grade Structure has been updated'
+            })
+          );
 
         closeForm();
       }

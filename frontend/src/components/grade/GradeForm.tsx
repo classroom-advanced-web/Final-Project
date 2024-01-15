@@ -10,6 +10,10 @@ import { Button } from '../ui/button';
 import { GradeBoard } from '@/type';
 import gradeApi from '@/api/gradeApi';
 import { useNavigate, useParams } from 'react-router-dom';
+import { stompClient } from '../header/Notifications';
+import { useAuth } from '@/hooks/useAuth';
+import usePeople from '@/hooks/usePeople';
+import { ROLE } from '@/constance/constance';
 
 type Props = {
   gradeBoard: GradeBoard | undefined;
@@ -19,6 +23,9 @@ type Props = {
 };
 
 function GradeForm({ open, onOpenChange, compisitionName, gradeBoard }: Props) {
+  const { user } = useAuth();
+  const { people } = usePeople();
+
   const form = useForm<z.infer<typeof requestReviewSchema>>({
     resolver: zodResolver(requestReviewSchema),
     defaultValues: {
@@ -29,6 +36,8 @@ function GradeForm({ open, onOpenChange, compisitionName, gradeBoard }: Props) {
 
   const classId = useParams<{ id: string | undefined }>().id;
 
+  if (!user || !people) return null;
+
   const handleShowRequest = (gradeId: string) => {
     navigate(`/grades-review/${classId}/${gradeId}`);
   };
@@ -36,12 +45,30 @@ function GradeForm({ open, onOpenChange, compisitionName, gradeBoard }: Props) {
   const handleSubmit = async (data: z.infer<typeof requestReviewSchema>) => {
     onOpenChange(false);
 
-    const res = await gradeApi.requestReview(
-      'Expected score: ' + data.expectationGrade + '\n' + 'Explanation: ' + data.explanationMessage,
+    try {
+      const res = await gradeApi.requestReview(
+        'Expected score: ' + data.expectationGrade + '\n' + 'Explanation: ' + data.explanationMessage,
 
-      gradeBoard?.id!
-    );
-    console.log(res);
+        gradeBoard?.id!
+      );
+
+      if (res) {
+        const owner = people.find((person) => person.role.code === ROLE.OWNER);
+
+        stompClient &&
+          stompClient.send(
+            '/app/notifications',
+            {},
+            JSON.stringify({
+              sender_id: user?.id,
+              classroom_id: classId,
+              receiver_id: owner?.user.id,
+              title: 'Request a review',
+              content: 'Student has requested a review'
+            })
+          );
+      }
+    } catch (error) {}
   };
 
   return (

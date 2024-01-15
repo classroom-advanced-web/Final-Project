@@ -10,9 +10,13 @@ import Replies from './Replies';
 import { useParams } from 'react-router-dom';
 import { FaCheckSquare } from 'react-icons/fa';
 import { ImCheckboxUnchecked } from 'react-icons/im';
+import { stompClient } from '@/components/header/Notifications';
+import { useAuth } from '@/hooks/useAuth';
 
 const RequestReviewsPage = () => {
   const { id } = useParams<{ id: string; gradeReviewId: string }>();
+
+  const { user } = useAuth();
 
   const { reviews, isLoading } = useReview('');
 
@@ -27,6 +31,20 @@ const RequestReviewsPage = () => {
       const res = await gradeApi.replyComment(content, gradeReviewId, reviewId);
       if (res) {
         queryClient.invalidateQueries(['reply', reviewId]);
+        const receiverId = reviews.find((review: any) => review.id === reviewId)?.user.id;
+
+        stompClient &&
+          stompClient.send(
+            '/app/notifications',
+            {},
+            JSON.stringify({
+              sender_id: user?.id,
+              classroom_id: id,
+              receiver_id: receiverId,
+              title: 'Reply from teacher',
+              content: 'Teacher replied to your request'
+            })
+          );
       }
     } catch (error) {}
   };
@@ -49,19 +67,20 @@ const RequestReviewsPage = () => {
       if (res) {
         queryClient.invalidateQueries(['review', id]);
 
-        // stompClient &&
-        //   stompClient.send(
-        //     '/app/notifications',
-        //     {},
-        //     JSON.stringify({
-        //       sender_id: user?.id,
-        //       classroom_id: id,
-        //       receiver_id: review.user.id,
-        //       title: 'End Grade Review',
-        //       content: 'Your grade review has been ended'
-        //     })
-        //   );
-        // navigate(0);
+        const receiverId = reviews.find((review: any) => review.id === reviewId)?.user.id;
+
+        stompClient &&
+          stompClient.send(
+            '/app/notifications',
+            {},
+            JSON.stringify({
+              sender_id: user?.id,
+              classroom_id: id,
+              receiver_id: receiverId,
+              title: 'End Grade Request Review',
+              content: 'Your grade request review has been ended'
+            })
+          );
       }
     } catch (error) {
       console.error(error);

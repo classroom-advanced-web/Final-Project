@@ -1,29 +1,26 @@
 import gradeApi from '@/api/gradeApi';
 import UserAvatar from '@/components/UserAvatar';
+import Loading from '@/components/loading/Loading';
+import useReview from '@/hooks/useReview';
 import { timeAgo } from '@/lib/utils';
-import { GradeReview } from '@/type';
-import React, { useEffect, useState } from 'react';
-import { LuSendHorizonal } from 'react-icons/lu';
+
+import React from 'react';
+import { useQueryClient } from 'react-query';
 import { useParams } from 'react-router-dom';
 import Replies from '../request-reviews/Replies';
-import useReview from '@/hooks/useReview';
-import { useQueryClient } from 'react-query';
-import Loading from '@/components/loading/Loading';
-import { FaCheckSquare } from 'react-icons/fa';
-type Props = {
-  gradeReview: GradeReview;
-};
 
-//get comment
+import { useAuth } from '@/hooks/useAuth';
 
-// This component represents a review with a post title, content, and user information.
-const ReviewComponent = ({ gradeReview }: Props) => {
-  const { id, gradeReviewId } = useParams<{ id: string; gradeReviewId: string }>();
+const ReviewComponent = () => {
+  const { user } = useAuth();
+  const { gradeReviewId } = useParams<{ id: string; gradeReviewId: string }>();
   console.log(gradeReviewId);
 
   const { reviews, isLoading } = useReview(gradeReviewId!);
 
   const queryClient = useQueryClient();
+
+  if (!user) return null;
 
   if (isLoading) {
     return <Loading />;
@@ -49,31 +46,6 @@ const ReviewComponent = ({ gradeReview }: Props) => {
     if (!comment) return;
     console.log({ comment, gradeReviewId, reviewId });
     handleReply(comment, gradeReviewId, reviewId);
-  };
-
-  const handleAccept = async (reviewId: string, status: boolean) => {
-    try {
-      const res = await gradeApi.acceptGrade(reviewId, status, id!);
-      if (res) {
-        queryClient.invalidateQueries(['review', id]);
-
-        // stompClient &&
-        //   stompClient.send(
-        //     '/app/notifications',
-        //     {},
-        //     JSON.stringify({
-        //       sender_id: user?.id,
-        //       classroom_id: id,
-        //       receiver_id: review.user.id,
-        //       title: 'End Grade Review',
-        //       content: 'Your grade review has been ended'
-        //     })
-        //   );
-        // navigate(0);
-      }
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   if (!reviews) {
