@@ -58,7 +58,7 @@ const RequestReviewsPage = () => {
               classroom_id: id,
               receiver_id: receiverId,
               title: 'Reply from teacher',
-              content: reviewId
+              content: gradeReviewId
             })
           );
       }
