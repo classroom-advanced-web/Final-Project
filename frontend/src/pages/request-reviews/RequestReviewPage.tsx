@@ -7,9 +7,12 @@ import useReview from '@/hooks/useReview';
 import React from 'react';
 import { useQueryClient } from 'react-query';
 import Replies from './Replies';
+import { useParams } from 'react-router-dom';
+import { FaCheckSquare } from 'react-icons/fa';
+import { ImCheckboxUnchecked } from 'react-icons/im';
 
 const RequestReviewsPage = () => {
-  // const { id } = useParams<{ id: string; gradeReviewId: string }>();
+  const { id } = useParams<{ id: string; gradeReviewId: string }>();
 
   const { reviews, isLoading } = useReview();
 
@@ -40,11 +43,46 @@ const RequestReviewsPage = () => {
     handleReply(comment, gradeReviewId, reviewId);
   };
 
+  const handleAccept = async (reviewId: string, status: boolean) => {
+    try {
+      const res = await gradeApi.acceptGrade(reviewId, status, id!);
+      if (res) {
+        queryClient.invalidateQueries(['review', id]);
+
+        // stompClient &&
+        //   stompClient.send(
+        //     '/app/notifications',
+        //     {},
+        //     JSON.stringify({
+        //       sender_id: user?.id,
+        //       classroom_id: id,
+        //       receiver_id: review.user.id,
+        //       title: 'End Grade Review',
+        //       content: 'Your grade review has been ended'
+        //     })
+        //   );
+        // navigate(0);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
-    <div className='container w-3/4'>
+    <div className='container relative w-3/4'>
       {reviews.map((review: any) => {
         return (
-          <div className='my-3 rounded-lg border border-gray-300  p-4 '>
+          <div className='relative my-3 rounded-lg border border-gray-300  p-4 '>
+            <div className='absolute right-4 top-4 flex items-center justify-end gap-2'>
+              <span>End this Review</span>
+              <span
+                className='cursor-pointer transition-all hover:opacity-60'
+                onClick={() => handleAccept(review.id, !review.is_shut_down)}
+              >
+                {review.is_shut_down ? <FaCheckSquare /> : <ImCheckboxUnchecked />}
+              </span>
+            </div>
+
             <div className='flex items-center'>
               <div className='mr-2 h-8 w-8 rounded-full'>
                 <UserAvatar keyword={review?.user?.first_name[0] ?? 'D'} />

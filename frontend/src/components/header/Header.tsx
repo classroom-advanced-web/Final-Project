@@ -8,7 +8,7 @@ const Header = () => {
   const { pathname } = useLocation();
   const { user } = useAuth();
   return (
-    <header className='sticky top-0 w-full border-b-[1px] bg-white py-5 shadow-sm'>
+    <header className='sticky top-0 z-10 w-full border-b-[1px] bg-white py-5 shadow-sm'>
       <div className='container flex items-center gap-10'>
         {user && <MobileSideBar />}
         <h2 className='text-xl font-bold md:text-3xl'>

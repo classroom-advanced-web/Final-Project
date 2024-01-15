@@ -1,15 +1,11 @@
-import gradeApi from '@/api/gradeApi';
 import UserAvatar from '@/components/UserAvatar';
+import Loading from '@/components/loading/Loading';
+import { useAuth } from '@/hooks/useAuth';
+import useReplies from '@/hooks/useReplies';
 import { timeAgo } from '@/lib/utils';
 import { useState } from 'react';
 import { LuSendHorizonal } from 'react-icons/lu';
-import { useNavigate, useParams } from 'react-router-dom';
-import { FaCheckSquare } from 'react-icons/fa';
-import { ImCheckboxUnchecked } from 'react-icons/im';
-import { useAuth } from '@/hooks/useAuth';
-import { stompClient } from '@/components/header/Notifications';
-import useReplies from '@/hooks/useReplies';
-import Loading from '@/components/loading/Loading';
+import { useParams } from 'react-router-dom';
 
 type Props = {
   review: any;
@@ -19,11 +15,7 @@ type Props = {
 const Replies = ({ review, onSubmit }: Props) => {
   const [comment, setComment] = useState('');
 
-  const [check, setCheck] = useState(review.is_shut_down);
   const { id } = useParams<{ id: string }>();
-
-  console.log({ review });
-  const navigate = useNavigate();
 
   const { replies, isLoading } = useReplies(review.id);
 
@@ -39,62 +31,33 @@ const Replies = ({ review, onSubmit }: Props) => {
     return <Loading />;
   }
 
-  const handleAccept = async (reviewId: string, status: boolean) => {
-    setCheck(!check);
-    try {
-      const res = await gradeApi.acceptGrade(reviewId, status, id);
-      if (res) {
-        stompClient &&
-          stompClient.send(
-            '/app/notifications',
-            {},
-            JSON.stringify({
-              sender_id: user?.id,
-              classroom_id: id,
-              receiver_id: review.user.id,
-              title: 'End Grade Review',
-              content: 'Your grade review has been ended'
-            })
-          );
-        navigate(0);
-      }
-    } catch (error) {
-      setCheck(check);
-    }
-  };
   return (
-    <div className='relative'>
-      <div className='absolute right-0 top-0 flex items-center justify-end gap-2'>
-        <span>End this Review</span>
-        <span
-          className='cursor-pointer transition-all hover:opacity-60'
-          onClick={() => handleAccept(review.id, !check)}
-        >
-          {check ? <FaCheckSquare /> : <ImCheckboxUnchecked />}
-        </span>
-      </div>
-      {replies &&
-        replies.map((reply: any) => {
-          return (
-            <div className='mt-4'>
-              <div className='flex flex-row justify-start'>
-                <div className='mr-2 h-8 w-8 rounded-full'>
-                  <UserAvatar keyword={reply?.user?.first_name[0]} />
-                </div>
-
-                <div className='flex flex-col'>
-                  <div className='flex flex-row items-center'>
-                    <span>{reply?.user?.first_name + ' ' + reply?.user?.last_name}</span>
-                    <span className='ml-1 text-sm text-gray-400'>{timeAgo(reply?.created_at)}</span>
+    <div>
+      <div className='relative flex max-h-[480px] flex-col gap-4 overflow-y-auto'>
+        {replies &&
+          replies.map((reply: any) => {
+            return (
+              <div className='mt-4 px-2 py-3 shadow-sm'>
+                <div className='flex flex-row justify-start'>
+                  <div className='mr-2 h-8 w-8 rounded-full'>
+                    <UserAvatar keyword={reply?.user?.first_name[0]} />
                   </div>
 
-                  <span className='text-sm'>{reply?.content}</span>
+                  <div className='flex flex-col'>
+                    <div className='flex flex-row items-center'>
+                      <span>{reply?.user?.first_name + ' ' + reply?.user?.last_name}</span>
+                      <span className='ml-1 text-sm text-gray-400'>{timeAgo(reply?.created_at)}</span>
+                    </div>
+
+                    <span className='text-sm'>{reply?.content}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+      </div>
       <form
+        className='mt-4'
         onSubmit={(e) => {
           onSubmit(e, comment, review.grade.id, review.id);
           setComment('');
