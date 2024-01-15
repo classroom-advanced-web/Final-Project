@@ -21,7 +21,6 @@ const StudentGradeTable = () => {
         const res = await classApi.getComposition(id!);
         if (res) {
           setItems(res);
-          console.log(items);
         }
       } catch (error) {
         console.error(error);
@@ -34,7 +33,6 @@ const StudentGradeTable = () => {
         if (res) {
           //set grade
           setGrade(res[0]);
-          console.log(res);
         }
       } catch (error) {
         console.error(error);

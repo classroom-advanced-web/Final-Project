@@ -13,7 +13,6 @@ const InvitePage = () => {
   }
 
   const code = searchParams.get('code') ?? '';
-  console.log(code);
 
   const { data, error } = useQuery('invite', async () => classApi.joinClass(code));
 

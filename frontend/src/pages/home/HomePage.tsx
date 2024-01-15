@@ -31,7 +31,7 @@ const HomePage = () => {
     const url = localStorage.getItem('redirect-url') ?? '';
     const path = new URL(url).pathname;
     const searchParams = new URL(url).searchParams;
-    console.log(path);
+
     return <Navigate to={path + '?' + searchParams} replace />;
   }
 

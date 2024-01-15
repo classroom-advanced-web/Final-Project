@@ -42,7 +42,6 @@ const ProfileForm = ({ setIsEditMode, user }: Props) => {
         lastName,
         studentId
       });
-      console.log(res);
 
       setIsEditMode(false);
       window.location.href = '/profile';

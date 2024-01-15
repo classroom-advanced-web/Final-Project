@@ -40,7 +40,7 @@ export const ProfileSchema = z.object({
     .refine((val) => {
       const date = new Date(val);
       const now = new Date();
-      console.log(date.getFullYear());
+
       return date < now && date.getFullYear() > 1900;
     }, 'Please enter a valid birthday'),
   gender: z.string().min(1, 'Please enter your gender').trim(),

@@ -30,7 +30,7 @@ class GradeApi {
 
   async getComments(class_id: string | undefined, grade_id: string) {
     const res = await instance.get(`/comments/classroom/${class_id}?grade_id=${grade_id}`);
-    console.log(grade_id);
+
     return res.data;
   }
 

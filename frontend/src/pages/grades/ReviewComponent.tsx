@@ -10,11 +10,14 @@ import { useParams } from 'react-router-dom';
 import Replies from '../request-reviews/Replies';
 
 import { useAuth } from '@/hooks/useAuth';
+import { stompClient } from '@/components/header/Notifications';
+import usePeople from '@/hooks/usePeople';
+import { ROLE } from '@/constance/constance';
 
 const ReviewComponent = () => {
   const { user } = useAuth();
-  const { gradeReviewId } = useParams<{ id: string; gradeReviewId: string }>();
-  console.log(gradeReviewId);
+  const { id, gradeReviewId } = useParams<{ id: string; gradeReviewId: string }>();
+  const { people } = usePeople();
 
   const { reviews, isLoading } = useReview(gradeReviewId!);
 
@@ -31,6 +34,20 @@ const ReviewComponent = () => {
     try {
       const res = await gradeApi.replyComment(content, gradeReviewId, reviewId);
       if (res) {
+        const owner = people?.find((person) => person.role.code === ROLE.OWNER);
+
+        stompClient &&
+          stompClient.send(
+            '/app/notifications',
+            {},
+            JSON.stringify({
+              sender_id: user?.id,
+              classroom_id: id,
+              receiver_id: owner?.user.id,
+              title: 'Your Student Replied',
+              content: 'Your Student has been replied to your comment'
+            })
+          );
         queryClient.invalidateQueries(['reply', reviewId]);
       }
     } catch (error) {}
@@ -44,7 +61,7 @@ const ReviewComponent = () => {
   ) => {
     event.preventDefault();
     if (!comment) return;
-    console.log({ comment, gradeReviewId, reviewId });
+
     handleReply(comment, gradeReviewId, reviewId);
   };
 

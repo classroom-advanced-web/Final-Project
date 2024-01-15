@@ -9,9 +9,6 @@ type Props = {
 const PrivateRoute = ({ redirectPath = '/login', children }: Props) => {
   useAuth();
 
-  // const { host } = useLocation();
-  // console.log(host);
-
   if (!localStorage.getItem('access-token')) {
     return <Navigate to={redirectPath} />;
   }

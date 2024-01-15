@@ -57,7 +57,7 @@ const RequestReviewsPage = () => {
   ) => {
     event.preventDefault();
     if (!comment) return;
-    console.log({ comment, gradeReviewId, reviewId });
+
     handleReply(comment, gradeReviewId, reviewId);
   };
 

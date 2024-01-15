@@ -34,8 +34,6 @@ const SignUpPage = () => {
   }
 
   const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
-    console.log('data');
-    console.log(data);
     const registerInstance: RegisterDTO = {
       ...data,
       firstName: data.first_name,

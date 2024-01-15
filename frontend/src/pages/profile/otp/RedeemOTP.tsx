@@ -40,7 +40,6 @@ const RedeemOTP = () => {
   };
 
   if (!searchParams.get('email')) {
-    console.log('No email found in search params');
     return <Navigate to={'/forgot-password'} />;
   }
 
@@ -64,7 +63,7 @@ const RedeemOTP = () => {
         }
       } else if (action === 'forgot-password') {
         const res = await authApi.verifyOtp({ id, otp, token: accessToken, email: searchParams.get('email') ?? '' });
-        console.log(res);
+
         navigate(`/forgot-password/reset?email=${searchParams.get('email')}`, {
           state: { accessToken }
         });
@@ -81,13 +80,11 @@ const RedeemOTP = () => {
   const handleResend = async () => {
     setIsResendDisabled(true);
     setCountdown(60);
-    // TODO: Implement resend logic here
 
     try {
       setLoading(true);
       const email: string = searchParams.get('email') ?? '';
       const res = await authApi.requestOtp({ email });
-      console.log(res);
     } catch (error: any) {
       if (error.response?.data?.error) {
         setError(error.response.data.error);

@@ -8,7 +8,6 @@ const useReview = (gradeId: string) => {
   if (!id) navigate('/');
 
   const { data: reviews, isLoading } = useQuery(['review', id], () => gradeApi.getComments(id, gradeId));
-  console.log(gradeId);
 
   return { reviews, isLoading };
 };

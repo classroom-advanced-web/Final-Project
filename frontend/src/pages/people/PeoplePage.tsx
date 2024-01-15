@@ -20,8 +20,6 @@ const PeoplePage = () => {
     enabled: !!id
   });
 
-  console.log(data);
-
   if (isLoading) return <Loading />;
 
   if (isSuccess) {

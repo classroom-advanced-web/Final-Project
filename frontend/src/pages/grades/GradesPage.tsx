@@ -8,7 +8,6 @@ import { useParams } from 'react-router-dom';
 const GradesPage = () => {
   const { id } = useParams();
   const { classDetail, isLoading } = useClassroom();
-  console.log(id);
 
   if (isLoading) return <Loading />;
 
