@@ -96,10 +96,10 @@ export const columns: ColumnDef<User>[] = [
     cell: ({ row }) => <div className='capitalize'>{row.getValue('gender')}</div>
   },
   {
-    accessorKey: 'activated',
+    accessorKey: 'is_activated',
     header: 'Activated',
     cell: ({ row }) => (
-      <div className='capitalize'>{row.getValue('activated') ? `Activated 🟢` : `Not activated 🔴`}</div>
+      <div className='capitalize'>{row.getValue('is_activated') ? `Activated 🟢` : `Not activated 🔴`}</div>
     )
   },
   {
