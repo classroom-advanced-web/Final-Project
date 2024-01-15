@@ -11,6 +11,7 @@ import { Input } from '../ui/input';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
 import { Navigate, useParams } from 'react-router-dom';
+import { ROLE } from '@/constance/constance';
 
 type Props = {
   open: boolean;
@@ -57,7 +58,7 @@ const InviteModal = ({ open, onOpenChange, desc = '', roleId }: Props) => {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
             <DialogHeader>
-              <DialogTitle>Invite teacher</DialogTitle>
+              <DialogTitle> {roleId === ROLE.STUDENT ? 'Invite student' : 'Invite teacher'} </DialogTitle>
             </DialogHeader>
             <FormField
               control={form.control}

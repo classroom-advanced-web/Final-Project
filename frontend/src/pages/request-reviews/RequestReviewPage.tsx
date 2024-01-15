@@ -2,28 +2,28 @@ import gradeApi from '@/api/gradeApi';
 import UserAvatar from '@/components/UserAvatar';
 import { timeAgo } from '@/lib/utils';
 
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import Loading from '@/components/loading/Loading';
+import useReview from '@/hooks/useReview';
+import React from 'react';
+import { useQueryClient } from 'react-query';
 import Replies from './Replies';
 
-//get comment
-
-// This component represents a review with a post title, content, and user information.
 const RequestReviewsPage = () => {
-  const { id } = useParams<{ id: string; gradeReviewId: string }>();
+  // const { id } = useParams<{ id: string; gradeReviewId: string }>();
 
-  const [reviews, setReviews] = useState<any[]>([]);
-  const [replies, setReplies] = useState<any[]>([]);
+  const { reviews, isLoading } = useReview();
 
-  const [currentReviewId, setCurrentReviewId] = useState<any[]>([]);
+  const queryClient = useQueryClient();
 
-  const navigate = useNavigate();
+  if (isLoading) {
+    return <Loading />;
+  }
 
   const handleReply = async (content: string, gradeReviewId: string, reviewId: string) => {
     try {
       const res = await gradeApi.replyComment(content, gradeReviewId, reviewId);
       if (res) {
-        navigate(0);
+        queryClient.invalidateQueries(['reply', reviewId]);
       }
     } catch (error) {}
   };
@@ -35,48 +35,14 @@ const RequestReviewsPage = () => {
     reviewId: string
   ) => {
     event.preventDefault();
+    if (!comment) return;
     console.log({ comment, gradeReviewId, reviewId });
     handleReply(comment, gradeReviewId, reviewId);
-    //send comment comment
   };
-
-  useEffect(() => {
-    const getGradeReview = async () => {
-      try {
-        const res = await gradeApi.getComments(id, '');
-        if (res) {
-          setReviews(res);
-          setCurrentReviewId(res);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    getGradeReview();
-  }, []);
-
-  useEffect(() => {
-    const getReply = async (reviewId: string) => {
-      try {
-        const res = await gradeApi.getReply(reviewId);
-        if (res) {
-          setReplies((prev) => [...prev, res]);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    if (currentReviewId) {
-      currentReviewId.forEach((element) => {
-        getReply(element?.id);
-      });
-    }
-  }, [currentReviewId]);
 
   return (
     <div className='container w-3/4'>
-      {reviews.map((review, index) => {
+      {reviews.map((review: any) => {
         return (
           <div className='my-3 rounded-lg border border-gray-300  p-4 '>
             <div className='flex items-center'>
@@ -98,7 +64,7 @@ const RequestReviewsPage = () => {
               })}
             </p>
             <h3 className='text-lg font-semibold'>Comments</h3>
-            <Replies review={review} replies={replies[index]} onSubmit={handleSubmit} />
+            <Replies review={review} onSubmit={handleSubmit} />
           </div>
         );
       })}

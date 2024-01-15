@@ -34,6 +34,7 @@ const StudentGradeTable = () => {
         if (res) {
           //set grade
           setGrade(res[0]);
+          console.log(res);
         }
       } catch (error) {
         console.error(error);
@@ -51,6 +52,14 @@ const StudentGradeTable = () => {
 
     //call api
   }
+
+  const calculateAverage = (studentGrade: StudentGrades) => {
+    let total = 0;
+    studentGrade.grades.forEach((item) => {
+      total += (item.value * item.grade_composition.scale) / 100;
+    });
+    return total;
+  };
   return (
     <div>
       <Table className='container w-3/4'>
@@ -63,7 +72,7 @@ const StudentGradeTable = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {grade?.grades.map((item) => (
+          {grade?.grades.map((item, index) => (
             <TableRow key={item.id}>
               <TableCell className='text-left'>{item.grade_composition.name}</TableCell>
               <TableCell className='text-right'>{item.id == null ? 'NA' : item.value}</TableCell>
@@ -78,7 +87,8 @@ const StudentGradeTable = () => {
           ))}
           <TableRow>
             <TableCell className='text-left font-bold'>Average</TableCell>
-            <TableCell className='text-right font-bold'>60 </TableCell>
+
+            {grade && <TableCell className='text-right font-bold'>{calculateAverage(grade)}</TableCell>}
           </TableRow>
         </TableBody>
       </Table>

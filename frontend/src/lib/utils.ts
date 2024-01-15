@@ -52,6 +52,8 @@ export function timeAgo(createdAt: Date): string {
   } else if (minutes > 0) {
     return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
   } else {
+    if (seconds < 0) return 'just now';
+
     return `${seconds} second${seconds !== 1 ? 's' : ''} ago`;
   }
 }

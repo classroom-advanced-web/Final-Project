@@ -8,19 +8,24 @@ import { FaCheckSquare } from 'react-icons/fa';
 import { ImCheckboxUnchecked } from 'react-icons/im';
 import { useAuth } from '@/hooks/useAuth';
 import { stompClient } from '@/components/header/Notifications';
+import useReplies from '@/hooks/useReplies';
+import Loading from '@/components/loading/Loading';
 
 type Props = {
   review: any;
-  replies: any[];
   onSubmit: any;
 };
 
-const Replies = ({ review, replies, onSubmit }: Props) => {
+const Replies = ({ review, onSubmit }: Props) => {
   const [comment, setComment] = useState('');
+
   const [check, setCheck] = useState(review.is_shut_down);
   const { id } = useParams<{ id: string }>();
+
   console.log({ review });
   const navigate = useNavigate();
+
+  const { replies, isLoading } = useReplies(review.id);
 
   const { user } = useAuth();
   if (!id) {
@@ -29,6 +34,9 @@ const Replies = ({ review, replies, onSubmit }: Props) => {
 
   if (!user) {
     return null;
+  }
+  if (isLoading) {
+    return <Loading />;
   }
 
   const handleAccept = async (reviewId: string, status: boolean) => {
@@ -86,7 +94,12 @@ const Replies = ({ review, replies, onSubmit }: Props) => {
             </div>
           );
         })}
-      <form onSubmit={(e) => onSubmit(e, comment, review.grade.id, review.id)}>
+      <form
+        onSubmit={(e) => {
+          onSubmit(e, comment, review.grade.id, review.id);
+          setComment('');
+        }}
+      >
         <div className='flex flex-row'>
           <div className='mr-2 h-8 w-8 rounded-full'>
             <UserAvatar keyword={review?.user?.first_name[0] ?? 'D'} />
