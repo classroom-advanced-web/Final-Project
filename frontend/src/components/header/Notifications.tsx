@@ -60,8 +60,11 @@ const Notifications = () => {
       case 'New Grade Structure':
         navigate(`/structure/${classroomId}`);
         break;
-      case 'Updated Grade Structure':
+      case 'Update Grade Structure':
         navigate(`/structure/${classroomId}`);
+        break;
+      case 'Finalize Grade Structure':
+        navigate(`/grades/${classroomId}`);
         break;
       case 'Reply from teacher':
         navigate(`/grades-review/${classroomId}/${content}`);

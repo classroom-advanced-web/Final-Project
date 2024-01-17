@@ -13,6 +13,8 @@ import GradeAction from './GradeAction';
 import { FaCheckSquare } from 'react-icons/fa';
 import { ImCheckboxUnchecked } from 'react-icons/im';
 import { useToast } from '../ui/use-toast';
+import { stompClient } from '../header/Notifications';
+import { useAuth } from '@/hooks/useAuth';
 
 const TeacherGradeTable = () => {
   const [items, setItems] = useState<GradeComposition[]>([]);
@@ -25,6 +27,7 @@ const TeacherGradeTable = () => {
     studentId: '',
     compositionId: ''
   });
+  const { user } = useAuth();
 
   const { gradeBoard, isLoading } = useGradeBoard();
   const { toast } = useToast();
@@ -53,6 +56,19 @@ const TeacherGradeTable = () => {
     setCheckList(newCheckList);
     try {
       await classApi.finalizeComposition(compositionId, newCheckList[index]);
+      if (newCheckList[index]) {
+        stompClient &&
+          stompClient.send(
+            '/app/notifications',
+            {},
+            JSON.stringify({
+              sender_id: user?.id,
+              classroom_id: id,
+              title: 'Finalize Grade Structure',
+              content: 'Grade Structure has been updated'
+            })
+          );
+      }
     } catch (error: any) {
       if (error?.response) {
         toast({

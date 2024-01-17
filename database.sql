@@ -135,7 +135,7 @@ CREATE TABLE notifications (
     revoked BOOLEAN NOT NULL DEFAULT 0,
     created_date TIMESTAMP DEFAULT NOW(),
     updated_date TIMESTAMP DEFAULT NOW(),
-    FOREIGN KEY (notification_sender_id) REFERENCES non_users_in_classroom (non_user_id)
+    FOREIGN KEY (notification_sender_id) REFERENCES users_in_classroom (class_user_id)
 );
 
 DROP TABLE IF EXISTS received_notifications;
